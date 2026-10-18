@@ -13,7 +13,8 @@ import { Pet, type PetState } from "../components/Pet";
 import { PetScale } from "../components/PetScale";
 import { ProgressDots } from "../components/ProgressDots";
 import { RoundButton } from "../components/RoundButton";
-import { Scene } from "../components/Scene";
+import { Scene, type SceneKind } from "../components/Scene";
+import { AddCard, ListCard, MapArt, SCENE_NAMES, SceneCard, ScenePill, Switch } from "../components/Places";
 import { Sheet } from "../components/Sheet";
 import { TimeCard } from "../components/TimeCard";
 import { Toast } from "../components/Toast";
@@ -36,10 +37,10 @@ export const SAMPLE: ScreenData = {
 };
 
 /** 390x844 phone canvas: scene behind, content layer on top. */
-export function Phone({ night, children }: { night?: boolean; children: ReactNode }) {
+export function Phone({ night, scene, children }: { night?: boolean; scene?: SceneKind; children: ReactNode }) {
   return (
     <div className="td-phone">
-      <Scene night={night} />
+      <Scene scene={scene} night={night} />
       <div className="td-layer">{children}</div>
     </div>
   );
@@ -146,14 +147,15 @@ export function WeightScreen({ name, weightKg, goalMl }: Pick<ScreenData, "name"
 export interface HomeProps extends Pick<ScreenData, "name" | "energyPercent" | "energyUntil" | "sleepEnd"> {
   state?: Extract<PetState, "awake" | "tired" | "sleeping" | "happy">;
   toast?: string;
+  scene?: SceneKind;
 }
 
-export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state = "awake", toast }: HomeProps) {
+export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state = "awake", toast, scene = "meadow" }: HomeProps) {
   const night = state === "sleeping";
   const caption = night ? `${name} śpi do ${sleepEnd}. Dobranoc!` : state === "tired" ? "Brak energii – napij się wody!" : `Energii starczy do ${energyUntil}`;
   return (
-    <Phone night={night}>
-      <HeaderBar left="menu" percent={energyPercent} />
+    <Phone night={night} scene={scene}>
+      <HeaderBar left="menu" title={SCENE_NAMES[scene]} percent={energyPercent} onTitle={() => undefined} />
       <Hero top={165} name={name}><Pet state={state} size={270} /></Hero>
       <div className="td-caption" style={{ top: 600 }}>{caption}</div>
       <div className="td-actionbar"><ActionButton active={state === "tired"} disabled={night} /></div>
@@ -210,6 +212,81 @@ export function SettingsScreen({ name, sleepStart, sleepEnd, weightKg, goalMl, e
       <div style={{ position: "absolute", left: 24, right: 24, top: 140, display: "flex", flexDirection: "column", gap: 12, zIndex: 2 }}>
         {rows.map(([a, b]) => <Card key={a} title={b}>{a}</Card>)}
       </div>
+    </Phone>
+  );
+}
+
+export function ScenePickerScreen({ name, energyPercent, scene = "office" }: Pick<ScreenData, "name" | "energyPercent"> & { scene?: SceneKind }) {
+  const all: SceneKind[] = ["meadow", "home", "office", "lunch"];
+  return (
+    <Phone scene={scene}>
+      <HeaderBar left="menu" title={SCENE_NAMES[scene]} percent={energyPercent} onTitle={() => undefined} />
+      <Hero top={165} name={name} float={false}><Pet size={270} /></Hero>
+      <div className="td-scrim" />
+      <Sheet>
+        <h3>Wybierz scenę</h3>
+        <Switch label="Automatycznie (miejsce i plan dnia)" checked={false} />
+        <div className="td-scenegrid">{all.map((k) => <SceneCard key={k} scene={k} selected={k === scene} />)}</div>
+        <p className="td-note">Wybrana ręcznie scena zostaje do końca dnia albo do włączenia trybu automatycznego.</p>
+      </Sheet>
+    </Phone>
+  );
+}
+
+export function PlacesScreen({ energyPercent }: Pick<ScreenData, "energyPercent">) {
+  return (
+    <Phone>
+      <HeaderBar left="menu-back" title="Miejsca" percent={energyPercent} />
+      <div className="td-page">
+        <MapArt />
+        <ListCard icon="pin" title="Dom" sub="52.2297, 21.0122 · promień 100 m" right={<ScenePill scene="home" />} />
+        <ListCard icon="pin" title="Praca" sub="52.2400, 21.0300 · promień 150 m" right={<ScenePill scene="office" />} />
+        <AddCard label="Dodaj miejsce" />
+        <Button variant="water">Użyj bieżącej lokalizacji</Button>
+        <p className="td-note">Lokalizację porównujemy z Twoimi miejscami na urządzeniu. Nie zapisujemy trasy.</p>
+      </div>
+    </Phone>
+  );
+}
+
+export function LocationPermissionScreen({ name }: Pick<ScreenData, "name">) {
+  return (
+    <Phone>
+      <Hero top={100} name={name}><Pet state="happy" size={200} /></Hero>
+      <Sheet>
+        <h3>Gdzie jesteś?</h3>
+        <p>Dzięki lokalizacji pokażę scenę domu, biura lub innego miejsca, które zapiszesz.</p>
+        <MapArt />
+        <p className="td-note">Używamy tylko ostatniej pozycji, żeby rozpoznać Twoje miejsca. Możesz to wyłączyć w każdej chwili i zmieniać sceny ręcznie.</p>
+        <Button>Zezwól na lokalizację</Button>
+        <Button variant="secondary">Nie teraz</Button>
+      </Sheet>
+    </Phone>
+  );
+}
+
+export function ScheduleScreen({ energyPercent }: Pick<ScreenData, "energyPercent">) {
+  return (
+    <Phone>
+      <HeaderBar left="menu-back" title="Plan dnia" percent={energyPercent} />
+      <div className="td-page">
+        <h2>Bloki dnia</h2>
+        <ListCard icon="clock" title="Praca" sub="09:00 – 17:00 · pon–pt" right={<ScenePill scene="office" />} />
+        <ListCard icon="clock" title="Lunch" sub="12:30 – 13:00 · pon–pt" right={<ScenePill scene="lunch" />} />
+        <AddCard label="Dodaj blok" />
+        <p className="td-note">Krótszy blok wygrywa z dłuższym, więc w czasie lunchu zobaczysz kuchnię, a nie biuro. Poza blokami scenę wybiera Twoja lokalizacja.</p>
+      </div>
+    </Phone>
+  );
+}
+
+export function SchedulePromptScreen({ name, energyPercent }: Pick<ScreenData, "name" | "energyPercent">) {
+  return (
+    <Phone scene="office">
+      <HeaderBar left="menu" title="Biuro" percent={energyPercent} onTitle={() => undefined} />
+      <Hero top={165} name={name} float={false}><Pet size={270} /></Hero>
+      <div className="td-scrim" />
+      <Dialog title="Zaczynasz pracę o 9:00?" description="Kończysz o 17:00? Pokażę wtedy scenę biura, a w czasie lunchu scenę z kuchnią." actions={<><Button variant="secondary">Zmień</Button><Button>Tak, ustaw</Button></>} />
     </Phone>
   );
 }

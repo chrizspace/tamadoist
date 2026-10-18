@@ -29,7 +29,7 @@ Stack (uzgodniony): pnpm + Turborepo, Next.js (web, Vercel), Supabase (Auth Goog
 5. **Waga → cel wody**: podanie wagi (kg), podgląd wyliczonego celu (waga × 35 ml), możliwość ręcznej korekty.
 → Home.
 
-Ekrany: Login, Onboarding (3 kroki), Home (postać + pasek energii + szybkie „+250 ml”), Woda (log/historia), Ustawienia (imię, sen, cel wody, wylogowanie).
+Ekrany: Login, Onboarding (5 kroków), Home (postać + pasek energii + szybkie „+250 ml”), Woda (log/historia), Ustawienia (imię, sen, cel wody, wylogowanie).
 
 ## Architektura repo
 ```
@@ -47,6 +47,27 @@ UI primitives piszemy z myślą o RN: tokeny w JSON (kolory, spacing, typografia
 - `water_logs(id, user_id, amount_ml, logged_at)`
 - RLS: tylko właściciel wierszy. Auth: Google OAuth (Apple odłożone do wersji mobilnej/po zakupie konta Apple Developer), callback `/auth/callback`.
 - Dzień liczony w strefie `tz` użytkownika.
+
+
+## Sceny, miejsca i plan dnia
+Postać żyje w scenie. Scena zależy od tego, gdzie jesteś i co robisz, a można ją zmienić ręcznie.
+
+**Sceny (MVP):** Zielona Łąka (domyślna), Dom, Biuro, Lunch. Każda ma wariant nocny (w oknie snu). Kolejne (siłownia, podróż) dojdą jako nowe wpisy bez zmian w logice.
+
+**Wybór sceny, od najwyższego priorytetu** (`packages/core/src/scene.ts`, testy w `scene.test.ts`):
+1. Ręczny wybór użytkownika, trzyma się do włączenia trybu automatycznego (opcjonalnie do godziny).
+2. Plan dnia: bloki czasu przypisane do scen (np. praca 9:00–17:00 → Biuro, lunch 12:30–13:00 → Lunch, dni tygodnia do wyboru). Krótszy blok wygrywa z dłuższym, więc lunch przebija pracę. Bloki mogą przechodzić przez północ.
+3. Miejsce: ostatnia pozycja porównana z zapisanymi miejscami (dom, praca, inne; promień 100–150 m). Wygrywa najbliższe.
+4. Domyślnie: Zielona Łąka.
+
+**Ekrany:** wybór sceny (dotknięcie tytułu lokacji w nagłówku), Miejsca (mapa, lista, „użyj bieżącej lokalizacji”), zgoda na lokalizację (z wyjaśnieniem), Plan dnia, pytanie „Zaczynasz pracę o 9:00?” (aplikacja proponuje plan, użytkownik zatwierdza lub zmienia).
+
+**Lokalizacja i prywatność**
+- Zgoda jest prosta i opcjonalna; bez niej działają plan dnia i ręczny wybór sceny.
+- Porównujemy ostatnią pozycję z miejscami, nie zapisujemy trasy. Współrzędne miejsc (dom, praca) to dane wrażliwe: tabela z RLS, tylko właściciel, usuwane z kontem.
+- Web: Geolocation API działa tylko przy otwartej aplikacji, więc scenę wyznaczamy przy wejściu do aplikacji. Automatyczne przełączanie w tle (geofencing) dopiero w aplikacji mobilnej (Expo).
+
+**Supabase (dodatkowe tabele):** `places(id, user_id, kind, name, lat, lng, radius_m, scene)`, `schedule_slots(id, user_id, label, start, "end", days int[], scene)`, `profiles.scene_override(scene, until)`.
 
 ## Storybook
 - Storybook 8 (react-vite lub nextjs framework) w `packages/ui`; każdy primitive + token (Colors, Typography, Spacing) ma story, `autodocs`, addon a11y.

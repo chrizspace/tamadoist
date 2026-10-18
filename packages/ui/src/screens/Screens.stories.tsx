@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import {
   EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LoginScreen, MenuScreen, NameScreen,
-  RenameDialogScreen, SAMPLE, SettingsScreen, SleepScreen, WaterScreen, WeightScreen,
+  LocationPermissionScreen, PlacesScreen, RenameDialogScreen, SAMPLE, ScenePickerScreen, ScheduleScreen,
+  SchedulePromptScreen, SettingsScreen, SleepScreen, WaterScreen, WeightScreen,
 } from "./Screens";
 
 const meta: Meta = {
@@ -26,3 +27,13 @@ export const S11_Sleeping: Story = { name: "11 Śpi", render: () => <HomeScreen 
 export const S12_Rename: Story = { name: "12 Zmiana imienia", render: () => <RenameDialogScreen name={d.name} energyPercent={d.energyPercent} /> };
 export const S13_Settings: Story = { name: "13 Ustawienia", render: () => <SettingsScreen {...d} /> };
 export const WaterDrinking: Story = { name: "Woda – po dodaniu szklanki", render: () => <WaterScreen {...d} drinking /> };
+
+export const S14_HomeOffice: Story = { name: "14 Home – biuro", render: () => <HomeScreen {...d} scene="office" /> };
+export const S15_HomeLunch: Story = { name: "15 Home – lunch", render: () => <HomeScreen {...d} scene="lunch" state="happy" /> };
+export const S16_HomeHome: Story = { name: "16 Home – dom", render: () => <HomeScreen {...d} scene="home" /> };
+export const S17_HomeHomeNight: Story = { name: "17 Dom – noc", render: () => <HomeScreen {...d} scene="home" state="sleeping" energyPercent={100} /> };
+export const S18_ScenePicker: Story = { name: "18 Wybór sceny", render: () => <ScenePickerScreen name={d.name} energyPercent={d.energyPercent} /> };
+export const S19_Places: Story = { name: "19 Miejsca", render: () => <PlacesScreen energyPercent={d.energyPercent} /> };
+export const S20_LocationPermission: Story = { name: "20 Zgoda na lokalizację", render: () => <LocationPermissionScreen name={d.name} /> };
+export const S21_Schedule: Story = { name: "21 Plan dnia", render: () => <ScheduleScreen energyPercent={d.energyPercent} /> };
+export const S22_SchedulePrompt: Story = { name: "22 Pytanie o plan", render: () => <SchedulePromptScreen name={d.name} energyPercent={d.energyPercent} /> };

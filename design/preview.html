@@ -104,7 +104,7 @@ input[type=range]{width:100%;accent-color:var(--primary)}
 @media(prefers-reduced-motion:reduce){.pet-wrap.float svg{animation:none}}
 .ptitle{position:absolute;left:24px;right:24px;text-align:center;font:800 40px/1.1 var(--font);color:var(--primary-dark);z-index:2}
 .psub{position:absolute;left:44px;right:44px;text-align:center;font:600 16px/1.4 var(--font);color:var(--p-muted);z-index:2}
-.caption{position:absolute;left:24px;right:24px;text-align:center;font:800 18px var(--font);color:#fff;z-index:2}
+.caption{position:absolute;left:50%;transform:translateX(-50%);width:max-content;max-width:342px;text-align:center;font:800 16px var(--font);color:#fff;background:rgba(15,40,34,.62);padding:6px 16px;border-radius:999px;z-index:2}
 .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:32px 32px 0 0;padding:26px 24px 34px;display:flex;flex-direction:column;gap:14px;z-index:3;box-shadow:0 -4px 16px rgba(0,0,0,.12)}
 .sheet h3{margin:0;font:800 24px var(--font);text-align:center}
 .sheet p{margin:0;text-align:center;color:var(--p-muted);font:600 16px/1.4 var(--font)}
@@ -163,6 +163,32 @@ input[type=range]{width:100%;accent-color:var(--primary)}
 .hdrwrap{zoom:.8;position:relative;width:390px;flex:none;height:64px;background:var(--sky);border-radius:16px;overflow:hidden}.hdrwrap .hdr{top:0}
 .ring{position:absolute;border:4px dashed var(--accent-y);border-radius:22px;z-index:4;pointer-events:none}
 .ghost{opacity:.35}
+
+.hdr .t.btn{background:none;border:0;cursor:pointer;color:var(--p-text);display:flex;align-items:center;justify-content:center;gap:2px;padding:6px 0;border-radius:12px}
+.hdr .t.btn svg{width:16px;height:16px;flex:none}
+.hdr .t.btn:focus-visible{outline:3px solid var(--water);outline-offset:2px}
+.pill{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;background:var(--primary-soft);color:var(--primary-dark);font:800 13px var(--font)}
+.pill.office{background:var(--water-soft);color:var(--water-dark)}.pill.lunch{background:#FFF3CC;color:#8A6500}
+.lcard{background:#fff;border:2px solid var(--p-border);border-radius:24px;padding:14px 16px;display:flex;align-items:center;gap:14px;text-align:left;width:100%;font-family:var(--font);color:var(--p-text)}
+.lcard .ic{width:44px;height:44px;border-radius:14px;background:var(--primary-soft);color:var(--primary-dark);display:grid;place-items:center;flex:none}
+.lcard .ic svg{width:24px;height:24px}
+.lcard .bd{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}.lcard .bd b{font:800 17px var(--font)}.lcard .bd span{font:600 13px var(--font);color:var(--p-muted)}
+.lcard.add{border-style:dashed;justify-content:center;gap:8px;color:var(--primary-dark);font:800 16px var(--font);background:rgba(255,255,255,.7);cursor:pointer}.lcard.add svg{width:22px;height:22px}
+.page{position:absolute;left:16px;right:16px;top:128px;bottom:32px;display:flex;flex-direction:column;gap:12px;z-index:2;overflow:hidden}
+.page h2{margin:0;font:800 14px var(--font);color:var(--p-muted);text-transform:uppercase;letter-spacing:.08em}
+.pnote{font:600 13px/1.4 var(--font);color:var(--p-muted);margin:0}.page .pnote{background:rgba(255,255,255,.88);padding:10px 14px;border-radius:16px}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.scard{border:3px solid var(--p-border);border-radius:22px;background:#fff;padding:0;overflow:hidden;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.scard[aria-pressed="true"]{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.scard .th{position:relative;height:120px;overflow:hidden;background:var(--sky)}
+.scard .th>div{position:absolute;left:50%;top:-80px;width:390px;height:844px;transform:translateX(-50%) scale(.46);transform-origin:top center}
+.scard .lb{padding:8px 12px;font:800 15px var(--font);display:flex;justify-content:space-between;align-items:center}.scard .lb svg{width:20px;height:20px;color:var(--primary)}
+.swt{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--p-surface);border-radius:20px;font:700 15px var(--font);border:0;width:100%;text-align:left;cursor:pointer;color:var(--p-text)}
+.swt i{margin-left:auto;width:52px;height:32px;border-radius:16px;background:var(--p-border);position:relative;flex:none}
+.swt i::after{content:"";position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .15s}
+.swt[aria-checked="true"] i{background:var(--primary)}.swt[aria-checked="true"] i::after{transform:translateX(20px)}
+.mapart{height:150px;border-radius:24px;overflow:hidden;position:relative;flex:none}.mapart svg{position:absolute;inset:0;width:100%;height:100%}
+.sheet .mapart{height:130px}
 </style>
 
 <div class="wrap">
@@ -224,7 +250,7 @@ input[type=range]{width:100%;accent-color:var(--primary)}
   <!-- ============ SCREENS ============ -->
   <section class="panel" id="screens" role="tabpanel" aria-labelledby="tab-screens" hidden>
     <h2>Prototyp</h2>
-    <p class="lead">Klikalna wersja z prawdziwą logiką: imię, godzina snu i waga zmieniają cel wody, a woda i godzina zegara zmieniają energię.</p>
+    <p class="lead">Klikalna wersja z prawdziwą logiką: imię, godzina snu i waga zmieniają cel wody, woda i zegar zmieniają energię, a zegar, lokalizacja i ręczny wybór zmieniają scenę.</p>
     <div class="proto">
       <div class="protoframe" id="protowrap"><div class="pf-scale" id="pfscale"><div class="phone" id="proto"></div></div></div>
       <div class="proto-ctl">
@@ -233,12 +259,14 @@ input[type=range]{width:100%;accent-color:var(--primary)}
           <h3 style="margin:0 0 10px;font-size:17px">Symulowany zegar</h3>
           <div class="ctl"><label for="clock">Godzina</label><input type="range" id="clock" min="0" max="1435" step="5" value="480"><b class="mono" id="clocklab">08:00</b></div>
           <p class="note" style="margin:10px 0 0;color:var(--muted);font-size:13px">Przesuń suwak, żeby zobaczyć, jak energia spada w ciągu dnia i jak postać zasypia w oknie snu.</p>
+          <div class="ctl" style="margin-top:14px"><label for="pos">Lokalizacja</label><select id="pos" style="font:700 14px var(--font);padding:8px 12px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--ink)"><option value="none">Nieznane miejsce</option><option value="home">Dom</option><option value="work">Praca</option></select></div>
+          <p class="note" style="margin:10px 0 0;color:var(--muted);font-size:13px">Scena wybiera się sama: najpierw ręczny wybór, potem plan dnia (praca 9–17, lunch 12:30–13:00 w dni robocze), potem miejsce, na końcu łąka.</p>
         </div>
         <div class="box"><h3 style="margin:0 0 10px;font-size:17px">Stan</h3><table class="tbl"><tbody id="statetbl"></tbody></table></div>
       </div>
     </div>
     <h2>Wszystkie ekrany</h2>
-    <p class="lead">Dwanaście ekranów z jednego zestawu komponentów.</p>
+    <p class="lead">Dwadzieścia jeden ekranów z jednego zestawu komponentów.</p>
     <div class="gallery" id="gallery"></div>
   </section>
 </div>
@@ -260,7 +288,7 @@ const ICONS={
   plus:'<path d="M12 5v14M5 12h14"/>',minus:'<path d="M5 12h14"/>',drop:'<path d="M12 2.5s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
   settings:'<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
   edit:'<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/>',logout:'<path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5M15 8l4 4-4 4M19 12H9"/>',
-  chevron:'<path d="M9 5l7 7-7 7"/>',pin:'<path d="M12 21s7-6.2 7-11.5a7 7 0 0 0-14 0C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>'
+  chevron:'<path d="M9 5l7 7-7 7"/>',chevronDown:'<path d="M6 9l6 6 6-6"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',pin:'<path d="M12 21s7-6.2 7-11.5a7 7 0 0 0-14 0C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>'
 };
 const icon=(n,cls='')=>`<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
 
@@ -296,16 +324,25 @@ function Pet(state='awake',size=160){
 function Egg(size=200){
   return `<svg width="${size*.75}" height="${size}" viewBox="0 0 150 200" role="img" aria-label="Jajko"><ellipse cx="75" cy="187" rx="55" ry="11" fill="#000" opacity=".15"/><ellipse cx="75" cy="94" rx="65" ry="90" fill="#A9C8F0" stroke="#7FA6DC" stroke-width="3"/><ellipse cx="47" cy="54" rx="15" ry="26" fill="#fff" opacity=".45"/><g fill="#7FA6DC" opacity=".7"><ellipse cx="89" cy="95" rx="17" ry="15"/><ellipse cx="68" cy="129" rx="20" ry="17"/><ellipse cx="110" cy="142" rx="14" ry="12"/><ellipse cx="94" cy="57" rx="10" ry="9"/></g></svg>`;
 }
-function Scene(night=false){
+const SCN={meadow:'Zielona Łąka',home:'Dom',office:'Biuro',lunch:'Lunch'};
+const SCN_HINT={meadow:'Domyślna scena',home:'Salon, kanapa i dywan',office:'Biurko i widok na miasto',lunch:'Stół i kuchnia'};
+function Win(x,y,w,h,inner=''){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="#BFE3FF"/>${inner}<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="none" stroke="#fff" stroke-width="8"/><path d="M${x+w/2} ${y}V${y+h}M${x} ${y+h/2}H${x+w}" stroke="#fff" stroke-width="6"/>`}
+function Interior(kind){
+  if(kind==='home') return `<rect width="390" height="844" fill="#FFF1DC"/><rect y="548" width="390" height="296" fill="#D9A66B"/><g fill="#C9935A">${[600,660,720,780].map(y=>`<rect y="${y}" width="390" height="4"/>`).join('')}</g><rect y="540" width="390" height="12" fill="#fff"/>${Win(36,140,130,150,'<ellipse cx="80" cy="190" rx="26" ry="10" fill="#fff" opacity=".9"/><ellipse cx="150" cy="240" rx="20" ry="8" fill="#fff" opacity=".8"/>')}<rect x="276" y="170" width="76" height="96" rx="8" fill="#CDEBE2" stroke="#fff" stroke-width="6"/><circle cx="314" cy="206" r="14" fill="#FFC93C"/><path d="M284 258l20-26 14 16 12-12 18 22z" fill="#1FBF8F"/><ellipse cx="195" cy="760" rx="165" ry="38" fill="#F6C9C0"/><ellipse cx="195" cy="760" rx="120" ry="26" fill="#F3B3A8"/><rect x="222" y="462" width="172" height="102" rx="26" fill="#2D9C8A"/><rect x="236" y="500" width="144" height="66" rx="16" fill="#38B29F"/><rect x="214" y="500" width="30" height="66" rx="14" fill="#2D9C8A"/><rect x="372" y="500" width="30" height="66" rx="14" fill="#2D9C8A"/><rect x="26" y="490" width="44" height="52" rx="8" fill="#E07A5F"/><ellipse cx="48" cy="470" rx="26" ry="30" fill="#1FBF8F"/><ellipse cx="30" cy="484" rx="14" ry="20" fill="#159A72"/><ellipse cx="66" cy="484" rx="14" ry="20" fill="#159A72"/><rect x="327" y="40" width="6" height="80" fill="#8B5A33"/><path d="M305 120h50l-10 26h-30z" fill="#FFC93C"/>`;
+  if(kind==='office') return `<rect width="390" height="844" fill="#E6EEF6"/><rect y="560" width="390" height="284" fill="#B8C4D2"/><g fill="#A9B6C6">${[610,670,730,790].map(y=>`<rect y="${y}" width="390" height="3"/>`).join('')}</g><rect y="552" width="390" height="10" fill="#fff"/>${Win(24,110,342,200,'<g fill="#8FA8C4"><rect x="44" y="210" width="40" height="100"/><rect x="92" y="170" width="52" height="140"/><rect x="152" y="220" width="36" height="90"/><rect x="196" y="150" width="56" height="160"/><rect x="260" y="200" width="44" height="110"/><rect x="312" y="230" width="40" height="80"/></g><g fill="#fff" opacity=".8"><rect x="104" y="190" width="8" height="10"/><rect x="120" y="190" width="8" height="10"/><rect x="212" y="170" width="8" height="10"/><rect x="228" y="170" width="8" height="10"/><rect x="272" y="220" width="8" height="10"/></g>')}<circle cx="338" cy="360" r="22" fill="#fff" stroke="#8FA8C4" stroke-width="5"/><path d="M338 360V345M338 360l10 5" stroke="#1F2D2A" stroke-width="4" stroke-linecap="round"/><rect x="214" y="500" width="176" height="16" rx="6" fill="#C58B52"/><rect x="226" y="516" width="12" height="62" fill="#A8723F"/><rect x="364" y="516" width="12" height="62" fill="#A8723F"/><rect x="252" y="418" width="96" height="70" rx="8" fill="#1F2D2A"/><rect x="260" y="426" width="80" height="54" rx="4" fill="#4CC3FF"/><rect x="292" y="488" width="16" height="12" fill="#1F2D2A"/><rect x="244" y="492" width="112" height="8" rx="4" fill="#fff"/><rect x="364" y="478" width="18" height="22" rx="4" fill="#E07A5F"/><rect x="26" y="500" width="40" height="48" rx="8" fill="#4B4FA8"/><ellipse cx="46" cy="478" rx="24" ry="30" fill="#1FBF8F"/><ellipse cx="30" cy="492" rx="12" ry="18" fill="#159A72"/>`;
+  return `<rect width="390" height="844" fill="#FFF4E0"/><rect y="300" width="390" height="260" fill="#FFE2B8"/><g fill="#fff" opacity=".7">${Array.from({length:13},(_,i)=>`<rect x="${i*32}" y="300" width="3" height="260"/>`).join('')}${[360,420,480].map(y=>`<rect y="${y}" width="390" height="3"/>`).join('')}</g><rect y="560" width="390" height="284" fill="#F2D9B3"/><g fill="#E9C58E">${Array.from({length:6},(_,r)=>Array.from({length:7},(_,c)=>(r+c)%2===0?`<rect x="${c*60-15}" y="${600+r*40}" width="60" height="40"/>`:'').join('')).join('')}</g><rect y="552" width="390" height="10" fill="#fff"/>${Win(236,90,120,130,'<ellipse cx="290" cy="140" rx="24" ry="9" fill="#fff" opacity=".9"/>')}${[20,84].map(x=>`<rect x="${x+18}" y="40" width="4" height="60" fill="#8B5A33"/><path d="M${x-4} 100h48l-10 28h-28z" fill="#E07A5F"/>`).join('')}<rect x="20" y="230" width="170" height="14" rx="5" fill="#C58B52"/><g fill="#fff" stroke="#E2E8E6" stroke-width="3">${[40,80,120,160].map(x=>`<rect x="${x-12}" y="196" width="22" height="34" rx="5"/>`).join('')}</g><ellipse cx="195" cy="700" rx="180" ry="40" fill="#C58B52"/><ellipse cx="195" cy="692" rx="180" ry="38" fill="#D9A066"/><ellipse cx="140" cy="690" rx="46" ry="14" fill="#fff" stroke="#E2E8E6" stroke-width="3"/><path d="M112 686l28-14 30 14z" fill="#F4B860"/><rect x="114" y="684" width="56" height="6" rx="3" fill="#10B38A"/><circle cx="236" cy="684" r="9" fill="#FF5A5F"/><rect x="262" y="660" width="26" height="36" rx="6" fill="#4CC3FF" opacity=".9"/><rect x="262" y="660" width="26" height="10" rx="4" fill="#fff"/>`;
+}
+function Scene(night=false,kind='meadow'){
+  if(kind!=='meadow') return `<svg class="scene" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${Interior(kind)}${night?'<rect width="390" height="844" fill="#1B2060" opacity=".45"/>':''}</svg>`;
   const sky=night?'#C9CCF2':'#E6FAF6',far=night?'#7C84D6':'#8EC5FF',hill=night?'#0E8C72':'#10B38A',co=night?.35:.8;
-  const tree=(x,s)=>`<g transform="translate(${x} 0) scale(${s})" transform-origin="0 0"><rect x="16" y="${520/s}" width="10" height="${60/s}" fill="#2D6FA3"/><polygon points="21,${330/s} 51,${406/s} -9,${406/s}" fill="#0B8F6F"/><polygon points="21,${390/s} 57,${466/s} -15,${466/s}" fill="#0B8F6F"/><polygon points="21,${450/s} 63,${526/s} -21,${526/s}" fill="#0B8F6F"/></g>`;
+  const tree=(x,s)=>`<g transform="translate(${x} 0) scale(${s})"><rect x="16" y="${520/s}" width="10" height="${60/s}" fill="#2D6FA3"/><polygon points="21,${330/s} 51,${406/s} -9,${406/s}" fill="#0B8F6F"/><polygon points="21,${390/s} 57,${466/s} -15,${466/s}" fill="#0B8F6F"/><polygon points="21,${450/s} 63,${526/s} -21,${526/s}" fill="#0B8F6F"/></g>`;
   const cloud=(x,y,w)=>`<g opacity="${co}" fill="#fff"><ellipse cx="${x+w/2}" cy="${y+w*.19}" rx="${w/2}" ry="${w*.19}"/><ellipse cx="${x+w*.47}" cy="${y+w*.06}" rx="${w*.27}" ry="${w*.2}"/></g>`;
   return `<svg class="scene" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="390" height="844" fill="${sky}"/>${cloud(30,110,110)}${cloud(250,60,90)}${cloud(300,230,70)}<ellipse cx="200" cy="670" rx="380" ry="200" fill="${far}"/>${tree(10,1)}${tree(340,.85)}<ellipse cx="195" cy="960" rx="495" ry="380" fill="${hill}"/></svg>`;
 }
 const HB=(kind,label,attrs='')=>`<button class="rbtn" aria-label="${label}" ${attrs}>${icon(kind)}</button>`;
-function HeaderBar({left='menu',title='Zielona Łąka',p=62,ghost=false}){
+function HeaderBar({left='menu',title='Zielona Łąka',p=62,ghost=false,tbtn=false}){
   const L=left==='menu'?HB('menu','Menu','data-act="menu"'):left==='menu+back'?HB('menu','Menu','data-act="menu"')+HB('back','Wstecz','data-act="back"'):left==='close'?HB('close','Zamknij menu','data-act="closemenu"'):'';
-  return `<div class="hdr"><div class="l ${ghost?'ghost':''}">${L}</div><div class="t">${title}</div><div class="r">${Battery(p)}</div></div>`;
+  return `<div class="hdr"><div class="l ${ghost?'ghost':''}">${L}</div>${tbtn?`<button class="t btn" data-act="scenes" aria-label="Scena: ${title}. Zmień scenę">${title}${icon('chevronDown')}</button>`:`<div class="t">${title}</div>`}<div class="r">${Battery(p)}</div></div>`;
 }
 const NameTag=n=>`<span class="tag">${n||'…'}</span>`;
 const Btn=(label,variant='primary',attrs='')=>`<button class="pbtn ${variant}" ${attrs}>${label}</button>`;
@@ -314,8 +351,37 @@ const EBar=(p,label='Energia')=>`<div class="ebar"><div class="row"><span>${labe
 const Field=(label,id,val='',ph='',type='text',err='')=>`<div class="fld ${err?'err':''}"><label for="${id}">${label}</label><input id="${id}" type="${type}" value="${val}" placeholder="${ph}" ${err?'aria-invalid="true"':''}>${err?`<span class="e" role="alert">${err}</span>`:''}</div>`;
 const Act=(on=false,dis=false)=>`<button class="act ${on?'on':''}" data-act="water" ${dis?'disabled':''}><span class="box" style="color:${on?'#fff':'#2A9BD8'}">${icon('drop')}</span>Woda</button>`;
 const Scale=(w,petState='awake')=>`<div style="position:relative;width:240px;height:260px"><div style="position:absolute;left:30px;top:0">${Pet(petState,180)}</div><svg style="position:absolute;left:0;top:168px" width="240" height="84" viewBox="0 0 240 84"><rect x="8" y="22" width="224" height="58" rx="20" fill="#F4F7F6" stroke="#CBD5D2" stroke-width="2"/><rect x="0" y="6" width="240" height="26" rx="13" fill="#F4F7F6" stroke="#CBD5D2" stroke-width="2"/><rect x="70" y="40" width="100" height="32" rx="10" fill="#1F2D2A"/><text x="120" y="63" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="18" fill="#1FBF8F" id="scalekg">${w||'—'} kg</text></svg></div>`;
-const MenuPanel=()=>`<div class="menupanel" role="menu"><div class="mh">MENU</div><button class="menurow" role="menuitem" data-act="settings"><span class="ib">${icon('settings')}</span>Ustawienia${icon('chevron','ch')}</button><button class="menurow" role="menuitem" data-act="rename"><span class="ib">${icon('edit')}</span>Zmień imię${icon('chevron','ch')}</button><hr><button class="menurow out" role="menuitem" data-act="logout"><span class="ib">${icon('logout')}</span>Wyloguj${icon('chevron','ch')}</button></div>`;
-const wrapScreen=(night,inner)=>Scene(night)+`<div class="layer">${inner}</div>`;
+const MenuPanel=()=>`<div class="menupanel" role="menu"><div class="mh">MENU</div><button class="menurow" role="menuitem" data-act="places"><span class="ib">${icon('pin')}</span>Miejsca${icon('chevron','ch')}</button><button class="menurow" role="menuitem" data-act="schedule"><span class="ib">${icon('clock')}</span>Plan dnia${icon('chevron','ch')}</button><button class="menurow" role="menuitem" data-act="settings"><span class="ib">${icon('settings')}</span>Ustawienia${icon('chevron','ch')}</button><button class="menurow" role="menuitem" data-act="rename"><span class="ib">${icon('edit')}</span>Zmień imię${icon('chevron','ch')}</button><hr><button class="menurow out" role="menuitem" data-act="logout"><span class="ib">${icon('logout')}</span>Wyloguj${icon('chevron','ch')}</button></div>`;
+const wrapScreen=(night,inner,kind='meadow')=>Scene(night,kind)+`<div class="layer">${inner}</div>`;
+
+
+const Pill=k=>`<span class="pill ${k}">${SCN[k]}</span>`;
+const LCard=(ic,t,sub,right='',attr='')=>`<div class="lcard" ${attr}><span class="ic">${icon(ic)}</span><span class="bd"><b>${t}</b><span>${sub}</span></span>${right}</div>`;
+const AddCardH=(l,attr='')=>`<button class="lcard add" ${attr}>${icon('plus')}${l}</button>`;
+const MapArt=()=>`<div class="mapart" style="background:#DDEFE8"><svg viewBox="0 0 300 150" preserveAspectRatio="xMidYMid slice"><rect width="300" height="150" fill="#DDEFE8"/><path d="M-10 100C60 70 120 120 190 80S280 60 320 90" stroke="#fff" stroke-width="14" fill="none"/><path d="M80 -10C90 40 70 90 100 160" stroke="#fff" stroke-width="10" fill="none"/><rect x="190" y="14" width="70" height="40" rx="10" fill="#B9E3D1"/><circle cx="150" cy="78" r="34" fill="#1FBF8F" opacity=".18"/><path d="M150 104s16-15 16-28a16 16 0 0 0-32 0c0 13 16 28 16 28z" fill="#159A72"/><circle cx="150" cy="76" r="6" fill="#fff"/></svg></div>`;
+const SceneCardH=(k,sel)=>`<button class="scard" data-act="pickscene" data-scene="${k}" aria-pressed="${!!sel}"><div class="th"><div>${Scene(false,k)}</div></div><div class="lb">${SCN[k]}${sel?icon('check'):''}</div></button>`;
+const SwitchH=(label,on)=>`<button class="swt" role="switch" aria-checked="${on}" data-act="autoscene">${label}<i></i></button>`;
+const SCHEDULE=[{label:'Praca',start:'09:00',end:'17:00',scene:'office'},{label:'Lunch',start:'12:30',end:'13:00',scene:'lunch'}];
+const PLACES={home:{name:'Dom',scene:'home'},work:{name:'Praca',scene:'office'}};
+const slotLen=s=>((pt(s.end)-pt(s.start)+MIN_DAY)%MIN_DAY)||MIN_DAY;
+const slotOn=(s,now)=>((now-pt(s.start)+MIN_DAY)%MIN_DAY)<slotLen(s);
+function resolveScene(S){
+  if(S.manual) return {scene:S.manual,source:'ręcznie',label:SCN[S.manual]};
+  const a=SCHEDULE.filter(s=>slotOn(s,S.now)).sort((x,y)=>slotLen(x)-slotLen(y));
+  if(a[0]) return {scene:a[0].scene,source:'plan dnia',label:a[0].label==='Praca'?'Biuro':a[0].label};
+  if(S.pos&&S.pos!=='none'){const p=PLACES[S.pos];return {scene:p.scene,source:'miejsce',label:p.name==='Praca'?'Biuro':p.name}}
+  return {scene:'meadow',source:'domyślnie',label:SCN.meadow};
+}
+function homeView(S,o){
+  const g=goalFor(S.weight),en=energy(S.now,S.sleep,S.water,g),nm=S.name||'Tama',sl=sleeping(S.now,S.sleep);
+  const tiredF=o.forceState==='tired', sleepF=o.forceState==='sleeping';
+  const night=sleepF||(o.live&&sl), tired=tiredF||(o.live&&!sl&&en.state==='tired');
+  const st=night?'sleeping':tired?'tired':(o.forceState||(o.live&&S.justDrank?'happy':(o.scene==='lunch'?'happy':'awake')));
+  const p=tiredF?0:sleepF?100:en.percent;
+  const cap=night?`${nm} śpi do ${ft(wakeOf(S.sleep))}. Dobranoc!`:tired?'Brak energii – napij się wody!':`Energii starczy do ${en.until}`;
+  const label=o.label||SCN[o.scene];
+  return wrapScreen(night,`${HeaderBar({left:'menu',title:label,p,tbtn:true})}<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap float">${Pet(st,270)}</div></div><div class="caption" style="top:600px">${cap}</div><div class="actbar">${Act(tired,night)}</div>${S.toast?`<div class="toast">${icon('drop')} ${S.toast}</div>`:''}`,o.scene);
+}
 
 /* ---------- screens ---------- */
 const SCREENS=[
@@ -330,7 +396,16 @@ const SCREENS=[
  ['water','Woda','Dodawanie i odejmowanie po szklance.'],
  ['tired','Zmęczony','Energia 0%, akcja Woda podświetlona.'],
  ['sleeping','Śpi','Scena nocna, akcja zablokowana.'],
- ['dialog','Zmiana imienia','Dialog z polem i dwoma przyciskami.']
+ ['dialog','Zmiana imienia','Dialog z polem i dwoma przyciskami.'],
+ ['home-office','Home – biuro','Scena biura w godzinach pracy.'],
+ ['home-lunch','Home – lunch','Krótszy blok lunchu wygrywa z pracą.'],
+ ['home-home','Home – dom','Scena domu, gdy jesteś w zapisanym miejscu.'],
+ ['home-night','Dom – noc','Wnętrze z nocną poświatą w oknie snu.'],
+ ['scenes','Wybór sceny','Ręczna zmiana sceny albo tryb automatyczny.'],
+ ['places','Miejsca','Dom, praca i inne miejsca zmapowane na sceny.'],
+ ['locperm','Zgoda na lokalizację','Prośba o dostęp, z jasnym wyjaśnieniem.'],
+ ['schedule','Plan dnia','Bloki czasu przypisane do scen.'],
+ ['prompt','Pytanie o plan','Aplikacja pyta, czy zaczynasz pracę o 9:00.']
 ];
 function renderScreen(id,S,live=false){
   const g=goalFor(S.weight), en=energy(S.now,S.sleep,S.water,g), nm=S.name||'Tama';
@@ -342,11 +417,18 @@ function renderScreen(id,S,live=false){
   case 'indicator': return wrapScreen(false,`${HeaderBar({left:'none',p:62,ghost:true})}<div class="ring" style="right:6px;top:52px;width:158px;height:56px"></div><div class="hero" style="top:150px">${NameTag(nm)}<div class="pet-wrap float">${Pet('awake',230)}</div></div><div class="sheet">${Dots(2)}<h3>To Twoja energia</h3><p>Wskaźnik w prawym górnym rogu pokazuje, ile energii ma Twoja postać. Pije wodę i śpi, a bateria się ładuje.</p>${Btn('Dalej','primary','data-go="sleep"')}</div>`);
   case 'sleep': {const w=ft(wakeOf(S.sleep)); return wrapScreen(true,`<div class="hero" style="top:110px">${NameTag(nm)}<div class="pet-wrap float">${Pet('sleeping',220)}</div></div><div class="sheet">${Dots(3)}<h3>Kiedy chodzisz spać?</h3><p>Sen zawsze trwa 8 godzin. Wybierz godzinę zaśnięcia.</p><div class="timecard"><b id="sleeplab">${S.sleep} → ${w}</b><span>8 godzin snu</span></div><div class="fld"><label for="f-sleep">Godzina zaśnięcia</label><select id="f-sleep">${Array.from({length:48},(_,i)=>ft(i*30)).map(t=>`<option ${t===S.sleep?'selected':''}>${t}</option>`).join('')}</select></div>${Btn('Dalej','primary','data-go="weight"')}</div>`);}
   case 'weight': return wrapScreen(false,`<div class="hero" style="top:70px">${NameTag(nm)}</div><div style="position:absolute;left:75px;top:130px;z-index:2">${Scale(S.weight)}</div><div class="sheet">${Dots(4)}<h3>Ile ważysz?</h3><p>Postać stanęła na wadze! Cel wody to waga × 35 ml.</p>${Field('Waga (kg)','f-weight',S.weight,'70','number')}<div style="text-align:center;font:800 18px var(--font);color:var(--water-dark)" id="goallab">Twój cel: ${g} ml wody dziennie</div>${Btn('Zaczynamy!','primary','data-go="home"')}</div>`);
-  case 'home': case 'tired': case 'sleeping': {
-    const st=id==='home'?(live?(sl?'sleeping':en.state==='tired'?'tired':S.justDrank?'happy':'awake'):'awake'):id==='tired'?'tired':'sleeping';
-    const night=id==='sleeping'||(live&&id==='home'&&sl); const p=id==='tired'?0:id==='sleeping'?100:en.percent;
-    const cap=night?`${nm} śpi do ${ft(wakeOf(S.sleep))}. Dobranoc!`:(id==='tired'||st==='tired')?'Brak energii – napij się wody!':`Energii starczy do ${en.until}`;
-    return wrapScreen(night,`${HeaderBar({left:'menu',p})}<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap float">${Pet(st,270)}</div></div><div class="caption" style="top:600px">${cap}</div><div class="actbar">${Act(id==='tired'||st==='tired',night)}</div>${S.toast?`<div class="toast">${icon('drop')} ${S.toast}</div>`:''}`);}
+  case 'home': return homeView(S,{live,scene:live?resolveScene(S).scene:'meadow',label:live?resolveScene(S).label:'Zielona Łąka'});
+  case 'tired': return homeView(S,{scene:'meadow',label:'Zielona Łąka',forceState:'tired'});
+  case 'sleeping': return homeView(S,{scene:'meadow',label:'Zielona Łąka',forceState:'sleeping'});
+  case 'home-office': return homeView(S,{scene:'office',label:'Biuro'});
+  case 'home-lunch': return homeView(S,{scene:'lunch',label:'Lunch',forceState:'happy'});
+  case 'home-home': return homeView(S,{scene:'home',label:'Dom'});
+  case 'home-night': return homeView(S,{scene:'home',label:'Dom',forceState:'sleeping'});
+  case 'scenes': {const cur=S.cur||'office';return wrapScreen(false,`${HeaderBar({left:'menu',title:SCN[cur],p:en.percent,tbtn:true})}<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap">${Pet('awake',270)}</div></div><div class="scrim"></div><div class="sheet"><h3>Wybierz scenę</h3>${SwitchH('Automatycznie (miejsce i plan dnia)',!S.manual&&S.auto!==false&&live)}<div class="sgrid">${['meadow','home','office','lunch'].map(k=>SceneCardH(k,k===cur)).join('')}</div><p class="pnote">Wybrana ręcznie scena zostaje do włączenia trybu automatycznego.</p></div>`,cur)}
+  case 'places': return wrapScreen(false,`${HeaderBar({left:'menu+back',title:'Miejsca',p:en.percent})}<div class="page">${MapArt()}${LCard('pin','Dom','52.2297, 21.0122 · promień 100 m',Pill('home'))}${LCard('pin','Praca','52.2400, 21.0300 · promień 150 m',Pill('office'))}${AddCardH('Dodaj miejsce')}${Btn('Użyj bieżącej lokalizacji','water','data-go="locperm"')}<p class="pnote">Lokalizację porównujemy z Twoimi miejscami na urządzeniu. Nie zapisujemy trasy.</p></div>`);
+  case 'locperm': return wrapScreen(false,`<div class="hero" style="top:100px">${NameTag(nm)}<div class="pet-wrap float">${Pet('happy',200)}</div></div><div class="sheet"><h3>Gdzie jesteś?</h3><p>Dzięki lokalizacji pokażę scenę domu, biura lub innego miejsca, które zapiszesz.</p>${MapArt()}<p class="pnote">Używamy tylko ostatniej pozycji, żeby rozpoznać Twoje miejsca. Możesz to wyłączyć w każdej chwili i zmieniać sceny ręcznie.</p>${Btn('Zezwól na lokalizację','primary','data-go="places"')}${Btn('Nie teraz','secondary','data-go="places"')}</div>`);
+  case 'schedule': return wrapScreen(false,`${HeaderBar({left:'menu+back',title:'Plan dnia',p:en.percent})}<div class="page"><h2>Bloki dnia</h2>${LCard('clock','Praca','09:00 – 17:00 · pon–pt',Pill('office'))}${LCard('clock','Lunch','12:30 – 13:00 · pon–pt',Pill('lunch'))}${AddCardH('Dodaj blok')}<p class="pnote">Krótszy blok wygrywa z dłuższym, więc w czasie lunchu zobaczysz kuchnię, a nie biuro. Poza blokami scenę wybiera Twoja lokalizacja.</p></div>`);
+  case 'prompt': return wrapScreen(false,`${HeaderBar({left:'menu',title:'Biuro',p:en.percent,tbtn:true})}<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap">${Pet('awake',270)}</div></div><div class="scrim"></div><div class="dialog"><h3>Zaczynasz pracę o 9:00?</h3><p>Kończysz o 17:00? Pokażę wtedy scenę biura, a w czasie lunchu scenę z kuchnią.</p><div class="btns">${Btn('Zmień','secondary','data-act="closedlg"')}${Btn('Tak, ustaw','primary','data-go="home"')}</div></div>`,'office');
   case 'menu': return wrapScreen(false,`<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap">${Pet('awake',270)}</div></div><div class="actbar">${Act()}</div><div class="scrim"></div>${HeaderBar({left:'close',title:'Menu',p:en.percent})}${MenuPanel()}`);
   case 'water': {const drank=S.justDrank; return wrapScreen(false,`${HeaderBar({left:'menu+back',title:'Woda',p:en.percent})}<div class="hero" style="top:130px">${NameTag(nm)}<div class="pet-wrap">${Pet(drank?'drinking':'awake',230)}</div></div><div class="counter" style="top:455px"><b id="wl">${S.water} / ${g} ml</b><span>Dodawaj po szklance (250 ml)</span></div><div class="panelw" style="top:560px">${EBar(Math.round(Math.min(1,S.water/g)*100),'Woda')}</div><div class="actbar" style="bottom:56px;gap:70px"><div class="rb"><button class="circ minus" aria-label="Odejmij 250 ml" data-act="minus">${icon('minus')}</button>−250 ml</div><div class="rb"><button class="circ plus" aria-label="Dodaj 250 ml" data-act="plus">${icon('plus')}</button>+250 ml</div></div>${S.toast?`<div class="toast">${icon('drop')} ${S.toast}</div>`:''}`);}
   case 'dialog': return wrapScreen(false,`${HeaderBar({left:'menu',p:en.percent})}<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap">${Pet('awake',270)}</div></div><div class="scrim"></div><div class="dialog"><h3>Zmień imię</h3><p>Jak ma się teraz nazywać Twoja postać?</p>${Field('Imię postaci','f-rename',S.name,'np. Tama')}<div class="btns">${Btn('Anuluj','secondary','data-act="closedlg"')}${Btn('Zapisz','primary','data-act="saverename"')}</div></div>`);
@@ -408,18 +490,18 @@ document.getElementById('gallery').innerHTML=SCREENS.map(([id,t,d],i)=>{
   const S={...SAMPLE};if(id==='tired')S.water=0;
   return `<div class="gcell"><h4>${String(i+1).padStart(2,'0')} · ${t}</h4><p>${d}</p><div class="scaler"><div class="phone">${renderScreen(id,S)}</div></div></div>`}).join('');
 
-const P={screen:'login',stack:[],S:{...SAMPLE,name:'',weight:70,water:0,now:480}};
+const P={screen:'login',stack:[],S:{...SAMPLE,name:'',weight:70,water:0,now:480,manual:null,pos:'none'}};
 const proto=document.getElementById('proto'),crumbs=document.getElementById('crumbs');
-const PROTO_ORDER=[['login','Login'],['name','Imię'],['energy','Energia'],['indicator','Wskaźnik'],['sleep','Sen'],['weight','Waga'],['home','Home'],['menu','Menu'],['water','Woda'],['settings','Ustawienia'],['dialog','Dialog']];
+const PROTO_ORDER=[['login','Login'],['name','Imię'],['energy','Energia'],['indicator','Wskaźnik'],['sleep','Sen'],['weight','Waga'],['home','Home'],['menu','Menu'],['water','Woda'],['scenes','Wybór sceny'],['places','Miejsca'],['locperm','Lokalizacja'],['schedule','Plan dnia'],['prompt','Pytanie o plan'],['settings','Ustawienia'],['dialog','Dialog']];
 crumbs.innerHTML=PROTO_ORDER.map(([id,l])=>`<button data-to="${id}">${l}</button>`).join('');
 let toastT;
 function showToast(msg){P.S.toast=msg;clearTimeout(toastT);toastT=setTimeout(()=>{P.S.toast='';P.S.justDrank=false;draw()},1500)}
 function draw(){
   const id=P.screen, S=P.S; const nameShown={...S,name:S.name||(['login','name'].includes(id)?'':'Tama')};
-  proto.innerHTML=renderScreen(id,id==='name'?{...S}:nameShown,true);
+  const rs=resolveScene(S);proto.innerHTML=renderScreen(id,id==='name'?{...S}:{...nameShown,cur:rs.scene},true);
   crumbs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b.dataset.to===id));
   const g=goalFor(S.weight),en=energy(S.now,S.sleep,S.water,g);
-  document.getElementById('statetbl').innerHTML=[['Imię',S.name||'—'],['Sen',S.sleep+' → '+ft(wakeOf(S.sleep))],['Waga / cel',S.weight+' kg / '+g+' ml'],['Woda',S.water+' ml ('+Math.round(en.ratio*100)+'%)'],['Energia',en.state==='sleeping'?'śpi':en.percent+'% do '+en.until]].map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('');
+  document.getElementById('statetbl').innerHTML=[['Imię',S.name||'—'],['Sen',S.sleep+' → '+ft(wakeOf(S.sleep))],['Waga / cel',S.weight+' kg / '+g+' ml'],['Woda',S.water+' ml ('+Math.round(en.ratio*100)+'%)'],['Scena',SCN[rs.scene]+' ('+rs.source+')'],['Energia',en.state==='sleeping'?'śpi':en.percent+'% do '+en.until]].map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('');
   const b=proto.querySelector('#b-name');if(b)b.disabled=!S.name.trim();
 }
 function go(id){P.screen=id;draw()}
@@ -433,6 +515,11 @@ proto.addEventListener('click',e=>{
   else if(a==='water'){go('water')}
   else if(a==='plus'){S.water+=250;S.justDrank=true;showToast('+250 ml wody');draw()}
   else if(a==='minus'){S.water=Math.max(0,S.water-250);showToast('−250 ml wody');draw()}
+  else if(a==='scenes'){P.prev=P.screen;go('scenes')}
+  else if(a==='pickscene'){S.manual=t.dataset.scene;go('home')}
+  else if(a==='autoscene'){S.manual=null;go('home')}
+  else if(a==='places'){go('places')}
+  else if(a==='schedule'){go('schedule')}
   else if(a==='settings'){go('settings')}
   else if(a==='rename'){go('dialog')}
   else if(a==='closedlg'){go('home')}
@@ -447,6 +534,7 @@ proto.addEventListener('input',e=>{
 proto.addEventListener('change',e=>{if(e.target.id==='f-sleep'){P.S.sleep=e.target.value;proto.querySelector('#sleeplab').textContent=P.S.sleep+' → '+ft(wakeOf(P.S.sleep))}});
 crumbs.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(!P.S.name)P.S.name='Tama';go(b.dataset.to)});
 const clock=document.getElementById('clock'),clocklab=document.getElementById('clocklab');
+document.getElementById('pos').addEventListener('change',e=>{P.S.pos=e.target.value;draw()});
 clock.addEventListener('input',()=>{P.S.now=+clock.value;clocklab.textContent=ft(P.S.now);if(['home','water','menu','settings','dialog'].includes(P.screen)){const a=document.activeElement;draw();}else{draw()}});
 draw();
 

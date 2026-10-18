@@ -22,3 +22,4 @@ export * from "./components/Toast";
 export * from "./components/Dialog";
 export * from "./components/WaterCounter";
 export * from "./components/PetScale";
+export * from "./components/Places";
