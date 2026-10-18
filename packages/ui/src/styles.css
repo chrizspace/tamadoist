@@ -184,3 +184,8 @@ body { font-family: var(--font); color: var(--color-text); background: var(--col
 .td-listcard--add { gap: 8px; }
 .td-scenecard__label svg { width: 20px; height: 20px; color: var(--color-primary); padding: 0; background: none; }
 .td-page .td-note { background: rgba(255,255,255,.88); padding: 10px 14px; border-radius: 16px; }
+
+.td-editbadge { width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary-soft); color: var(--color-primary-dark); display: grid; place-items: center; flex: none; }
+.td-editbadge svg { width: 20px; height: 20px; }
+button.td-listcard { cursor: pointer; font-family: var(--font); color: var(--color-text); }
+button.td-listcard:focus-visible { outline: 3px solid var(--color-water); outline-offset: 2px; }

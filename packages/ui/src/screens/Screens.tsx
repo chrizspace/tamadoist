@@ -14,7 +14,7 @@ import { PetScale } from "../components/PetScale";
 import { ProgressDots } from "../components/ProgressDots";
 import { RoundButton } from "../components/RoundButton";
 import { Scene, type SceneKind } from "../components/Scene";
-import { AddCard, ListCard, MapArt, SCENE_NAMES, SceneCard, ScenePill, Switch } from "../components/Places";
+import { AddCard, ListCard, MapArt, SCENE_NAMES, SceneCard, ScenePill, SettingRow, Switch } from "../components/Places";
 import { Sheet } from "../components/Sheet";
 import { TimeCard } from "../components/TimeCard";
 import { Toast } from "../components/Toast";
@@ -191,11 +191,16 @@ export function WaterScreen({ name, drunkMl, goalMl, energyPercent, drinking }: 
   );
 }
 
-export function RenameDialogScreen({ name, energyPercent }: Pick<ScreenData, "name" | "energyPercent">) {
+export function RenameDialogScreen({ name, sleepStart, sleepEnd, weightKg, goalMl, energyPercent }: ScreenData) {
   return (
     <Phone>
-      <HeaderBar left="menu" percent={energyPercent} />
-      <Hero top={165} name={name} float={false}><Pet size={270} /></Hero>
+      <HeaderBar left="back" title="Ustawienia" percent={energyPercent} />
+      <div className="td-page">
+        <SettingRow label="Imię postaci" value={name} onEdit={() => undefined} />
+        <SettingRow label="Godzina snu" value={`${sleepStart} → ${sleepEnd}`} />
+        <SettingRow label="Waga" value={`${weightKg} kg`} />
+        <SettingRow label="Cel wody" value={`${goalMl} ml`} />
+      </div>
       <div className="td-scrim" />
       <Dialog title="Zmień imię" description="Jak ma się teraz nazywać Twoja postać?" actions={<><Button variant="secondary">Anuluj</Button><Button>Zapisz</Button></>}>
         <Input label="Imię postaci" defaultValue={name} />
@@ -205,12 +210,14 @@ export function RenameDialogScreen({ name, energyPercent }: Pick<ScreenData, "na
 }
 
 export function SettingsScreen({ name, sleepStart, sleepEnd, weightKg, goalMl, energyPercent }: ScreenData) {
-  const rows: [string, string][] = [["Imię postaci", name], ["Godzina snu", `${sleepStart} → ${sleepEnd}`], ["Waga", `${weightKg} kg`], ["Cel wody", `${goalMl} ml`]];
   return (
     <Phone>
       <HeaderBar left="back" title="Ustawienia" percent={energyPercent} />
-      <div style={{ position: "absolute", left: 24, right: 24, top: 140, display: "flex", flexDirection: "column", gap: 12, zIndex: 2 }}>
-        {rows.map(([a, b]) => <Card key={a} title={b}>{a}</Card>)}
+      <div className="td-page">
+        <SettingRow label="Imię postaci" value={name} onEdit={() => undefined} />
+        <SettingRow label="Godzina snu" value={`${sleepStart} → ${sleepEnd}`} />
+        <SettingRow label="Waga" value={`${weightKg} kg`} />
+        <SettingRow label="Cel wody" value={`${goalMl} ml`} />
       </div>
     </Phone>
   );

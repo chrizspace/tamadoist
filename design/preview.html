@@ -189,6 +189,10 @@ input[type=range]{width:100%;accent-color:var(--primary)}
 .swt[aria-checked="true"] i{background:var(--primary)}.swt[aria-checked="true"] i::after{transform:translateX(20px)}
 .mapart{height:150px;border-radius:24px;overflow:hidden;position:relative;flex:none}.mapart svg{position:absolute;inset:0;width:100%;height:100%}
 .sheet .mapart{height:130px}
+.srow{background:#fff;border:2px solid var(--p-border);border-radius:24px;padding:14px 16px;display:flex;align-items:center;gap:12px;width:100%;font-family:var(--font);color:var(--p-text);text-align:left}
+button.srow{cursor:pointer}button.srow:focus-visible{outline:3px solid var(--water);outline-offset:2px}
+.srow .bd{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}.srow .bd span{font:600 13px var(--font);color:var(--p-muted)}.srow .bd b{font:800 18px var(--font)}
+.srow .eb{width:40px;height:40px;border-radius:50%;background:var(--primary-soft);color:var(--primary-dark);display:grid;place-items:center;flex:none}.srow .eb svg{width:20px;height:20px}
 </style>
 
 <div class="wrap">
@@ -351,7 +355,7 @@ const EBar=(p,label='Energia')=>`<div class="ebar"><div class="row"><span>${labe
 const Field=(label,id,val='',ph='',type='text',err='')=>`<div class="fld ${err?'err':''}"><label for="${id}">${label}</label><input id="${id}" type="${type}" value="${val}" placeholder="${ph}" ${err?'aria-invalid="true"':''}>${err?`<span class="e" role="alert">${err}</span>`:''}</div>`;
 const Act=(on=false,dis=false)=>`<button class="act ${on?'on':''}" data-act="water" ${dis?'disabled':''}><span class="box" style="color:${on?'#fff':'#2A9BD8'}">${icon('drop')}</span>Woda</button>`;
 const Scale=(w,petState='awake')=>`<div style="position:relative;width:240px;height:260px"><div style="position:absolute;left:30px;top:0">${Pet(petState,180)}</div><svg style="position:absolute;left:0;top:168px" width="240" height="84" viewBox="0 0 240 84"><rect x="8" y="22" width="224" height="58" rx="20" fill="#F4F7F6" stroke="#CBD5D2" stroke-width="2"/><rect x="0" y="6" width="240" height="26" rx="13" fill="#F4F7F6" stroke="#CBD5D2" stroke-width="2"/><rect x="70" y="40" width="100" height="32" rx="10" fill="#1F2D2A"/><text x="120" y="63" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="18" fill="#1FBF8F" id="scalekg">${w||'—'} kg</text></svg></div>`;
-const MenuPanel=()=>`<div class="menupanel" role="menu"><div class="mh">MENU</div><button class="menurow" role="menuitem" data-act="places"><span class="ib">${icon('pin')}</span>Miejsca${icon('chevron','ch')}</button><button class="menurow" role="menuitem" data-act="schedule"><span class="ib">${icon('clock')}</span>Plan dnia${icon('chevron','ch')}</button><button class="menurow" role="menuitem" data-act="settings"><span class="ib">${icon('settings')}</span>Ustawienia${icon('chevron','ch')}</button><button class="menurow" role="menuitem" data-act="rename"><span class="ib">${icon('edit')}</span>Zmień imię${icon('chevron','ch')}</button><hr><button class="menurow out" role="menuitem" data-act="logout"><span class="ib">${icon('logout')}</span>Wyloguj${icon('chevron','ch')}</button></div>`;
+const MenuPanel=()=>`<div class="menupanel" role="menu"><div class="mh">MENU</div><button class="menurow" role="menuitem" data-act="places"><span class="ib">${icon('pin')}</span>Miejsca${icon('chevron','ch')}</button><button class="menurow" role="menuitem" data-act="schedule"><span class="ib">${icon('clock')}</span>Plan dnia${icon('chevron','ch')}</button><button class="menurow" role="menuitem" data-act="settings"><span class="ib">${icon('settings')}</span>Ustawienia${icon('chevron','ch')}</button><hr><button class="menurow out" role="menuitem" data-act="logout"><span class="ib">${icon('logout')}</span>Wyloguj${icon('chevron','ch')}</button></div>`;
 const wrapScreen=(night,inner,kind='meadow')=>Scene(night,kind)+`<div class="layer">${inner}</div>`;
 
 
@@ -361,6 +365,7 @@ const AddCardH=(l,attr='')=>`<button class="lcard add" ${attr}>${icon('plus')}${
 const MapArt=()=>`<div class="mapart" style="background:#DDEFE8"><svg viewBox="0 0 300 150" preserveAspectRatio="xMidYMid slice"><rect width="300" height="150" fill="#DDEFE8"/><path d="M-10 100C60 70 120 120 190 80S280 60 320 90" stroke="#fff" stroke-width="14" fill="none"/><path d="M80 -10C90 40 70 90 100 160" stroke="#fff" stroke-width="10" fill="none"/><rect x="190" y="14" width="70" height="40" rx="10" fill="#B9E3D1"/><circle cx="150" cy="78" r="34" fill="#1FBF8F" opacity=".18"/><path d="M150 104s16-15 16-28a16 16 0 0 0-32 0c0 13 16 28 16 28z" fill="#159A72"/><circle cx="150" cy="76" r="6" fill="#fff"/></svg></div>`;
 const SceneCardH=(k,sel)=>`<button class="scard" data-act="pickscene" data-scene="${k}" aria-pressed="${!!sel}"><div class="th"><div>${Scene(false,k)}</div></div><div class="lb">${SCN[k]}${sel?icon('check'):''}</div></button>`;
 const SwitchH=(label,on)=>`<button class="swt" role="switch" aria-checked="${on}" data-act="autoscene">${label}<i></i></button>`;
+const SettingsRows=(S,nm,g)=>`<div class="page">${[['Imię postaci',nm,true],['Godzina snu',S.sleep+' → '+ft(wakeOf(S.sleep))],['Waga',S.weight+' kg'],['Cel wody',g+' ml']].map(([a,b,e])=>e?`<button class="srow" data-act="rename" aria-label="${a}: ${b}. Edytuj"><span class="bd"><span>${a}</span><b>${b}</b></span><span class="eb">${icon('edit')}</span></button>`:`<div class="srow"><span class="bd"><span>${a}</span><b>${b}</b></span></div>`).join('')}</div>`;
 const SCHEDULE=[{label:'Praca',start:'09:00',end:'17:00',scene:'office'},{label:'Lunch',start:'12:30',end:'13:00',scene:'lunch'}];
 const PLACES={home:{name:'Dom',scene:'home'},work:{name:'Praca',scene:'office'}};
 const slotLen=s=>((pt(s.end)-pt(s.start)+MIN_DAY)%MIN_DAY)||MIN_DAY;
@@ -396,7 +401,7 @@ const SCREENS=[
  ['water','Woda','Dodawanie i odejmowanie po szklance.'],
  ['tired','Zmęczony','Energia 0%, akcja Woda podświetlona.'],
  ['sleeping','Śpi','Scena nocna, akcja zablokowana.'],
- ['dialog','Zmiana imienia','Dialog z polem i dwoma przyciskami.'],
+ ['dialog','Zmiana imienia','Ustawienia: dotknij imienia (ikona edycji po prawej), pojawia się dialog.'],
  ['home-office','Home – biuro','Scena biura w godzinach pracy.'],
  ['home-lunch','Home – lunch','Krótszy blok lunchu wygrywa z pracą.'],
  ['home-home','Home – dom','Scena domu, gdy jesteś w zapisanym miejscu.'],
@@ -431,8 +436,8 @@ function renderScreen(id,S,live=false){
   case 'prompt': return wrapScreen(false,`${HeaderBar({left:'menu',title:'Biuro',p:en.percent,tbtn:true})}<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap">${Pet('awake',270)}</div></div><div class="scrim"></div><div class="dialog"><h3>Zaczynasz pracę o 9:00?</h3><p>Kończysz o 17:00? Pokażę wtedy scenę biura, a w czasie lunchu scenę z kuchnią.</p><div class="btns">${Btn('Zmień','secondary','data-act="closedlg"')}${Btn('Tak, ustaw','primary','data-go="home"')}</div></div>`,'office');
   case 'menu': return wrapScreen(false,`<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap">${Pet('awake',270)}</div></div><div class="actbar">${Act()}</div><div class="scrim"></div>${HeaderBar({left:'close',title:'Menu',p:en.percent})}${MenuPanel()}`);
   case 'water': {const drank=S.justDrank; return wrapScreen(false,`${HeaderBar({left:'back',title:'Woda',p:en.percent})}<div class="hero" style="top:130px">${NameTag(nm)}<div class="pet-wrap">${Pet(drank?'drinking':'awake',230)}</div></div><div class="counter" style="top:455px"><b id="wl">${S.water} / ${g} ml</b><span>Dodawaj po szklance (250 ml)</span></div><div class="panelw" style="top:560px">${EBar(Math.round(Math.min(1,S.water/g)*100),'Woda')}</div><div class="actbar" style="bottom:56px;gap:70px"><div class="rb"><button class="circ minus" aria-label="Odejmij 250 ml" data-act="minus">${icon('minus')}</button>−250 ml</div><div class="rb"><button class="circ plus" aria-label="Dodaj 250 ml" data-act="plus">${icon('plus')}</button>+250 ml</div></div>${S.toast?`<div class="toast">${icon('drop')} ${S.toast}</div>`:''}`);}
-  case 'dialog': return wrapScreen(false,`${HeaderBar({left:'menu',p:en.percent})}<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap">${Pet('awake',270)}</div></div><div class="scrim"></div><div class="dialog"><h3>Zmień imię</h3><p>Jak ma się teraz nazywać Twoja postać?</p>${Field('Imię postaci','f-rename',S.name,'np. Tama')}<div class="btns">${Btn('Anuluj','secondary','data-act="closedlg"')}${Btn('Zapisz','primary','data-act="saverename"')}</div></div>`);
-  case 'settings': return wrapScreen(false,`${HeaderBar({left:'back',title:'Ustawienia',p:en.percent})}<div style="position:absolute;left:24px;right:24px;top:140px;display:flex;flex-direction:column;gap:12px;z-index:2">${[['Imię postaci',nm],['Godzina snu',S.sleep+' → '+ft(wakeOf(S.sleep))],['Waga',S.weight+' kg'],['Cel wody',g+' ml']].map(([a,b])=>`<div class="pcard"><span>${a}</span><b>${b}</b></div>`).join('')}</div>`);
+  case 'dialog': return wrapScreen(false,`${HeaderBar({left:'back',title:'Ustawienia',p:en.percent})}${SettingsRows(S,nm,g)}<div class="scrim"></div><div class="dialog"><h3>Zmień imię</h3><p>Jak ma się teraz nazywać Twoja postać?</p>${Field('Imię postaci','f-rename',S.name,'np. Tama')}<div class="btns">${Btn('Anuluj','secondary','data-act="closedlg"')}${Btn('Zapisz','primary','data-act="saverename"')}</div></div>`);
+  case 'settings': return wrapScreen(false,`${HeaderBar({left:'back',title:'Ustawienia',p:en.percent})}${SettingsRows(S,nm,g)}`);
   }
 }
 const SAMPLE={name:'Tama',sleep:'22:00',weight:70,water:1700,now:480,toast:'',justDrank:false};
@@ -522,8 +527,8 @@ proto.addEventListener('click',e=>{
   else if(a==='schedule'){go('schedule')}
   else if(a==='settings'){go('settings')}
   else if(a==='rename'){go('dialog')}
-  else if(a==='closedlg'){go('home')}
-  else if(a==='saverename'){const v=(proto.querySelector('#f-rename').value||'').trim();if(v){S.name=v.slice(0,20)}go('home')}
+  else if(a==='closedlg'){go(P.screen==='prompt'?'home':'settings')}
+  else if(a==='saverename'){const v=(proto.querySelector('#f-rename').value||'').trim();if(v){S.name=v.slice(0,20)}go('settings')}
   else if(a==='logout'){P.S={...SAMPLE,name:'',weight:70,water:0,now:P.S.now};go('login')}
 });
 proto.addEventListener('input',e=>{

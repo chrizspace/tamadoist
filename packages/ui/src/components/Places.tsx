@@ -66,3 +66,20 @@ export function MapArt() {
     </div>
   );
 }
+
+export interface SettingRowProps { label: string; value: string; onEdit?: () => void }
+
+/** A settings row. When `onEdit` is set the whole row is tappable and shows an edit icon on the right. */
+export function SettingRow({ label, value, onEdit }: SettingRowProps) {
+  const body = (
+    <>
+      <span className="td-listcard__body"><span className="sub">{label}</span><b>{value}</b></span>
+      {onEdit && <span className="td-editbadge"><Icon name="edit" /></span>}
+    </>
+  );
+  return onEdit ? (
+    <button type="button" className="td-listcard" onClick={onEdit} aria-label={`${label}: ${value}. Edytuj`}>{body}</button>
+  ) : (
+    <div className="td-listcard">{body}</div>
+  );
+}

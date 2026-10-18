@@ -24,7 +24,7 @@ export const S08_Menu: Story = { name: "08 Menu", render: () => <MenuScreen name
 export const S09_Water: Story = { name: "09 Woda", render: () => <WaterScreen {...d} /> };
 export const S10_Tired: Story = { name: "10 Zmęczony", render: () => <HomeScreen {...d} energyPercent={0} state="tired" /> };
 export const S11_Sleeping: Story = { name: "11 Śpi", render: () => <HomeScreen {...d} energyPercent={100} state="sleeping" /> };
-export const S12_Rename: Story = { name: "12 Zmiana imienia", render: () => <RenameDialogScreen name={d.name} energyPercent={d.energyPercent} /> };
+export const S12_Rename: Story = { name: "12 Zmiana imienia", render: () => <RenameDialogScreen {...d} /> };
 export const S13_Settings: Story = { name: "13 Ustawienia", render: () => <SettingsScreen {...d} /> };
 export const WaterDrinking: Story = { name: "Woda – po dodaniu szklanki", render: () => <WaterScreen {...d} drinking /> };
 
