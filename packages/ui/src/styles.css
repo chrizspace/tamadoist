@@ -314,3 +314,15 @@ button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outli
 .td-phone--plain { background: #F6F9F8; }
 .td-statusfull { position: absolute; inset: 0; padding: 60px 20px 0; display: flex; flex-direction: column; z-index: 3; }
 .td-statusfull .td-status__head h3 { margin: 0; font: 800 28px var(--font); }
+
+.td-circle--primary { background: var(--color-primary); box-shadow: 0 var(--lip) 0 var(--color-primary-dark); color: #fff; }
+.td-circle--plain { background: #fff; border: 2px solid var(--color-border); color: var(--color-text); box-shadow: 0 var(--lip) 0 var(--lip-neutral); }
+.td-counter__next { font: 700 14px var(--font); color: var(--color-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.td-counter .td-counter__next b { display: inline; font: 800 14px var(--font); color: var(--color-text); }
+.td-counter--green b:first-of-type { color: var(--color-primary-dark); }
+.td-counter--green .td-counter__fill { background: linear-gradient(var(--color-primary), var(--color-primary-dark)); }
+.td-counter--green .td-counter__track { background: var(--color-primary-soft); }
+.td-counter--green .td-counter__gain { background: var(--color-primary); box-shadow: 0 2px 0 var(--color-primary-dark); }
+.td-status__list button.td-status__check { cursor: pointer; padding: 0; background: #fff; }
+.td-status__list button.td-status__check.is-done { background: var(--c); }
+.td-status__list li { min-height: 40px; }

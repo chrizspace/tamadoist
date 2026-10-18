@@ -5,6 +5,7 @@ import {
   SchedulePromptScreen, SettingsScreen, SleepScreen, WaterScreen, WeightScreen,
 } from "./Screens";
 import { StatusScreen } from "./Status";
+import { ChecklistActionScreen, ChecklistPage, SAMPLE_HABIT_ITEMS, SAMPLE_TODAY } from "./Checklist";
 
 const meta: Meta = {
   title: "Screens/Flow",
@@ -46,3 +47,7 @@ export const S25_SchedulePrompt: Story = { name: "25 Pytanie o plan", render: ()
 export const S20_StatusEnergy: Story = { name: "20 Karta statusu (pełny ekran) – energia", render: () => <StatusScreen focus="energy" /> };
 export const S21_StatusTasks: Story = { name: "21 Karta statusu – zadania", render: () => <StatusScreen focus="tasks" /> };
 export const S22_StatusStreak: Story = { name: "22 Karta statusu – seria", render: () => <StatusScreen focus="streak" /> };
+export const S23_Tasks: Story = { name: "23 Zadania (akcja)", render: () => <ChecklistActionScreen title="Zadania" items={SAMPLE_TODAY} /> };
+export const S24_TasksList: Story = { name: "24 Zadania – lista", render: () => <ChecklistPage title="Zadania" items={SAMPLE_TODAY} /> };
+export const S25_Habits: Story = { name: "25 Nawyki (akcja)", render: () => <ChecklistActionScreen title="Nawyki" items={SAMPLE_HABIT_ITEMS.map((h, i) => ({ ...h, done: i === 0 }))} /> };
+export const S26_HabitsList: Story = { name: "26 Nawyki – lista", render: () => <ChecklistPage title="Nawyki" color="#FF8A3D" items={SAMPLE_HABIT_ITEMS.map((h, i) => ({ ...h, done: i === 0 }))} /> };

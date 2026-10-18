@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import { LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
+import { completeNext, toggleItem, LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
 import {
-  IndicatorsProvider, IndicatorsLayoutContext, StatusScreen, SAMPLE_TASKS, type DialKey, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
+  IndicatorsProvider, IndicatorsLayoutContext, StatusScreen, ChecklistActionScreen, ChecklistPage, SAMPLE_TODAY, SAMPLE_HABIT_ITEMS, type DialKey, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
   PlacesScreen, RenameDialogScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
   SleepScreen, WaterScreen, WeightScreen,
 } from "@tamadoist/ui";
@@ -11,11 +11,11 @@ import { useCharacter } from "./modules/character";
 import { useScene, type SimPosition } from "./modules/scene";
 import { CITIES, SEASONS, deriveWorld, fmt, isoDate, parseIso, type Env, DEFAULT_ENV } from "./world";
 
-type ScreenId = "login" | "name" | "energy" | "indicator" | "sleep" | "weight" | "home" | "menu" | "water" | "settings" | "rename" | "scenes" | "places" | "locperm" | "schedule" | "prompt" | "status";
+type ScreenId = "login" | "name" | "energy" | "indicator" | "sleep" | "weight" | "home" | "menu" | "water" | "settings" | "rename" | "scenes" | "places" | "locperm" | "schedule" | "prompt" | "status" | "tasks" | "tasks-list" | "habits" | "habits-list";
 
 const CRUMBS: [ScreenId, string][] = [
   ["login", "Login"], ["name", "Imię"], ["energy", "Energia"], ["indicator", "Wskaźnik"], ["sleep", "Sen"], ["weight", "Waga"],
-  ["home", "Home"], ["menu", "Menu"], ["water", "Woda"], ["scenes", "Wybór sceny"], ["places", "Miejsca"], ["locperm", "Lokalizacja"],
+  ["home", "Home"], ["menu", "Menu"], ["water", "Woda"], ["tasks", "Zadania"], ["habits", "Nawyki"], ["status", "Status"], ["scenes", "Wybór sceny"], ["places", "Miejsca"], ["locperm", "Lokalizacja"],
   ["schedule", "Plan dnia"], ["prompt", "Pytanie o plan"], ["settings", "Ustawienia"], ["rename", "Zmiana imienia"],
 ];
 
@@ -31,6 +31,8 @@ export function Prototype() {
   const [forced, setForced] = useState<PetState | "">("");
   const [threeIndicators, setThree] = useState(true);
   const [zones, setZones] = useState(false);
+  const [tasks, setTasks] = useState(SAMPLE_TODAY);
+  const [habitManual, setHabitManual] = useState<Record<string, boolean>>({});
   const [statusFocus, setStatusFocus] = useState<DialKey>("energy");
   const [statusBack, setStatusBack] = useState<ScreenId>("home");
   const [layout, setLayout] = useState<IndicatorsLayout>("dial");
@@ -44,15 +46,18 @@ export function Prototype() {
     drunkMl: ac.drunkMl, energyPercent: w.energy.percent, energyUntil: w.energy.energyUntil,
   };
   const scene = { location: w.scene.location, period: w.scene.period.id };
-  const tasksDone = Math.min(10, 3 + Math.floor(ac.drunkMl / 500)); // demo: 3/10 tasks done, +1 per 500 ml of water
+  const tasksDone = tasks.filter((t) => t.done).length;
   const go = (s: ScreenId) => setScreen(s);
   const openStatus = (from: ScreenId) => (key: DialKey) => { setStatusFocus(key); setStatusBack(from); go("status"); };
-  const statusTasks = SAMPLE_TASKS.map((t, i) => ({ ...t, done: i < tasksDone }));
-  const habits = [
-    { id: "h1", title: "Wypij cały cel wody", detail: `${ac.drunkMl} / ${ch.goalMl} ml`, done: ac.drunkMl >= ch.goalMl },
-    { id: "h2", title: "Połóż się spać na czas", detail: `do ${ch.profile.sleepStart}`, done: false },
-    { id: "h3", title: "Zrób wszystkie zadania na dziś", detail: `${tasksDone} / 10`, done: tasksDone >= 10 },
-  ];
+  // Habits: ticked by hand, or automatic when the underlying goal is met (water goal, all tasks).
+  const habitItems = SAMPLE_HABIT_ITEMS.map((h) => ({
+    ...h,
+    done: Boolean(habitManual[h.id]) || (h.id === "h1" && ac.drunkMl >= ch.goalMl) || (h.id === "h3" && tasksDone >= tasks.length),
+  }));
+  const habitDetail: Record<string, string> = { h1: `${ac.drunkMl} / ${ch.goalMl} ml`, h2: `do ${ch.profile.sleepStart}`, h3: `${tasksDone} / ${tasks.length}` };
+  const habits = habitItems.map((h) => ({ ...h, detail: habitDetail[h.id] ?? "" }));
+  const completeNextHabit = () => { const n = habitItems.find((h) => !h.done); if (n) setHabitManual((m) => ({ ...m, [n.id]: true })); };
+  const toggleHabit = (id: string) => setHabitManual((m) => ({ ...m, [id]: !habitItems.find((h) => h.id === id)?.done }));
   const flash = (msg: string) => { setToast(msg); window.setTimeout(() => setToast(""), 1400); };
 
   const render = () => {
@@ -63,7 +68,7 @@ export function Prototype() {
       case "indicator": return <EnergyIndicatorScreen name={w.name} energyPercent={d.energyPercent} onNext={() => go("sleep")} />;
       case "sleep": return <SleepScreen name={w.name} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} onSleepStart={ch.setSleepStart} onNext={() => go("weight")} />;
       case "weight": return <WeightScreen name={w.name} weightKg={d.weightKg} goalMl={d.goalMl} onWeight={ch.setWeight} onNext={() => go("home")} />;
-      case "home": return <HomeScreen {...d} {...scene} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onIndicator={openStatus("home")} onAction={(id) => id === "water" && go("water")} />;
+      case "home": return <HomeScreen {...d} {...scene} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onIndicator={openStatus("home")} onAction={(id) => id === "water" ? go("water") : id === "tasks" ? go("tasks") : id === "habits" && go("habits")} />;
       case "menu": return <MenuScreen name={w.name} energyPercent={d.energyPercent} onClose={() => go("home")} onSettings={() => go("settings")} onPlaces={() => go("places")} onSchedule={() => go("schedule")} onLogout={() => { ch.reset(); ac.reset(); sc.setManual(undefined); sc.setPos("none"); go("login"); }} />;
       case "water": return <WaterScreen {...d} {...scene} onIndicator={openStatus("water")} drinking={ac.justDrank} toast={toast} onBack={() => go("home")} onPlus={() => { ac.add(); flash("+250 ml"); }} onMinus={() => { ac.remove(); flash("−250 ml"); }} />;
       case "settings": return <SettingsScreen {...d} onBack={() => go("home")} onEditName={() => { setDraft(ch.profile.name); go("rename"); }} />;
@@ -72,7 +77,11 @@ export function Prototype() {
       case "places": return <PlacesScreen energyPercent={d.energyPercent} onBack={() => go("home")} onUseLocation={() => go("locperm")} />;
       case "locperm": return <LocationPermissionScreen name={w.name} onAllow={() => { sc.setPos("home"); go("places"); }} onLater={() => go("places")} />;
       case "schedule": return <ScheduleScreen energyPercent={d.energyPercent} onBack={() => go("home")} />;
-      case "status": return <StatusScreen {...scene} name={w.name} focus={statusFocus} energyPercent={d.energyPercent} energyUntil={d.energyUntil} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} sleeping={w.energy.state === "sleeping"} tasks={statusTasks} habits={habits} streakDays={12} onClose={() => go(statusBack)} />;
+      case "status": return <StatusScreen {...scene} name={w.name} focus={statusFocus} energyPercent={d.energyPercent} energyUntil={d.energyUntil} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} sleeping={w.energy.state === "sleeping"} tasks={tasks} habits={habits} streakDays={12} onClose={() => go(statusBack)} />;
+      case "tasks": return <ChecklistActionScreen {...scene} title="Zadania" name={w.name} energyPercent={d.energyPercent} state={w.petState} items={tasks} gain={toast} onBack={() => go("home")} onDone={() => { setTasks(completeNext); flash("+1"); }} onList={() => go("tasks-list")} onIndicator={openStatus("tasks")} />;
+      case "tasks-list": return <ChecklistPage title="Zadania" items={tasks} onToggle={(id) => setTasks((t) => toggleItem(t, id))} onClose={() => go("tasks")} />;
+      case "habits": return <ChecklistActionScreen {...scene} title="Nawyki" name={w.name} energyPercent={d.energyPercent} state={w.petState} items={habitItems} gain={toast} onBack={() => go("home")} onDone={() => { completeNextHabit(); flash("+1"); }} onList={() => go("habits-list")} onIndicator={openStatus("habits")} />;
+      case "habits-list": return <ChecklistPage title="Nawyki" color="#FF8A3D" items={habitItems} onToggle={toggleHabit} onClose={() => go("habits")} />;
       case "prompt": return <SchedulePromptScreen name={w.name} energyPercent={d.energyPercent} onYes={() => go("home")} onChange={() => go("schedule")} />;
     }
   };
