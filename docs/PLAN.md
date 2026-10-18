@@ -3,7 +3,7 @@
 ## Context
 Repo `chrizspace/tamadoist` jest pusty (README + .gitignore). Budujemy companion app: wirtualna postać, której energia zależy od snu i nawodnienia, z docelowym rozszerzeniem o cele/zadania w stylu Todoist. Kolejność pracy wg użytkownika: **plan → Figma (prototyp) → implementacja**. Ten dokument to etap 1.
 
-Stack (uzgodniony): pnpm + Turborepo, Next.js (web, Vercel), Supabase (Auth Google/Apple + Postgres), Storybook, Playwright; później Expo/React Native.
+Stack (uzgodniony): pnpm + Turborepo, Next.js (web, Vercel), Supabase (Auth Google (Apple później) + Postgres), Storybook, Playwright; później Expo/React Native.
 
 ## Zasady produktowe (MVP)
 **Sen**
@@ -22,7 +22,7 @@ Stack (uzgodniony): pnpm + Turborepo, Next.js (web, Vercel), Supabase (Auth Goog
 **Faza 2 (po MVP)**: cele i zadania (własne + integracja Todoist API), nagrody za ukończenie, XP/poziomy, powiadomienia (woda, pora snu).
 
 ## Onboarding / walkthrough (3 kroki + powitanie)
-1. Logowanie (Google / Apple) → ekran powitalny.
+1. Logowanie (tylko Google na start) → ekran powitalny.
 2. **Imię postaci** (walidacja 1–20 znaków).
 3. **Wyjaśnienie energii**: ilustracja paska — „energia = sen + woda”; bazowo 30% dnia, woda wydłuża. Interaktywna mini-demo (suwak wody).
 4. **Godzina snu**: picker godziny zaśnięcia, auto 8h, podgląd okna 22→6.
@@ -45,7 +45,7 @@ UI primitives piszemy z myślą o RN: tokeny w JSON (kolory, spacing, typografia
 **Supabase (schemat)**
 - `profiles(user_id pk→auth.users, pet_name, sleep_start time, weight_kg numeric, water_goal_ml int (domyślnie weight_kg*35, nadpisywalny), onboarded bool, tz text)`
 - `water_logs(id, user_id, amount_ml, logged_at)`
-- RLS: tylko właściciel wierszy. Auth: Google + Apple OAuth, callback `/auth/callback`.
+- RLS: tylko właściciel wierszy. Auth: Google OAuth (Apple odłożone do wersji mobilnej/po zakupie konta Apple Developer), callback `/auth/callback`.
 - Dzień liczony w strefie `tz` użytkownika.
 
 ## Storybook
@@ -67,7 +67,7 @@ UI primitives piszemy z myślą o RN: tokeny w JSON (kolory, spacing, typografia
 0. **Plan** (ten dokument) — zatwierdzenie.
 1. **Figma**: po podłączeniu konektora — design tokens, komponenty (te same nazwy co w Storybook), 5 ekranów + flow onboardingu, prototyp klikalny. Wyjście: link do pliku, eksport tokenów.
 2. **Fundament**: monorepo, CI, Storybook ze tokenami i primitives, `core` + testy jednostkowe.
-3. **Auth + dane**: Supabase, OAuth Google/Apple, migracje, RLS.
+3. **Auth + dane**: Supabase, OAuth Google, migracje, RLS.
 4. **Onboarding + Home + Woda + Ustawienia** wg Figmy.
 5. **Playwright e2e** + deploy Vercel (preview + prod).
 6. Faza 2: cele/Todoist, powiadomienia, Expo.
@@ -78,4 +78,10 @@ UI primitives piszemy z myślą o RN: tokeny w JSON (kolory, spacing, typografia
 - Preview Vercel działa, RLS potwierdzone (użytkownik A nie widzi danych B).
 
 ## Do ustalenia później
-- Wygląd postaci (styl ilustracji), formuła energii (liniowa vs. progi), Apple Sign-In wymaga płatnego konta Apple Developer.
+- Formuła energii (liniowa vs. progi); Apple Sign-In później (wymaga płatnego konta Apple Developer).
+
+## Postać (styl ilustracji, w duchu Duolingo)
+- Przyjazny, zaokrąglony maskotek (np. mały stworek/ptak) o prostych kształtach, grubych jasnych konturach, płaskich kolorach i dużych oczach — czytelny w małych rozmiarach.
+- Paleta: żywa zieleń/turkus jako kolor główny, ciepłe akcenty (żółty, pomarańcz), duży kontrast, zaokrąglone przyciski z "3D" cieniem na dole (jak Duolingo).
+- Typografia: zaokrąglony sans (np. Nunito / DIN Rounded). Animacje: lekkie "oddychanie", mruganie, ziewanie przy niskiej energii, zzz podczas snu.
+- Stany (SVG/Lottie, jeden komponent `Pet`): energiczny, zmęczony, śpiący, pije wodę (+ później: szczęśliwy, głodny). Własna, oryginalna postać — nie kopiujemy Duo.
