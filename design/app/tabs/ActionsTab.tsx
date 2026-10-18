@@ -13,9 +13,9 @@ export function ActionsTab() {
           <tbody>{ACTIONS.map((a) => <tr key={a.id}><td className="mono">{a.id}</td><td>{a.label}</td><td className="mono">{a.icon}</td><td className="mono">{a.screen}</td><td>{a.blockedWhenSleeping ? "tak" : "nie"}</td><td>{a.highlightedWhenTired ? "tak" : "nie"}</td></tr>)}</tbody></table></div>
       </Section>
 
-      <Section title="Odżywianie" lead="Jedna akcja łączy sen, jedzenie i picie. Pasek interakcji pokazuje wodę, posiłki i okno snu, a w docku są trzy okrągłe przyciski: +250 ml, Posiłek i Sen.">
+      <Section title="Zadbaj" lead="Jedna akcja łączy sen, jedzenie i picie. Pasek interakcji pokazuje wodę, posiłki i okno snu, a w docku są trzy okrągłe przyciski: +250 ml, Posiłek i Sen.">
         <SpecGrid>
-          <Spec title="Pasek akcji" note="Trzy stany: zwykły, zmęczony (akcja podświetlona) i śpi (Odżywianie nadal dostępne, bo pić i jeść można też wieczorem i w nocy; Zadania i Nawyki zablokowane)." stage="hillbg col">
+          <Spec title="Pasek akcji" note="Trzy stany: zwykły, zmęczony (akcja podświetlona) i śpi (Zadbaj nadal dostępne, bo pić i jeść można też wieczorem i w nocy; Zadania i Nawyki zablokowane)." stage="hillbg col">
             {([["zwykły", false, false], ["zmęczony", false, true], ["śpi", true, false]] as const).map(([l, sleeping, tired]) => (
               <div key={l} className="barrow"><span className="mono">{l}</span><div className="td-actionbar" style={{ position: "static" }}><ActionBar context={{ sleeping, tired }} /></div></div>
             ))}
@@ -34,10 +34,10 @@ export function ActionsTab() {
       <Section title="Ekrany akcji">
         <Gallery items={[
           { title: "Home z paskiem akcji", node: <HomeScreen {...d} /> },
-          { title: "Home zmęczony", note: "Akcja Odżywianie jest podświetlona.", node: <HomeScreen {...d} state="tired" energyPercent={0} /> },
-          { title: "Home śpi", note: "Odżywianie nadal dostępne.", node: <HomeScreen {...d} state="sleeping" energyPercent={50} location="home.bedroom" period="night" /> },
-          { title: "Odżywianie", node: <NutritionScreen /> },
-          { title: "Odżywianie po dodaniu szklanki", node: <NutritionScreen state="drinking" gain="+250 ml" /> },
+          { title: "Home zmęczony", note: "Akcja Zadbaj jest podświetlona.", node: <HomeScreen {...d} state="tired" energyPercent={0} /> },
+          { title: "Home śpi", note: "Zadbaj nadal dostępne.", node: <HomeScreen {...d} state="sleeping" energyPercent={50} location="home.bedroom" period="night" /> },
+          { title: "Zadbaj", node: <NutritionScreen /> },
+          { title: "Zadbaj po dodaniu szklanki", node: <NutritionScreen state="drinking" gain="+250 ml" /> },
           { title: "Sen", node: <SleepPage sleepStart="22:00" sleepEnd="06:00" /> },
         ]} />
       </Section>

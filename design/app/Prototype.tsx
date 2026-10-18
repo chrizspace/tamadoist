@@ -15,7 +15,7 @@ type ScreenId = "login" | "name" | "energy" | "indicator" | "sleep" | "weight" |
 
 const CRUMBS: [ScreenId, string][] = [
   ["login", "Login"], ["name", "Imię"], ["energy", "Energia"], ["indicator", "Wskaźnik"], ["sleep", "Sen"], ["weight", "Waga"],
-  ["home", "Home"], ["menu", "Menu"], ["nutrition", "Odżywianie"], ["tasks", "Zadania"], ["habits", "Nawyki"], ["status", "Status"], ["scenes", "Wybór sceny"], ["places", "Miejsca"], ["locperm", "Lokalizacja"],
+  ["home", "Home"], ["menu", "Menu"], ["nutrition", "Zadbaj"], ["tasks", "Zadania"], ["habits", "Nawyki"], ["status", "Status"], ["scenes", "Wybór sceny"], ["places", "Miejsca"], ["locperm", "Lokalizacja"],
   ["schedule", "Plan dnia"], ["prompt", "Pytanie o plan"], ["settings", "Ustawienia"], ["rename", "Zmiana imienia"],
 ];
 

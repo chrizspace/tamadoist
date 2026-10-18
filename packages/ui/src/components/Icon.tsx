@@ -14,6 +14,11 @@ export const ICON_PATHS = {
   list: (<><path d="M9 6h11M9 12h11M9 18h11" /><path d="M4 6h.01M4 12h.01M4 18h.01" strokeWidth="3" /></>),
   repeat: (<><path d="M17 3l3 3-3 3" /><path d="M4 11V9a3 3 0 0 1 3-3h13" /><path d="M7 21l-3-3 3-3" /><path d="M20 13v2a3 3 0 0 1-3 3H4" /></>),
   utensils: (<><path d="M7 3v7a2 2 0 0 0 2 2v9M5 3v6M9 3v6" /><path d="M17 21V3c-2.200 1-3.500 3.500-3.500 7 0 1.800.8 3 2 3h1.500" /></>),
+  care: (<>
+    <g transform="translate(-0.4 0.2) scale(0.53)" strokeWidth="3.8"><path d="M7 3v7a2 2 0 0 0 2 2v9M5 3v6M9 3v6" /><path d="M17 21V3c-2.200 1-3.500 3.500-3.500 7 0 1.800.8 3 2 3h1.500" /></g>
+    <g transform="translate(11.9 0.2) scale(0.53)" strokeWidth="3.8"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" /></g>
+    <g transform="translate(5.75 11.2) scale(0.53)" strokeWidth="3.8"><path d="M12 2.5s6 6.500 6 11a6 6 0 0 1-12 0c0-4.500 6-11 6-11z" /></g>
+  </>),
   recharge: (<><rect x="2.5" y="6.5" width="16" height="11" rx="3" /><path d="M21.5 10.5v3" /><path d="M11.8 8.8 9.2 12.2h3.6l-2.6 3.2" /></>),
   moon: <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />,
   clock: (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>),

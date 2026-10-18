@@ -57,7 +57,7 @@ export function NutritionScreen({
 }: NutritionScreenProps) {
   return (
     <Phone location={location} period={period}>
-      <HeaderBar left="back" title="Odżywianie" percent={energyPercent} onBack={onBack} onIndicator={onIndicator} />
+      <HeaderBar left="back" title="Zadbaj" percent={energyPercent} onBack={onBack} onIndicator={onIndicator} />
       <PetStage location={location} state={state} name={name} top={226} />
       <div className="td-nutri" data-testid="nutrition-card">
         {gain && <span className="td-counter__gain td-nutri__gain" role="status">{gain}</span>}
