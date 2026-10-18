@@ -176,7 +176,7 @@ export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state =
     <Phone location={location} period={period}>
       <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onMenu={onMenu} onTitle={onTitle ?? (() => undefined)} onEnergy={onEnergy} />
       <Hero float={false} top={STAGE_TOP} name={name}><Pet state={state} size={270} /></Hero>
-      <div className="td-caption" style={{ top: STAGE_TOP + 350 }}>{caption}</div>
+      <div className="td-caption td-caption--slot">{caption}</div>
       <ActionBar context={{ sleeping, tired }} onAction={onAction} />
       {toast && <Toast>{toast}</Toast>}
     </Phone>
