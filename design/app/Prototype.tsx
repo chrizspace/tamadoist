@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
 import {
-  EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
+  IndicatorsProvider, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
   PlacesScreen, RenameDialogScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
   SleepScreen, WaterScreen, WeightScreen,
 } from "@tamadoist/ui";
@@ -29,6 +29,7 @@ export function Prototype() {
   const [nameError, setNameError] = useState<string | undefined>();
   const [toast, setToast] = useState("");
   const [forced, setForced] = useState<PetState | "">("");
+  const [threeIndicators, setThree] = useState(false);
   const [cityId, setCityId] = useState(DEFAULT_ENV.city.id);
   const [date, setDate] = useState(DEFAULT_ENV.date);
   const env: Env = useMemo(() => ({ city: CITIES.find((c) => c.id === cityId)!, date }), [cityId, date]);
@@ -39,6 +40,7 @@ export function Prototype() {
     drunkMl: ac.drunkMl, energyPercent: w.energy.percent, energyUntil: w.energy.energyUntil,
   };
   const scene = { location: w.scene.location, period: w.scene.period.id };
+  const xp = 640 + Math.floor(ac.drunkMl / 250) * 10; // demo: +10 EXP per glass of water
   const go = (s: ScreenId) => setScreen(s);
   const flash = (msg: string) => { setToast(msg); window.setTimeout(() => setToast(""), 1400); };
 
@@ -76,7 +78,7 @@ export function Prototype() {
 
   return (
     <div className="proto">
-      <div className="protoframe"><Fit><div className="phoneroot">{render()}</div></Fit></div>
+      <div className="protoframe"><Fit><div className="phoneroot"><IndicatorsProvider value={threeIndicators ? { exp: { level: Math.floor(xp / 100), progress: (xp % 100) / 100 }, streak: { days: 12, progress: Math.min(1, ac.drunkMl / ch.goalMl) } } : {}}>{render()}</IndicatorsProvider></div></Fit></div>
       <div className="protoctl">
         <details open className="box mod"><summary><b>Ekran</b></summary>
           <div className="crumbs">
@@ -110,6 +112,10 @@ export function Prototype() {
           <div className="ctl"><label htmlFor="s-man">Ręcznie</label>
             <select id="s-man" value={sc.manual ?? ""} onChange={(e) => sc.setManual((e.target.value || undefined) as LocationId | undefined)}><option value="">(automatycznie)</option>{LOCATIONS.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}</select></div>
           <p className="note">Pory dziś: {periodWindows(w.sun).map((x, i) => `${PERIODS[i]!.label} ${fmt(x.start)}–${fmt(x.end)}`).join(" · ")}</p>
+        </details>
+
+        <details open className="box mod"><summary><b>Wskaźniki</b> · nagłówek</summary>
+          <div className="ctl"><label htmlFor="ind3">Trzy wskaźniki</label><input id="ind3" type="checkbox" checked={threeIndicators} onChange={(e) => setThree(e.target.checked)} /><span className="note">energia + EXP + seria (EXP rośnie z wypitą wodą)</span></div>
         </details>
 
         <details open className="box mod"><summary><b>3 · Akcje</b> · woda</summary>

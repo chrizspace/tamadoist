@@ -117,3 +117,8 @@ Jedna zasada dla całego UI (`packages/ui`, sekcja „Elevation system” w `sty
 - Paleta: żywa zieleń/turkus jako kolor główny, ciepłe akcenty (żółty, pomarańcz), duży kontrast, zaokrąglone przyciski z "3D" cieniem na dole (jak Duolingo).
 - Typografia: zaokrąglony sans (np. Nunito / DIN Rounded). Animacje: lekkie "oddychanie", mruganie, ziewanie przy niskiej energii, zzz podczas snu.
 - Stany (SVG/Lottie, jeden komponent `Pet`): energiczny, zmęczony, śpiący, pije wodę (+ później: szczęśliwy, głodny). Własna, oryginalna postać — nie kopiujemy Duo.
+
+## Wskaźniki w nagłówku (okrągłe, do 3 slotów)
+- Zamiast baterii: okrągłe chipy 40 px (biała obwódka + szara „warga” 3D = klikalne) z pierścieniem postępu, ikoną w środku i licznikiem pod spodem.
+- Sloty: **Energia** (piorun, kolor wg progu: <25 czerwony, <50 żółty, reszta zielony), **EXP** (gwiazda, licznik = poziom), **Seria** (płomień, licznik = dni z rzędu; propozycja 3. wskaźnika — alternatywy: monety, nastrój).
+- Dziś widoczna tylko energia; EXP i Seria włączane przez `IndicatorsProvider` (w prototypie checkbox „Trzy wskaźniki”).

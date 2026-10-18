@@ -114,7 +114,7 @@ export function EnergyIndicatorScreen({ name, energyPercent, onNext }: Pick<Scre
       <Sheet>
         <ProgressDots total={5} current={2} />
         <h3>To Twoja energia</h3>
-        <p>Wskaźnik w prawym górnym rogu pokazuje, ile energii ma Twoja postać. Pije wodę i śpi, a bateria się ładuje.</p>
+        <p>Wskaźnik w prawym górnym rogu pokazuje, ile energii ma Twoja postać. Pije wodę i śpi, a pasek się ładuje.</p>
         <Button onClick={onNext}>Dalej</Button>
       </Sheet>
     </Phone>

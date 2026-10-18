@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { BASE_ENERGY_SHARE, DEFAULT_PROFILE, PET_STATES, computeEnergy, derivePetState, sleepWindow, waterGoalMl, type PetState } from "@tamadoist/core";
 import {
-  Battery, Egg, EnergyExplainScreen, EnergyIndicatorScreen, LoginScreen, NameScreen, NameTag, Pet, PetScale, RenameDialogScreen,
-  SAMPLE, SettingsScreen, SleepScreen, WeightScreen, batteryRange, TimePicker,
+  EnergyIndicator, ExpIndicator, StreakIndicator, IndicatorsProvider, HeaderBar, Egg, EnergyExplainScreen, EnergyIndicatorScreen, LoginScreen, NameScreen, NameTag, Pet, PetScale, RenameDialogScreen,
+  SAMPLE, SettingsScreen, SleepScreen, WeightScreen, energyRange, TimePicker,
 } from "@tamadoist/ui";
 import { Gallery, Section, Spec, SpecGrid } from "../chrome";
 import { dateAt, fmt } from "../world";
@@ -51,18 +51,18 @@ export function CharacterTab() {
             <div style={{ width: 280, display: "flex", flexDirection: "column", gap: 12 }}>
               <label className="fld"><span>Godzina: {fmt(clock)}</span><input type="range" min={0} max={1435} step={5} value={clock} onChange={(ev) => setClock(+ev.target.value)} /></label>
               <label className="fld"><span>Wypita woda: {drunk} / {goal} ml</span><input type="range" min={0} max={goal} step={250} value={drunk} onChange={(ev) => setDrunk(+ev.target.value)} /></label>
-              <div className="readout"><b>{e.percent}%</b><span>{e.state === "sleeping" ? "śpi, bateria się ładuje" : `energii starczy do ${e.energyUntil}`}</span></div>
-              <div style={{ alignSelf: "center", background: "#fff", padding: "10px 16px", borderRadius: 999 }}><Battery percent={e.percent} /></div>
+              <div className="readout"><b>{e.percent}%</b><span>{e.state === "sleeping" ? "śpi, energia się ładuje" : `energii starczy do ${e.energyUntil}`}</span></div>
+              <div style={{ alignSelf: "center" }}><EnergyIndicator percent={e.percent} /></div>
             </div>
           </Spec>
           <Spec title="Stany postaci" note="Priorytet od góry: sleeping, tired, drinking, happy, awake." stage="sky">
             <div className="states">{PET_STATES.map((s) => <div key={s}><Pet state={s} size={96} /><b>{s}</b><span>{RULES[s]}</span></div>)}</div>
           </Spec>
-          <Spec title="Wskaźnik energii" note="Obrys zawsze czarny. Wypełnienie ciągłe, zmienia kolor: 1–24% czerwony, 25–49% żółty, od 50% zielony. Procent w środku.">
-            <div style={{ width: 280, display: "flex", flexDirection: "column", gap: 14, alignItems: "center" }}>
-              <div style={{ background: "#fff", padding: "10px 16px", borderRadius: 999 }}><Battery percent={pct} /></div>
+          <Spec title="Wskaźnik energii" note="Okrągły pierścień z piorunem. Pierścień wypełnia się proporcjonalnie, a kolor zmienia się: 1–24% czerwony, 25–49% żółty, od 50% zielony. Liczba w rogu to procent." stage="sky">
+            <div style={{ width: 260, display: "flex", flexDirection: "column", gap: 14, alignItems: "center" }}>
+              <EnergyIndicator percent={pct} onClick={() => undefined} />
               <input type="range" min={0} max={100} value={pct} onChange={(ev) => setPct(+ev.target.value)} aria-label="Energia" style={{ width: "100%" }} />
-              <code className="mono">zakres {batteryRange(pct)}</code>
+              <code className="mono">zakres {energyRange(pct)}</code>
             </div>
           </Spec>
           <Spec title="Reguła stanu" note="derivePetState w packages/core/src/character/state.ts.">
@@ -76,6 +76,30 @@ export function CharacterTab() {
           </Spec>
           <Spec title="Jajko" note="Postać zaczyna jako jajko, zanim nadasz jej imię." stage="sky"><div className="float"><Egg size={190} /></div></Spec>
           <Spec title="Waga na wadze" note="Podczas wpisywania wagi postać stoi na wadze." stage="sky"><PetScale weightKg={weight} /></Spec>
+        </SpecGrid>
+      </Section>
+
+      <Section title="Wskaźniki w nagłówku" lead="Po prawej stronie nagłówka jest miejsce na trzy okrągłe wskaźniki w tym samym stylu: biała obwódka z szarą krawędzią 3D, pierścień postępu i symbol w środku. Na razie działa energia, a EXP i seria są zaproponowane na później.">
+        <SpecGrid>
+          <Spec title="Na razie: sama energia" stage="sky">
+            <div className="hdrwrap"><div style={{ position: "absolute", inset: 0, top: -48 }}><HeaderBar left="menu" title="Park" percent={62} onTitle={() => undefined} onEnergy={() => undefined} /></div></div>
+          </Spec>
+          <Spec title="Docelowo: trzy wskaźniki" note="Tytuł lokacji zajmuje miejsce między hamburgerem a wskaźnikami." stage="sky">
+            <IndicatorsProvider value={{ exp: { level: 7, progress: 0.62 }, streak: { days: 12, progress: 0.7 } }}>
+              <div className="hdrwrap"><div style={{ position: "absolute", inset: 0, top: -48 }}><HeaderBar left="menu" title="Park" percent={62} onTitle={() => undefined} onEnergy={() => undefined} /></div></div>
+            </IndicatorsProvider>
+          </Spec>
+          <Spec title="Propozycje na kolejne dwa" note="Każdy wskaźnik ma pierścień (postęp), symbol i liczbę w rogu." stage="sky col">
+            <div style={{ display: "flex", gap: 18, justifyContent: "center" }}>
+              <EnergyIndicator percent={62} /><ExpIndicator level={7} progress={0.62} /><StreakIndicator days={12} progress={0.7} />
+            </div>
+            <table className="tbl"><tbody>
+              <tr><th>⚡ Energia</th><td>pierścień = energia teraz, liczba = procent</td></tr>
+              <tr><th>★ EXP</th><td>pierścień = postęp do następnego poziomu, liczba = poziom. Punkty za wypitą wodę i zrealizowane cele</td></tr>
+              <tr><th>🔥 Seria</th><td>pierścień = dzisiejszy postęp celów dnia, liczba = dni z rzędu. Zachęca do codziennego powrotu</td></tr>
+            </tbody></table>
+            <p className="note">Inne pomysły na trzeci wskaźnik: monety do wydania w sklepie (ubranka, nowe sceny) albo nastrój postaci.</p>
+          </Spec>
         </SpecGrid>
       </Section>
 
