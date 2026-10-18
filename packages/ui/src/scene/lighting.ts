@@ -18,7 +18,7 @@ export interface Lighting {
 }
 
 const TABLE: Record<PeriodId, Omit<Lighting, "period" | "lit">> = {
-  morning: { skyTop: "#FFD9A8", skyBottom: "#E8F7F1", windowSky: "#FFE2B8", tint: "#FFB86B", tintOpacity: 0.1, sun: { x: 70, y: 210, color: "#FFC93C" }, stars: false },
+  morning: { skyTop: "#FFD9A8", skyBottom: "#E8F7F1", windowSky: "#FFE2B8", tint: "#FFB86B", tintOpacity: 0.1, sun: { x: 62, y: 300, color: "#FFC93C" }, stars: false },
   noon: { skyTop: "#8ED0FF", skyBottom: "#E6FAF6", windowSky: "#BFE3FF", tint: "#FFFFFF", tintOpacity: 0, sun: { x: 195, y: 90, color: "#FFE066" }, stars: false },
   afternoon: { skyTop: "#9CCBF2", skyBottom: "#FFEBC7", windowSky: "#C9E4FA", tint: "#FFC37A", tintOpacity: 0.12, sun: { x: 322, y: 170, color: "#FFD060" }, stars: false },
   evening: { skyTop: "#5B5FB0", skyBottom: "#F2A36B", windowSky: "#F6B27A", tint: "#6B3A7A", tintOpacity: 0.3, sun: { x: 330, y: 300, color: "#FF9A4D" }, stars: false },

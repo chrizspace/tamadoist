@@ -49,25 +49,28 @@ UI primitives piszemy z myślą o RN: tokeny w JSON (kolory, spacing, typografia
 - Dzień liczony w strefie `tz` użytkownika.
 
 
-## Sceny, miejsca i plan dnia
-Postać żyje w scenie. Scena zależy od tego, gdzie jesteś i co robisz, a można ją zmienić ręcznie.
+## Moduły: Postać, Scena, Akcje
+Funkcje są rozdzielone na trzy niezależne moduły, żeby nowe dodawać jako dane, bez zmian w istniejących ekranach. Ten sam podział jest w `packages/core/src`, w Storybooku i w prototypie (`design/app/modules`).
 
-**Sceny (MVP):** Zielona Łąka (domyślna), Dom, Biuro, Lunch. Każda ma wariant nocny (w oknie snu). Kolejne (siłownia, podróż) dojdą jako nowe wpisy bez zmian w logice.
+**1. Postać** (`character/`) — imię (1–20 znaków, zmiana w Ustawieniach), godziny snu (zawsze 8 h), waga, cel wody (waga × 35 ml, ręczna korekta), energia i **stany** (`PET_STATES`: awake, tired, sleeping, happy, drinking; priorytet sleeping > tired > drinking > happy > awake). Nowy stan: wpis w `PET_STATES` i rysunek w komponencie `Pet`.
 
-**Wybór sceny, od najwyższego priorytetu** (`packages/core/src/scene.ts`, testy w `scene.test.ts`):
-1. Ręczny wybór użytkownika, trzyma się do włączenia trybu automatycznego (opcjonalnie do godziny).
-2. Plan dnia: bloki czasu przypisane do scen (np. praca 9:00–17:00 → Biuro, lunch 12:30–13:00 → Lunch, dni tygodnia do wyboru). Krótszy blok wygrywa z dłuższym, więc lunch przebija pracę. Bloki mogą przechodzić przez północ.
-3. Miejsce: ostatnia pozycja porównana z zapisanymi miejscami (dom, praca, inne; promień 100–150 m). Wygrywa najbliższe.
-4. Domyślnie: Zielona Łąka.
+**2. Scena** (`scene/`) — dwie niezależne osie:
+- **Pory dnia** (`periods.ts`): Poranek 6–10, Południe 10–14, Popołudnie 14–18, Wieczór 18–22, „Danger Noc” 22–24, Noc 0–6. Pora zmienia tylko **światło**: kolor nieba i okna, ciepły lub chłodny filtr, a od wieczora do rana zapalają się lampy i światła sufitowe (`lighting.ts` w UI).
+- **Lokalizacje** (`locations.ts`): **Dom** (Sypialnia, Biuro domowe, Kuchnia), **Praca** (Open space, Kuchnia w pracy), **Rekreacja** (Park, Basen, Siłownia, Rower). Nowa lokalizacja: wpis w `LOCATIONS` i rysunek w `LOCATION_ART`.
+- **Wybór lokalizacji** (`resolve.ts`, od najwyższego priorytetu): ręczny wybór (trzyma się do włączenia trybu automatycznego) → sen (postać śpi w sypialni) → plan dnia (krótszy blok wygrywa z dłuższym, więc lunch przebija pracę; bloki mogą przechodzić przez północ) → najbliższe zapisane miejsce w jego promieniu → park.
+- **Ekrany:** wybór sceny (dotknięcie tytułu lokacji), Miejsca, zgoda na lokalizację, Plan dnia, pytanie „Zaczynasz pracę o 9:00?”.
 
-**Ekrany:** wybór sceny (dotknięcie tytułu lokacji w nagłówku), Miejsca (mapa, lista, „użyj bieżącej lokalizacji”), zgoda na lokalizację (z wyjaśnieniem), Plan dnia, pytanie „Zaczynasz pracę o 9:00?” (aplikacja proponuje plan, użytkownik zatwierdza lub zmienia).
+**3. Akcje** (`actions/`) — pasek akcji budowany z rejestru `ACTIONS`. Na razie tylko **woda** (dodaj i odejmij szklankę 250 ml, zablokowana podczas snu, podświetlona gdy postać jest zmęczona). Nowa akcja: wpis w rejestrze i własny ekran.
 
 **Lokalizacja i prywatność**
 - Zgoda jest prosta i opcjonalna; bez niej działają plan dnia i ręczny wybór sceny.
-- Porównujemy ostatnią pozycję z miejscami, nie zapisujemy trasy. Współrzędne miejsc (dom, praca) to dane wrażliwe: tabela z RLS, tylko właściciel, usuwane z kontem.
-- Web: Geolocation API działa tylko przy otwartej aplikacji, więc scenę wyznaczamy przy wejściu do aplikacji. Automatyczne przełączanie w tle (geofencing) dopiero w aplikacji mobilnej (Expo).
+- Porównujemy ostatnią pozycję z miejscami, nie zapisujemy trasy. Współrzędne miejsc to dane wrażliwe: tabela z RLS, tylko właściciel, usuwane z kontem.
+- Web: Geolocation API działa tylko przy otwartej aplikacji, więc scenę wyznaczamy przy wejściu do aplikacji. Przełączanie w tle (geofencing) dopiero w aplikacji mobilnej (Expo).
 
-**Supabase (dodatkowe tabele):** `places(id, user_id, kind, name, lat, lng, radius_m, scene)`, `schedule_slots(id, user_id, label, start, "end", days int[], scene)`, `profiles.scene_override(scene, until)`.
+**Supabase (dodatkowe tabele):** `places(id, user_id, group, name, lat, lng, radius_m, location)`, `schedule_slots(id, user_id, label, start, "end", days int[], location)`, `profiles.scene_override(location, until)`.
+
+## Podgląd design systemu
+`pnpm design:build` składa `design/preview.html` z prawdziwych komponentów (`packages/ui`) i prawdziwej logiki (`packages/core`): zakładki Foundations, Postać, Scena, Akcje, Components i klikalny Prototyp z osobnymi ustawieniami dla każdego modułu.
 
 ## Storybook
 - Storybook 8 (react-vite lub nextjs framework) w `packages/ui`; każdy primitive + token (Colors, Typography, Spacing) ma story, `autodocs`, addon a11y.
