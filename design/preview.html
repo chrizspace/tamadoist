@@ -445,6 +445,10 @@ button.td-status__check { cursor: pointer; padding: 0; background: #fff; appeara
 button.td-status__check.is-done { background: var(--c); border-color: var(--c); }
 .td-trow__subs .td-status__check { width: 20px; height: 20px; border-width: 2px; border-color: color-mix(in srgb, var(--c) 55%, #fff); }
 .td-trow__subs .td-status__check.is-done { border-color: var(--c); }
+/* Rows breathe: the check circles no longer touch the edge of the white row */
+.td-trow { padding: 0 12px; border-radius: 12px; }
+.td-trow--tomorrow { padding: 4px 12px; }
+.td-trow + .td-trow { border-top: 0; box-shadow: 0 -1px 0 var(--color-border); }
 
 /* Concept: a calm specimen book (page chrome) around a bright, rounded game UI (the product, which keeps its own fixed palette from packages/ui/src/styles.css). */
 :root{
