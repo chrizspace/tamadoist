@@ -1,5 +1,5 @@
 /** One block: the water level (drunk / goal) with a progress bar directly below it. */
-export function WaterCounter({ drunkMl, goalMl, top = 470 }: { drunkMl: number; goalMl: number; top?: number }) {
+export function WaterCounter({ drunkMl, goalMl, top = 120 }: { drunkMl: number; goalMl: number; top?: number }) {
   const pct = goalMl > 0 ? Math.min(100, Math.max(0, Math.round((drunkMl / goalMl) * 100))) : 0;
   return (
     <div className="td-counter" style={{ top }}>

@@ -122,3 +122,8 @@ Jedna zasada dla całego UI (`packages/ui`, sekcja „Elevation system” w `sty
 - Zamiast baterii: okrągłe chipy 40 px (biała obwódka + szara „warga” 3D = klikalne) z pierścieniem postępu, ikoną w środku i licznikiem pod spodem.
 - Sloty: **Energia** (piorun, kolor wg progu: <25 czerwony, <50 żółty, reszta zielony), **EXP** (gwiazda, licznik = poziom), **Seria** (płomień, licznik = dni z rzędu; propozycja 3. wskaźnika — alternatywy: monety, nastrój).
 - Dziś widoczna tylko energia; EXP i Seria włączane przez `IndicatorsProvider` (w prototypie checkbox „Trzy wskaźniki”).
+
+## Układ ekranu sceny (strefy)
+- **Góra** (header + wskaźniki + ewentualny licznik, np. woda): nic stąd nie wchodzi na postać.
+- **Scena**: postać stoi na stałym miejscu (środek sceny, `STAGE_TOP`), na każdym ekranie tak samo, bez unoszenia; animacje per scena później.
+- **Dół (dock)**: akcje zawsze przy dolnej krawędzi. Poziom 1: kwadratowe przyciski 3D akcji (przewijane w poziomie, gdy będzie ich więcej). Wewnątrz akcji: okrągłe przyciski (−/+) w tym samym miejscu.
