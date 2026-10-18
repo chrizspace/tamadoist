@@ -434,3 +434,10 @@ button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outli
 .td-tomorrow__back { flex: none; border: 2px solid var(--color-border); border-radius: 12px; background: #fff; padding: 6px 12px; font: 800 12px var(--font); color: var(--color-text); cursor: pointer; }
 .td-tomorrow__push:disabled { opacity: .5; cursor: default; }
 .td-trow__tomorrow { font: 800 11px var(--font); background: #E6E7FA; color: #4B4FA8; border-radius: 999px; padding: 2px 8px; }
+
+/* Subtasks: full width (no indent), tinted panel, circles in the task's own color instead of the default dark button */
+.td-trow__panel { margin: 0 0 10px; padding: 8px 10px 10px; border-left: 0; border-radius: 14px; background: color-mix(in srgb, var(--c) 7%, #fff); }
+button.td-status__check { cursor: pointer; padding: 0; background: #fff; appearance: none; }
+button.td-status__check.is-done { background: var(--c); border-color: var(--c); }
+.td-trow__subs .td-status__check { width: 20px; height: 20px; border-width: 2px; border-color: color-mix(in srgb, var(--c) 55%, #fff); }
+.td-trow__subs .td-status__check.is-done { border-color: var(--c); }
