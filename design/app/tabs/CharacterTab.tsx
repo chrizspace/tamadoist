@@ -47,11 +47,11 @@ export function CharacterTab() {
 
       <Section title="Energia i stany" lead="Energia zależy od snu i wody. Stan postaci wynika z energii i z tego, co się właśnie wydarzyło.">
         <SpecGrid>
-          <Spec title="Kalkulator energii" note={`Bez wody energia starcza na ${BASE_ENERGY_SHARE * 100}% dnia aktywnego (16 h). Pełny cel wody daje 100%.`}>
+          <Spec title="Kalkulator energii" note={`Bez wody energia starcza na ${BASE_ENERGY_SHARE * 100}% dnia aktywnego (16 h). Pełny cel wody daje 100%. Sen ładuje pasek stopniowo: od poziomu z chwili zaśnięcia (zwykle 0%) do 100% w chwili pobudki.`}>
             <div style={{ width: 280, display: "flex", flexDirection: "column", gap: 12 }}>
               <label className="fld"><span>Godzina: {fmt(clock)}</span><input type="range" min={0} max={1435} step={5} value={clock} onChange={(ev) => setClock(+ev.target.value)} /></label>
               <label className="fld"><span>Wypita woda: {drunk} / {goal} ml</span><input type="range" min={0} max={goal} step={250} value={drunk} onChange={(ev) => setDrunk(+ev.target.value)} /></label>
-              <div className="readout"><b>{e.state === "sleeping" ? "śpi" : `${e.percent}%`}</b><span>energii starczy do {e.energyUntil}</span></div>
+              <div className="readout"><b>{e.percent}%</b><span>{e.state === "sleeping" ? "śpi, bateria się ładuje" : `energii starczy do ${e.energyUntil}`}</span></div>
               <div style={{ alignSelf: "center", background: "#fff", padding: "10px 16px", borderRadius: 999 }}><Battery percent={e.percent} /></div>
             </div>
           </Spec>

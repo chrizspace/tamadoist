@@ -35,7 +35,7 @@ export function ActionsTab() {
         <Gallery items={[
           { title: "Home z paskiem akcji", node: <HomeScreen {...d} /> },
           { title: "Home zmęczony", note: "Akcja Woda jest podświetlona.", node: <HomeScreen {...d} state="tired" energyPercent={0} /> },
-          { title: "Home śpi", note: "Akcja zablokowana.", node: <HomeScreen {...d} state="sleeping" energyPercent={100} location="home.bedroom" period="night" /> },
+          { title: "Home śpi", note: "Akcja zablokowana.", node: <HomeScreen {...d} state="sleeping" energyPercent={50} location="home.bedroom" period="night" /> },
           { title: "Woda", node: <WaterScreen {...d} /> },
           { title: "Woda po dodaniu szklanki", node: <WaterScreen {...d} drinking /> },
         ]} />

@@ -8,7 +8,7 @@ Stack (uzgodniony): pnpm + Turborepo, Next.js (web, Vercel), Supabase (Auth Goog
 ## Zasady produktowe (MVP)
 **Sen**
 - Zawsze 8h. Użytkownik wybiera tylko godzinę zaśnięcia; pobudka = zaśnięcie + 8h (domyślnie 22:00–06:00).
-- W oknie snu postać śpi, energia się regeneruje, akcje zablokowane.
+- W oknie snu postać śpi, akcje są zablokowane, a sen ładuje pasek liniowo od poziomu z chwili zaśnięcia (zwykle 0%) do 100% w chwili pobudki, bez skoków.
 
 **Energia (0–100%)**
 - Dzień aktywny = 16h (pobudka → zaśnięcie). Bazowo energia starcza na 30% dnia aktywnego (~4,8h; domyślnie 6:00 → ok. 10:48).

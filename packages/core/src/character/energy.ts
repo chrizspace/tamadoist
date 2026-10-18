@@ -1,5 +1,5 @@
-import { MINUTES_PER_DAY, formatTime, minutesOfDay } from "../shared/time";
-import { ACTIVE_MINUTES, isSleeping, wakeMinutes } from "./sleep";
+import { MINUTES_PER_DAY, formatTime, minutesOfDay, parseTime } from "../shared/time";
+import { ACTIVE_MINUTES, SLEEP_MINUTES, isSleeping, wakeMinutes } from "./sleep";
 
 /** Without any water, energy lasts for this share of the active day. */
 export const BASE_ENERGY_SHARE = 0.3;
@@ -34,6 +34,11 @@ export function energyBudgetMinutes(ratio: number): number {
   return ACTIVE_MINUTES * (BASE_ENERGY_SHARE + (1 - BASE_ENERGY_SHARE) * ratio);
 }
 
+/** Energy left when the active day ends. With the base budget (30%) this is 0: the bar ran out long before bedtime. */
+export function percentAtBedtime(budgetMinutes: number): number {
+  return Math.max(0, Math.min(100, Math.round((1 - ACTIVE_MINUTES / budgetMinutes) * 100)));
+}
+
 export function computeEnergy({ now, sleepStart, drunkMl, goalMl }: EnergyInput): EnergyResult {
   const ratio = waterRatio(drunkMl, goalMl);
   const budgetMinutes = energyBudgetMinutes(ratio);
@@ -41,7 +46,11 @@ export function computeEnergy({ now, sleepStart, drunkMl, goalMl }: EnergyInput)
   const energyUntil = formatTime(wake + budgetMinutes);
 
   if (isSleeping(now, sleepStart)) {
-    return { state: "sleeping", percent: 100, budgetMinutes, energyUntil, waterRatio: ratio };
+    // Sleep charges the bar steadily from what was left at bedtime up to 100% at wake-up.
+    const sinceBed = (minutesOfDay(now) - parseTime(sleepStart) + MINUTES_PER_DAY) % MINUTES_PER_DAY;
+    const start = percentAtBedtime(budgetMinutes);
+    const percent = Math.round(start + ((100 - start) * sinceBed) / SLEEP_MINUTES);
+    return { state: "sleeping", percent: Math.max(0, Math.min(100, percent)), budgetMinutes, energyUntil, waterRatio: ratio };
   }
 
   const sinceWake = (minutesOfDay(now) - wake + MINUTES_PER_DAY) % MINUTES_PER_DAY;

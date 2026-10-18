@@ -60,11 +60,30 @@ describe("energy", () => {
     expect(wet.percent).toBeGreaterThan(dry.percent);
     expect(wet.energyUntil).toBe("22:00");
   });
-  it("sleeping pet recharges", () => {
-    expect(computeEnergy({ now: at(2), sleepStart: "22:00", drunkMl: 0, goalMl: 2000 })).toMatchObject({
-      state: "sleeping",
-      percent: 100,
-    });
+  it("sleep charges the bar steadily from empty to full", () => {
+    const at22 = computeEnergy({ now: at(22), sleepStart: "22:00", drunkMl: 0, goalMl: 2000 });
+    const at02 = computeEnergy({ now: at(2), sleepStart: "22:00", drunkMl: 0, goalMl: 2000 });
+    const at0559 = computeEnergy({ now: at(5, 59), sleepStart: "22:00", drunkMl: 0, goalMl: 2000 });
+    expect(at22).toMatchObject({ state: "sleeping", percent: 0 });
+    expect(at02).toMatchObject({ state: "sleeping", percent: 50 });
+    expect(at0559.percent).toBe(100);
+  });
+  it("is continuous: no jump at bedtime or at wake-up", () => {
+    const before = computeEnergy({ now: at(21, 59), sleepStart: "22:00", drunkMl: 2000, goalMl: 2000 });
+    const after = computeEnergy({ now: at(22, 1), sleepStart: "22:00", drunkMl: 2000, goalMl: 2000 });
+    expect(Math.abs(before.percent - after.percent)).toBeLessThanOrEqual(1);
+    const lastSleep = computeEnergy({ now: at(5, 59), sleepStart: "22:00", drunkMl: 0, goalMl: 2000 });
+    const wake = computeEnergy({ now: at(6), sleepStart: "22:00", drunkMl: 0, goalMl: 2000 });
+    expect(wake).toMatchObject({ state: "awake", percent: 100 });
+    expect(Math.abs(lastSleep.percent - wake.percent)).toBeLessThanOrEqual(1);
+  });
+  it("never decreases while sleeping", () => {
+    let prev = -1;
+    for (let m = 22 * 60; m < 24 * 60 + 6 * 60; m += 15) {
+      const e = computeEnergy({ now: new Date(2026, 0, 15, Math.floor((m % 1440) / 60), m % 60), sleepStart: "22:00", drunkMl: 500, goalMl: 2000 });
+      expect(e.percent).toBeGreaterThanOrEqual(prev);
+      prev = e.percent;
+    }
   });
   it("water above goal is capped", () => {
     expect(computeEnergy({ now: at(7), sleepStart: "22:00", drunkMl: 9999, goalMl: 2000 }).waterRatio).toBe(1);

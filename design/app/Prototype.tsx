@@ -65,7 +65,7 @@ export function Prototype() {
     ["Sen", `${ch.profile.sleepStart} → ${w.sleepEnd}`],
     ["Waga / cel", `${ch.profile.weightKg} kg / ${ch.goalMl} ml`],
     ["Stan postaci", w.petState],
-    ["Energia", w.energy.state === "sleeping" ? "śpi" : `${w.energy.percent}% do ${w.energy.energyUntil}`],
+    ["Energia", w.energy.state === "sleeping" ? `${w.energy.percent}% (śpi, ładuje się)` : `${w.energy.percent}% do ${w.energy.energyUntil}`],
     ["Pora dnia", w.scene.period.label],
     ["Scena", `${w.scene.label} (${w.scene.source})`],
     ["Woda", `${ac.drunkMl} ml`],
