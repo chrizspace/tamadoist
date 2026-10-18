@@ -202,11 +202,10 @@ export function WaterScreen({ name, drunkMl, goalMl, energyPercent, drinking, lo
     <Phone location={location} period={period}>
       <HeaderBar left="back" title="Woda" percent={energyPercent} onBack={onBack} />
       <Hero top={STAGE_TOP} name={name} float={false}><Pet state={drinking ? "drinking" : "awake"} size={270} /></Hero>
-      <WaterCounter drunkMl={drunkMl} goalMl={goalMl} />
+      <WaterCounter drunkMl={drunkMl} goalMl={goalMl} gain={toast} />
       <div className="td-actionbar td-actionbar--pair">
         <RoundButton kind="minus" onClick={onMinus} /><RoundButton kind="plus" onClick={onPlus} />
       </div>
-      {toast && <Toast bottom={222}>{toast}</Toast>}
     </Phone>
   );
 }

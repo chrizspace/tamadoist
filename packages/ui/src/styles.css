@@ -131,11 +131,11 @@ body { font-family: var(--font); color: var(--color-text); background: var(--col
 .td-dialog h3 { margin: 0; font: 800 24px var(--font); }
 .td-dialog p { margin: 0; color: var(--color-text-muted); font: 600 16px/1.4 var(--font); }
 .td-dialog__btns { display: flex; gap: 12px; }
-.td-toast { position: absolute; left: 16px; right: 16px; bottom: 148px; background: rgba(15,40,34,.62); color: #fff; padding: 14px 20px; border-radius: 20px; font: 800 17px var(--font); display: flex; justify-content: center; align-items: center; z-index: 6; text-align: center; }
+.td-toast { position: absolute; left: 16px; right: 16px; top: 120px; background: rgba(15,40,34,.62); color: #fff; padding: 14px 20px; border-radius: 20px; font: 800 17px var(--font); display: flex; justify-content: center; align-items: center; z-index: 6; text-align: center; }
 .td-toast--inline { position: static; }
 .td-toast svg { width: 20px; height: 20px; }
 /* water level block */
-.td-counter { position: absolute; bottom: 148px; left: 16px; right: 16px; background: #fff; border-radius: 20px; padding: 8px 20px 12px; text-align: center; z-index: 2; border: 2px solid var(--color-border); display: flex; flex-direction: column; gap: 6px; }
+.td-counter { position: absolute; top: 120px; left: 16px; right: 16px; background: #fff; border-radius: 20px; padding: 8px 20px 12px; text-align: center; z-index: 2; border: 2px solid var(--color-border); display: flex; flex-direction: column; gap: 6px; }
 .td-counter b { display: block; font: 800 20px var(--font); color: var(--color-water-dark); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .td-counter__track { height: 10px; border-radius: 5px; background: var(--color-water-soft); overflow: hidden; }
 .td-counter__fill { height: 100%; border-radius: 5px; background: linear-gradient(var(--color-water), var(--color-water-dark)); transition: width .3s; min-width: 0; }
@@ -230,7 +230,7 @@ button.td-ichip:focus-visible { outline: 3px solid var(--color-water); outline-o
 .td-header__right { min-width: 48px; margin-left: 0; flex: none; display: flex; justify-content: flex-end; }
 .td-rail { position: absolute; right: 16px; top: 60px; z-index: 3; }
 .td-rail .td-indicators { flex-direction: column; gap: 22px; }
-.td-static .td-counter { bottom: auto; top: 0; left: 0; right: 0; }
+.td-static .td-counter { top: 0; left: 0; right: 0; }
 
 /* Rail folding */
 .td-rail { display: flex; flex-direction: column; align-items: center; gap: 12px; }
@@ -256,3 +256,8 @@ button.td-ibar__seg:active { transform: translateY(2px); }
 button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outline-offset: 2px; }
 .td-header__title--btn { justify-content: safe center; } .td-header__label { flex: 0 1 auto; }
 .td-header__title--btn { overflow: visible; } .td-header__label { max-width: calc(100% - 18px); }
+
+/* "+250 ml" pops next to the water amount, on a solid water-blue pill (no separate toast) */
+.td-counter__gain { position: absolute; right: 16px; top: 8px; background: var(--color-water); color: #fff; border-radius: 999px; padding: 3px 12px; font: 800 14px/1.3 var(--font); animation: td-gain .35s ease-out; box-shadow: 0 2px 0 var(--color-water-dark); }
+@keyframes td-gain { from { transform: translateY(8px) scale(.8); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .td-counter__gain { animation: none; } }

@@ -41,14 +41,14 @@ export const typography = {
 /**
  * Zones of a 390x844 scene screen (px from the top).
  * topbar: menu/back + title. rail: round indicators stacked on the right edge.
- * interaction: progress / notification, right above the action dock. dock: action buttons.
+ * interaction: progress / notification, right under the top bar. dock: action buttons.
  * Everything else is the scene: only the character (and its name tag) is drawn there,
  * so scene animations can use all of it.
  */
 export const LAYOUT = {
   topbar: { top: 48, bottom: 112 },
   rail: { top: 60, right: 16, width: 40 },
-  scene: { top: 112, bottom: 632 },
-  interaction: { top: 632, bottom: 696 },
+  interaction: { top: 120, bottom: 184 },
+  scene: { top: 184, bottom: 704 },
   dock: { top: 712, bottom: 844 },
 } as const;
