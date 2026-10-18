@@ -50,7 +50,7 @@ export function Prototype() {
       case "indicator": return <EnergyIndicatorScreen name={w.name} energyPercent={d.energyPercent} onNext={() => go("sleep")} />;
       case "sleep": return <SleepScreen name={w.name} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} onSleepStart={ch.setSleepStart} onNext={() => go("weight")} />;
       case "weight": return <WeightScreen name={w.name} weightKg={d.weightKg} goalMl={d.goalMl} onWeight={ch.setWeight} onNext={() => go("home")} />;
-      case "home": return <HomeScreen {...d} {...scene} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onAction={(id) => id === "water" && go("water")} />;
+      case "home": return <HomeScreen {...d} {...scene} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onEnergy={() => flash(`Energia ${d.energyPercent}% · ${w.energy.state === "sleeping" ? "śpi, ładuje się" : `starczy do ${w.energy.energyUntil}`}`)} onAction={(id) => id === "water" && go("water")} />;
       case "menu": return <MenuScreen name={w.name} energyPercent={d.energyPercent} onClose={() => go("home")} onSettings={() => go("settings")} onPlaces={() => go("places")} onSchedule={() => go("schedule")} onLogout={() => { ch.reset(); ac.reset(); sc.setManual(undefined); sc.setPos("none"); go("login"); }} />;
       case "water": return <WaterScreen {...d} {...scene} drinking={ac.justDrank} toast={toast} onBack={() => go("home")} onPlus={() => { ac.add(); flash("+250 ml wody"); }} onMinus={() => { ac.remove(); flash("−250 ml wody"); }} />;
       case "settings": return <SettingsScreen {...d} onBack={() => go("home")} onEditName={() => { setDraft(ch.profile.name); go("rename"); }} />;

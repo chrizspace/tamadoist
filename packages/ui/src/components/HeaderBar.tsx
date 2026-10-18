@@ -1,4 +1,4 @@
-import { Battery } from "../character/Battery";
+import { EnergyChip } from "../character/EnergyChip";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 
@@ -14,10 +14,12 @@ export interface HeaderBarProps {
   onMenu?: () => void;
   onBack?: () => void;
   onClose?: () => void;
+  /** When set the energy indicator is pressable (3D) and opens the energy details. */
+  onEnergy?: () => void;
 }
 
 /** Left: one button (hamburger, back or close), center: title, right: energy indicator. */
-export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, ghost, onTitle, onMenu, onBack, onClose }: HeaderBarProps) {
+export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, ghost, onTitle, onMenu, onBack, onClose, onEnergy }: HeaderBarProps) {
   return (
     <div className="td-header">
       <div className={`td-header__left${ghost ? " td-ghost" : ""}`}>
@@ -32,7 +34,7 @@ export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, gh
       ) : (
         <div className="td-header__title">{title}</div>
       )}
-      <div className="td-header__right"><Battery percent={percent} /></div>
+      <div className="td-header__right"><EnergyChip percent={percent} onClick={onEnergy} /></div>
     </div>
   );
 }

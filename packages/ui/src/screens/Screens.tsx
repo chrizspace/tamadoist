@@ -161,16 +161,17 @@ export interface HomeProps extends SceneProps, Pick<ScreenData, "name" | "energy
   toast?: string;
   onMenu?: () => void;
   onTitle?: () => void;
+  onEnergy?: () => void;
   onAction?: (id: string) => void;
 }
 
-export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state = "awake", toast, location = "recreation.park", period = "noon", onMenu, onTitle, onAction }: HomeProps) {
+export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state = "awake", toast, location = "recreation.park", period = "noon", onMenu, onTitle, onEnergy, onAction }: HomeProps) {
   const sleeping = state === "sleeping";
   const tired = state === "tired";
   const caption = sleeping ? `${name} śpi do ${sleepEnd}. Dobranoc!` : tired ? "Brak energii – napij się wody!" : `Energii starczy do ${energyUntil}`;
   return (
     <Phone location={location} period={period}>
-      <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onMenu={onMenu} onTitle={onTitle ?? (() => undefined)} />
+      <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onMenu={onMenu} onTitle={onTitle ?? (() => undefined)} onEnergy={onEnergy} />
       <Hero top={165} name={name}><Pet state={state} size={270} /></Hero>
       <div className="td-caption" style={{ top: 600 }}>{caption}</div>
       <ActionBar context={{ sleeping, tired }} onAction={onAction} />
@@ -274,8 +275,8 @@ export function PlacesScreen({ energyPercent, onBack, onUseLocation }: Pick<Scre
       <HeaderBar left="back" title="Miejsca" percent={energyPercent} onBack={onBack} />
       <div className="td-page">
         <MapArt />
-        <ListCard icon="pin" title="Dom" sub="52.2297, 21.0122 · promień 100 m" right={<LocationPill location="home.office" />} />
-        <ListCard icon="pin" title="Praca" sub="52.2400, 21.0300 · promień 150 m" right={<LocationPill location="work.openspace" />} />
+        <ListCard icon="pin" title="Dom" sub="52.2297, 21.0122 · promień 100 m" onClick={() => undefined} right={<LocationPill location="home.office" />} />
+        <ListCard icon="pin" title="Praca" sub="52.2400, 21.0300 · promień 150 m" onClick={() => undefined} right={<LocationPill location="work.openspace" />} />
         <AddCard label="Dodaj miejsce" />
         <Button variant="water" onClick={onUseLocation}>Użyj bieżącej lokalizacji</Button>
         <p className="td-note">Lokalizację porównujemy z Twoimi miejscami na urządzeniu. Nie zapisujemy trasy.</p>
@@ -294,7 +295,7 @@ export function LocationPermissionScreen({ name, onAllow, onLater }: Pick<Screen
         <MapArt />
         <p className="td-note">Używamy tylko ostatniej pozycji, żeby rozpoznać Twoje miejsca. Możesz to wyłączyć w każdej chwili i zmieniać sceny ręcznie.</p>
         <Button onClick={onAllow}>Zezwól na lokalizację</Button>
-        <Button variant="secondary" onClick={onLater}>Nie teraz</Button>
+        <Button variant="ghost" onClick={onLater}>Nie teraz</Button>
       </Sheet>
     </Phone>
   );
@@ -306,8 +307,8 @@ export function ScheduleScreen({ energyPercent, onBack }: Pick<ScreenData, "ener
       <HeaderBar left="back" title="Plan dnia" percent={energyPercent} onBack={onBack} />
       <div className="td-page">
         <h2>Bloki dnia</h2>
-        <ListCard icon="clock" title="Praca" sub="09:00 – 17:00 · pon–pt" right={<LocationPill location="work.openspace" />} />
-        <ListCard icon="clock" title="Lunch" sub="12:30 – 13:00 · pon–pt" right={<LocationPill location="work.kitchen" />} />
+        <ListCard icon="clock" title="Praca" sub="09:00 – 17:00 · pon–pt" onClick={() => undefined} right={<LocationPill location="work.openspace" />} />
+        <ListCard icon="clock" title="Lunch" sub="12:30 – 13:00 · pon–pt" onClick={() => undefined} right={<LocationPill location="work.kitchen" />} />
         <AddCard label="Dodaj blok" />
         <p className="td-note">Krótszy blok wygrywa z dłuższym, więc w czasie lunchu zobaczysz kuchnię, a nie open space. Poza blokami scenę wybiera Twoja lokalizacja.</p>
       </div>

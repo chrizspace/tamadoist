@@ -72,6 +72,14 @@ Funkcje są rozdzielone na trzy niezależne moduły, żeby nowe dodawać jako da
 ## Podgląd design systemu
 `pnpm design:build` składa `design/preview.html` z prawdziwych komponentów (`packages/ui`) i prawdziwej logiki (`packages/core`): zakładki Foundations, Postać, Scena, Akcje, Components i klikalny Prototyp z osobnymi ustawieniami dla każdego modułu.
 
+## Zasady interfejsu: płasko czy 3D
+Jedna zasada dla całego UI (`packages/ui`, sekcja „Elevation system” w `styles.css`, strona Foundations → „Płasko czy 3D”):
+- **3D = można nacisnąć.** Twarda, ciemniejsza krawędź 4 px u dołu, po naciśnięciu zapada się o 4 px. Przyciski (główny, drugorzędny, woda), ikony w nagłówku (hamburger, wstecz, zamknij), +/−, przyciski akcji, wskaźnik energii (jest przyciskiem: pokazuje szczegóły), karty sceny i wiersze, które można edytować.
+- **Płasko = informuje.** Ramka 2 px, bez krawędzi: imię nad postacią, licznik wody, powiadomienia, pastylki, paski postępu, pola tekstowe, przełączniki.
+- **Powierzchnia = miękki cień.** Arkusz, dialog i menu leżą nad sceną i nie mają krawędzi.
+- **Ghost = sam tekst** dla najcichszej akcji, np. „Nie teraz”.
+- **Stany:** wyłączony jest płaski i szary, wybrany ma krawędź w kolorze marki, a na ekranie tylko jedna główna akcja ma kolor.
+
 ## Storybook
 - Storybook 8 (react-vite lub nextjs framework) w `packages/ui`; każdy primitive + token (Colors, Typography, Spacing) ma story, `autodocs`, addon a11y.
 - Stany: default/hover/disabled/error; EnergyBar: 0/30/70/100%; Pet: awake/tired/sleeping.

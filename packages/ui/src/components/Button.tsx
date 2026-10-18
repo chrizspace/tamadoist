@@ -1,7 +1,8 @@
 import type { ButtonHTMLAttributes } from "react";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "water";
+  /** primary / secondary / water are pressable with a 3D lip. ghost is the quiet, flat text action. */
+  variant?: "primary" | "secondary" | "water" | "ghost";
 }
 
 export function Button({ variant = "primary", className = "", type = "button", ...rest }: ButtonProps) {

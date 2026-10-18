@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, colors, radius, space, typography } from "@tamadoist/ui";
+import { Button, ElevationGuide, colors, radius, space, typography } from "@tamadoist/ui";
 import { Section, Spec, SpecGrid, copyText } from "../chrome";
 
 const GROUPS: Record<string, (keyof typeof colors)[]> = {
@@ -27,6 +27,10 @@ export function Foundations() {
           ))}
         </div>
         <p className="note">Wybór sceny łączy moduły: lokalizację wskazuje ręczny wybór, sen, plan dnia albo miejsce, a porę dnia wyznacza zegar. Pora zmienia tylko światło.</p>
+      </Section>
+
+      <Section title="Płasko czy 3D" lead="Jedna zasada dla całego interfejsu: 3D mają tylko elementy, które można nacisnąć. Informacje i pola są płaskie, a arkusze, dialogi i menu mają tylko miękki cień.">
+        <ElevationGuide />
       </Section>
 
       <Section title="Kolory" lead="Ciepła zieleń marki, żółty akcent, błękit wody i fiolet nocy. Kliknij próbkę, żeby skopiować kod.">
