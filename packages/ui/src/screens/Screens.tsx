@@ -196,17 +196,15 @@ export function MenuScreen({ name, energyPercent, onClose, onSettings, onPlaces,
 /* ---------------- Actions: water ---------------- */
 
 export function WaterScreen({ name, drunkMl, goalMl, energyPercent, drinking, location = "recreation.park", period = "noon", onBack, onPlus, onMinus, toast }: Pick<ScreenData, "name" | "drunkMl" | "goalMl" | "energyPercent"> & SceneProps & { drinking?: boolean; onBack?: () => void; onPlus?: () => void; onMinus?: () => void; toast?: string }) {
-  const pct = Math.round(Math.min(1, drunkMl / goalMl) * 100);
   return (
     <Phone location={location} period={period}>
       <HeaderBar left="back" title="Woda" percent={energyPercent} onBack={onBack} />
       <Hero top={130} name={name} float={false}><Pet state={drinking ? "drinking" : "awake"} size={230} /></Hero>
       <WaterCounter drunkMl={drunkMl} goalMl={goalMl} />
-      <div className="td-panelw" style={{ top: 560 }}><EnergyBar percent={pct} label="Woda" /></div>
       <div className="td-actionbar" style={{ bottom: 56, gap: 70 }}>
         <RoundButton kind="minus" onClick={onMinus} /><RoundButton kind="plus" onClick={onPlus} />
       </div>
-      {toast && <Toast>{toast}</Toast>}
+      {toast && <Toast top={408}>{toast}</Toast>}
     </Phone>
   );
 }

@@ -47,7 +47,7 @@ export const WaterFlow: Story = {
     const goal = 2450;
     return (
       <div style={{ width: 340, background: "var(--color-hill)", borderRadius: 20, padding: 24, display: "flex", flexDirection: "column", gap: 16, alignItems: "center", position: "relative" }}>
-        <div style={{ position: "relative", height: 90, width: "100%" }}><WaterCounter drunkMl={ml} goalMl={goal} top={0} /></div>
+        <div style={{ position: "relative", height: 112, width: "100%" }}><WaterCounter drunkMl={ml} goalMl={goal} top={0} /></div>
         <div style={{ display: "flex", gap: 60 }}>
           <RoundButton kind="minus" onClick={() => setMl((v) => applyWater(v, -GLASS_ML))} />
           <RoundButton kind="plus" onClick={() => setMl((v) => applyWater(v, GLASS_ML))} />

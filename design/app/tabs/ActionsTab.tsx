@@ -22,7 +22,7 @@ export function ActionsTab() {
           </Spec>
           <Spec title="Przycisk akcji" stage="hillbg"><ActionButton /><ActionButton active /><ActionButton disabled /></Spec>
           <Spec title="Dodawanie wody" note={`Zapis w applyWater: krok ${GLASS_ML} ml, wynik nigdy poniżej zera.`} stage="hillbg col">
-            <div style={{ position: "relative", height: 84, width: 260 }}><WaterCounter drunkMl={ml} goalMl={2450} top={0} /></div>
+            <div style={{ position: "relative", height: 112, width: 320 }}><WaterCounter drunkMl={ml} goalMl={2450} top={0} /></div>
             <div style={{ display: "flex", gap: 56 }}>
               <RoundButton kind="minus" onClick={() => setMl((v) => applyWater(v, -GLASS_ML))} />
               <RoundButton kind="plus" onClick={() => setMl((v) => applyWater(v, GLASS_ML))} />

@@ -1,8 +1,12 @@
-export function WaterCounter({ drunkMl, goalMl, top = 455 }: { drunkMl: number; goalMl: number; top?: number }) {
+/** One block: the water level (drunk / goal) with a progress bar directly below it. */
+export function WaterCounter({ drunkMl, goalMl, top = 470 }: { drunkMl: number; goalMl: number; top?: number }) {
+  const pct = goalMl > 0 ? Math.min(100, Math.max(0, Math.round((drunkMl / goalMl) * 100))) : 0;
   return (
     <div className="td-counter" style={{ top }}>
       <b>{drunkMl} / {goalMl} ml</b>
-      <span>Dodawaj po szklance (250 ml)</span>
+      <div className="td-counter__track" role="progressbar" aria-label="Woda" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+        <div className="td-counter__fill" style={{ width: `${pct}%` }} />
+      </div>
     </div>
   );
 }
