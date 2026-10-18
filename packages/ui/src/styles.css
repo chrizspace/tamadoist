@@ -266,6 +266,6 @@ button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outli
 .td-dial { position: relative; width: 40px; height: 40px; margin-right: 4px; }
 .td-dial__dots { position: absolute; inset: 0; pointer-events: none; }
 .td-dial__dot { pointer-events: auto; position: absolute; width: 20px; height: 20px; margin: -10px 0 0 -10px; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 50%; }
-.td-dial__dot::after { content: ""; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; margin: -3.5px; border-radius: 50%; background: rgba(255,255,255,.85); box-shadow: 0 1px 0 rgba(0,0,0,.18); transition: transform .15s, background .15s; }
-.td-dial__dot.is-active::after { background: var(--dot); transform: scale(1.35); box-shadow: 0 0 0 2px #fff; }
+.td-dial__dot::after { content: ""; position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%; background: rgba(255,255,255,.85); box-shadow: 0 1px 0 rgba(0,0,0,.18); transition: transform .15s, background .15s; }
+.td-dial__dot.is-active::after { background: var(--dot); transform: scale(1.4); box-shadow: 0 0 0 1.5px #fff; }
 .td-dial__dot:focus-visible { outline: 3px solid var(--color-water); outline-offset: -2px; }

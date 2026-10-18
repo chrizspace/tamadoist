@@ -188,7 +188,7 @@ export interface IndicatorDialProps extends IndicatorClusterProps {
 }
 
 const DOT_ANGLES = [-50, 0, 50];
-const DOT_RADIUS = 31;
+const DOT_RADIUS = 29;
 
 /**
  * One round indicator that shows energy, experience or streak. Three small dots on an arc above it
