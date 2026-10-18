@@ -190,7 +190,7 @@ export interface IndicatorDialProps extends IndicatorClusterProps {
 
 /**
  * One round indicator that shows energy, experience or streak. Three small dots in a column beside it
- * switch between them (the active dot takes the indicator's color). Tapping the chip itself also switches to the next one.
+ * show which one is active (its dot takes the indicator's color). Tapping a dot or the chip always loads the next indicator.
  */
 export function IndicatorDial({ energyPercent, value, onChange }: IndicatorDialProps) {
   const extra = useExtraIndicators();
@@ -219,7 +219,7 @@ export function IndicatorDial({ energyPercent, value, onChange }: IndicatorDialP
                 aria-label={x.label}
                 className={`td-dial__dot${x.key === active.key ? " is-active" : ""}`}
                 style={{ ["--dot" as string]: x.color }}
-                onClick={() => select(x.key)}
+                onClick={next}
               />
             );
           })}
