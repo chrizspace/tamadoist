@@ -1,6 +1,6 @@
 export const ICON_PATHS = {
   menu: <path d="M4 7h16M4 12h16M4 17h16" />,
-  back: <path d="M15 5l-7 7 7 7" />,
+  back: <path d="M20 12H5M11 5.5 4.500 12 11 18.5" />,
   close: <path d="M6 6l12 12M18 6L6 18" />,
   plus: <path d="M12 5v14M5 12h14" />,
   minus: <path d="M5 12h14" />,
