@@ -89,8 +89,8 @@ export function CharacterTab() {
               <div className="railwrap" style={{ height: 210 }}><IndicatorRail energyPercent={62} onEnergy={() => undefined} /></div>
             </IndicatorsProvider>
           </Spec>
-          <Spec title="Wariant okrągły: jeden chip, trzy kropki" note="Kropki na łuku nad chipem przełączają energię / EXP / serię; kolor aktywnej kropki = kolor wskaźnika. Dotknięcie chipa też przełącza na następny wskaźnik." stage="sky">
-            <div style={{ padding: "34px 40px 18px" }}><IndicatorDial energyPercent={62} /></div>
+          <Spec title="Wariant okrągły: jeden chip, trzy kropki" note="Kropki w pionie po prawej stronie chipa przełączają energię / EXP / serię; kolor aktywnej kropki = kolor wskaźnika. Dotknięcie chipa też przełącza na następny wskaźnik." stage="sky">
+            <div style={{ padding: "18px 40px 24px" }}><IndicatorDial energyPercent={62} /></div>
           </Spec>
           <Spec title="Wariant poziomy: jedna kapsuła" note="Wszystkie trzy w jednym komponencie na linii hamburgera; liczba obok pierścienia zamiast plakietki." stage="sky">
             <IndicatorBar energyPercent={62} onEnergy={() => undefined} />

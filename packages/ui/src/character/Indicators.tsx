@@ -187,11 +187,9 @@ export interface IndicatorDialProps extends IndicatorClusterProps {
   onChange?: (key: DialKey) => void;
 }
 
-const DOT_ANGLES = [-50, 0, 50];
-const DOT_RADIUS = 31;
 
 /**
- * One round indicator that shows energy, experience or streak. Three small dots on an arc above it
+ * One round indicator that shows energy, experience or streak. Three small dots in a column beside it
  * switch between them (the active dot takes the indicator's color). Tapping the chip itself also switches to the next one.
  */
 export function IndicatorDial({ energyPercent, value, onChange }: IndicatorDialProps) {
@@ -212,7 +210,6 @@ export function IndicatorDial({ energyPercent, value, onChange }: IndicatorDialP
       {slots.length > 1 && (
         <div className="td-dial__dots" role="tablist" aria-label="Wskaźnik">
           {slots.map((x, i) => {
-            const a = (DOT_ANGLES[slots.length === 2 ? i * 2 : i] ?? 0) * (Math.PI / 180);
             return (
               <button
                 key={x.key}
@@ -221,7 +218,7 @@ export function IndicatorDial({ energyPercent, value, onChange }: IndicatorDialP
                 aria-selected={x.key === active.key}
                 aria-label={x.label}
                 className={`td-dial__dot${x.key === active.key ? " is-active" : ""}`}
-                style={{ left: 20 + DOT_RADIUS * Math.sin(a), top: 20 - DOT_RADIUS * Math.cos(a), ["--dot" as string]: x.color }}
+                style={{ ["--dot" as string]: x.color }}
                 onClick={() => select(x.key)}
               />
             );
