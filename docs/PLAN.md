@@ -128,7 +128,7 @@ Jedna zasada dla całego UI (`packages/ui`, sekcja „Elevation system” w `sty
 - **Scena**: postać stoi na stałym miejscu (środek sceny, `STAGE_TOP`), na każdym ekranie tak samo, bez unoszenia; animacje per scena później.
 - **Dół (dock)**: akcje zawsze przy dolnej krawędzi. Poziom 1: kwadratowe przyciski 3D akcji (przewijane w poziomie, gdy będzie ich więcej). Wewnątrz akcji: okrągłe przyciski (−/+) w tym samym miejscu.
 - Doprecyzowanie: licznik akcji na górze ma szerokość kontenera (16 px marginesu); powiadomienia (toast) pojawiają się nad dockiem, nie u góry; dock leży nisko (28 px od dołu), żeby środek został dla postaci i animacji.
-- Strefa informacji pod headerem (pełna szerokość) to jedyne miejsce na kontekst: podpis na Home („Energii starczy do…”), licznik w akcji; krótkie powiadomienia pojawiają się tuż pod nią. Pod postacią nic się już nie wyświetla.
+- Strefa informacji pod headerem (pełna szerokość): licznik w akcji oraz krótkie powiadomienia. Podpis energii („Energii starczy do…”) nie jest stale widoczny — pojawia się tylko po kliknięciu wskaźnika energii. Pod postacią nic się nie wyświetla.
 
 ### Zasada: scena jest nienaruszalna
 Ekran sceny ma 4 strefy (`LAYOUT` w `packages/ui/src/tokens.ts`): header (48–112), strefa informacji (120–176), **scena (184–704)**, dock akcji (704–844). W strefie sceny nie rysujemy żadnego UI poza postacią i jej imieniem — to miejsce na animacje i interakcje postaci ze sceną (ruch generowany per scena). Powiadomienia, liczniki i podpisy trafiają do strefy informacji, akcje do docka. W prototypie checkbox „Strefy ekranu” podświetla scenę.

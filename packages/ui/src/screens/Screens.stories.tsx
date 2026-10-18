@@ -22,6 +22,7 @@ export const S06_Weight: Story = { name: "06 Waga", render: () => <WeightScreen 
 export const S07_Home: Story = { name: "07 Home", render: () => <HomeScreen {...d} /> };
 export const S08_Menu: Story = { name: "08 Menu", render: () => <MenuScreen name={d.name} energyPercent={d.energyPercent} /> };
 export const S09_Water: Story = { name: "09 Woda", render: () => <WaterScreen {...d} /> };
+export const S07b_EnergyInfo: Story = { name: "07b Home – po kliknięciu energii", render: () => <HomeScreen {...d} toast={`Energii starczy do ${d.energyUntil}`} /> };
 export const S10_Tired: Story = { name: "10 Zmęczony", render: () => <HomeScreen {...d} energyPercent={0} state="tired" /> };
 export const S11_Sleeping: Story = { name: "11 Śpi", render: () => <HomeScreen {...d} energyPercent={50} state="sleeping" location="home.bedroom" period="night" /> };
 export const S12_Rename: Story = { name: "12 Zmiana imienia", render: () => <RenameDialogScreen {...d} /> };

@@ -171,12 +171,10 @@ export interface HomeProps extends SceneProps, Pick<ScreenData, "name" | "energy
 export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state = "awake", toast, location = "recreation.park", period = "noon", onMenu, onTitle, onEnergy, onAction }: HomeProps) {
   const sleeping = state === "sleeping";
   const tired = state === "tired";
-  const caption = sleeping ? `${name} śpi do ${sleepEnd}. Dobranoc!` : tired ? "Brak energii – napij się wody!" : `Energii starczy do ${energyUntil}`;
   return (
     <Phone location={location} period={period}>
       <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onMenu={onMenu} onTitle={onTitle ?? (() => undefined)} onEnergy={onEnergy} />
       <Hero float={false} top={STAGE_TOP} name={name}><Pet state={state} size={270} /></Hero>
-      <div className="td-caption td-caption--slot">{caption}</div>
       <ActionBar context={{ sleeping, tired }} onAction={onAction} />
       {toast && <Toast>{toast}</Toast>}
     </Phone>
