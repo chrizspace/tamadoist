@@ -127,3 +127,4 @@ Jedna zasada dla całego UI (`packages/ui`, sekcja „Elevation system” w `sty
 - **Góra** (header + wskaźniki + ewentualny licznik, np. woda): nic stąd nie wchodzi na postać.
 - **Scena**: postać stoi na stałym miejscu (środek sceny, `STAGE_TOP`), na każdym ekranie tak samo, bez unoszenia; animacje per scena później.
 - **Dół (dock)**: akcje zawsze przy dolnej krawędzi. Poziom 1: kwadratowe przyciski 3D akcji (przewijane w poziomie, gdy będzie ich więcej). Wewnątrz akcji: okrągłe przyciski (−/+) w tym samym miejscu.
+- Doprecyzowanie: licznik akcji na górze ma szerokość kontenera (16 px marginesu); powiadomienia (toast) pojawiają się nad dockiem, nie u góry; dock leży nisko (28 px od dołu), żeby środek został dla postaci i animacji.

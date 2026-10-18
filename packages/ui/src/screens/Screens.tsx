@@ -208,7 +208,7 @@ export function WaterScreen({ name, drunkMl, goalMl, energyPercent, drinking, lo
       <div className="td-actionbar td-actionbar--pair">
         <RoundButton kind="minus" onClick={onMinus} /><RoundButton kind="plus" onClick={onPlus} />
       </div>
-      {toast && <Toast top={190}>{toast}</Toast>}
+      {toast && <Toast>{toast}</Toast>}
     </Phone>
   );
 }
