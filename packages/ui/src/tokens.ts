@@ -37,3 +37,16 @@ export const typography = {
   caption: { size: 13, weight: 600 },
   button: { size: 16, weight: 800 },
 } as const;
+
+/**
+ * Vertical zones of a 390x844 scene screen (px from the top).
+ * header and info slot sit above the stage, the action dock below it.
+ * The stage is reserved: nothing but the character (and its name tag) is drawn there,
+ * so scene animations can use all of it.
+ */
+export const LAYOUT = {
+  header: { top: 48, bottom: 112 },
+  info: { top: 120, bottom: 176 },
+  stage: { top: 184, bottom: 704 },
+  dock: { top: 704, bottom: 844 },
+} as const;

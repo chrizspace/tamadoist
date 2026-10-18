@@ -48,7 +48,7 @@ export function Phone({ location, period, children }: SceneProps & { children: R
   );
 }
 /** Where the character stands in every scene screen: centred, never covered by header or dock. */
-const STAGE_TOP = 262;
+const STAGE_TOP = 262; // inside LAYOUT.stage
 
 
 const Hero = ({ top, name, children, float = true }: { top: number; name: string; children: ReactNode; float?: boolean }) => (

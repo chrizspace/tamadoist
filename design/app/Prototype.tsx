@@ -30,6 +30,7 @@ export function Prototype() {
   const [toast, setToast] = useState("");
   const [forced, setForced] = useState<PetState | "">("");
   const [threeIndicators, setThree] = useState(false);
+  const [zones, setZones] = useState(false);
   const [cityId, setCityId] = useState(DEFAULT_ENV.city.id);
   const [date, setDate] = useState(DEFAULT_ENV.date);
   const env: Env = useMemo(() => ({ city: CITIES.find((c) => c.id === cityId)!, date }), [cityId, date]);
@@ -78,7 +79,7 @@ export function Prototype() {
 
   return (
     <div className="proto">
-      <div className="protoframe"><Fit><div className="phoneroot"><IndicatorsProvider value={threeIndicators ? { exp: { level: Math.floor(xp / 100), progress: (xp % 100) / 100 }, streak: { days: 12, progress: Math.min(1, ac.drunkMl / ch.goalMl) } } : {}}>{render()}</IndicatorsProvider></div></Fit></div>
+      <div className="protoframe"><Fit><div className={`phoneroot${zones ? " show-zones" : ""}`}><IndicatorsProvider value={threeIndicators ? { exp: { level: Math.floor(xp / 100), progress: (xp % 100) / 100 }, streak: { days: 12, progress: Math.min(1, ac.drunkMl / ch.goalMl) } } : {}}>{render()}</IndicatorsProvider></div></Fit></div>
       <div className="protoctl">
         <details open className="box mod"><summary><b>Ekran</b></summary>
           <div className="crumbs">
@@ -116,6 +117,7 @@ export function Prototype() {
 
         <details open className="box mod"><summary><b>Wskaźniki</b> · nagłówek</summary>
           <div className="ctl"><label htmlFor="ind3">Trzy wskaźniki</label><input id="ind3" type="checkbox" checked={threeIndicators} onChange={(e) => setThree(e.target.checked)} /><span className="note">energia + EXP + seria (EXP rośnie z wypitą wodą)</span></div>
+          <div className="ctl"><label htmlFor="zones">Strefy ekranu</label><input id="zones" type="checkbox" checked={zones} onChange={(e) => setZones(e.target.checked)} /><span className="note">żółta ramka = scena zarezerwowana na postać i animacje</span></div>
         </details>
 
         <details open className="box mod"><summary><b>3 · Akcje</b> · woda</summary>
