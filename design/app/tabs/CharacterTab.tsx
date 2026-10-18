@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BASE_ENERGY_SHARE, DEFAULT_PROFILE, PET_STATES, computeEnergy, derivePetState, sleepWindow, waterGoalMl, type PetState } from "@tamadoist/core";
 import {
-  EnergyIndicator, ExpIndicator, StreakIndicator, IndicatorsProvider, IndicatorRail, IndicatorBar, Egg, EnergyExplainScreen, EnergyIndicatorScreen, LoginScreen, NameScreen, NameTag, Pet, PetScale, RenameDialogScreen,
+  EnergyIndicator, ExpIndicator, StreakIndicator, IndicatorsProvider, IndicatorRail, IndicatorBar, IndicatorDial, Egg, EnergyExplainScreen, EnergyIndicatorScreen, LoginScreen, NameScreen, NameTag, Pet, PetScale, RenameDialogScreen,
   SAMPLE, SettingsScreen, SleepScreen, WeightScreen, energyRange, TimePicker,
 } from "@tamadoist/ui";
 import { Gallery, Section, Spec, SpecGrid } from "../chrome";
@@ -88,6 +88,9 @@ export function CharacterTab() {
             <IndicatorsProvider value={{ exp: { level: 7, progress: 0.62 }, streak: { days: 12, progress: 0.7 } }}>
               <div className="railwrap" style={{ height: 210 }}><IndicatorRail energyPercent={62} onEnergy={() => undefined} /></div>
             </IndicatorsProvider>
+          </Spec>
+          <Spec title="Wariant okrągły: jeden chip, trzy kropki" note="Kropki na łuku nad chipem przełączają energię / EXP / serię; kolor aktywnej kropki = kolor wskaźnika. Dotknięcie chipa też przełącza na następny wskaźnik." stage="sky">
+            <div style={{ padding: "34px 40px 18px" }}><IndicatorDial energyPercent={62} /></div>
           </Spec>
           <Spec title="Wariant poziomy: jedna kapsuła" note="Wszystkie trzy w jednym komponencie na linii hamburgera; liczba obok pierścienia zamiast plakietki." stage="sky">
             <IndicatorBar energyPercent={62} onEnergy={() => undefined} />

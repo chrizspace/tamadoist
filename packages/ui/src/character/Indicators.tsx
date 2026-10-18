@@ -148,9 +148,9 @@ export function IndicatorRail({ defaultCollapsed = false, ...props }: IndicatorC
 
 /* ---------------- Horizontal variant: one capsule with all three ---------------- */
 
-export type IndicatorsLayout = "bar" | "rail";
-/** "bar": one horizontal capsule on the top bar line. "rail": round chips stacked on the right edge. */
-export const IndicatorsLayoutContext = createContext<IndicatorsLayout>("bar");
+export type IndicatorsLayout = "dial" | "bar" | "rail";
+/** "dial": one round chip with three dots to switch (default). "bar": one horizontal capsule. "rail": round chips stacked on the right edge. */
+export const IndicatorsLayoutContext = createContext<IndicatorsLayout>("dial");
 export const useIndicatorsLayout = () => useContext(IndicatorsLayoutContext);
 
 interface SegmentProps { glyph: IndicatorGlyph; progress: number; color: string; value: string | number; label: string; onClick?: () => void }
@@ -173,6 +173,61 @@ export function IndicatorBar({ energyPercent, onEnergy, onExp, onStreak }: Indic
       <Segment glyph="bolt" progress={p / 100} color={energyColor(p)} value={p} label={`Energia ${p}%`} onClick={onEnergy} />
       {extra.exp && <Segment glyph="star" progress={extra.exp.progress} color={INDICATOR_COLORS.exp} value={extra.exp.level} label={`Poziom ${extra.exp.level}`} onClick={onExp} />}
       {extra.streak && <Segment glyph="flame" progress={extra.streak.progress} color={INDICATOR_COLORS.streak} value={extra.streak.days} label={`Seria ${extra.streak.days} dni`} onClick={onStreak} />}
+    </div>
+  );
+}
+
+/* ---------------- Single round dial with three switch dots ---------------- */
+
+export type DialKey = "energy" | "exp" | "streak";
+
+export interface IndicatorDialProps extends IndicatorClusterProps {
+  /** Controlled selection; when omitted the dial keeps its own. */
+  value?: DialKey;
+  onChange?: (key: DialKey) => void;
+}
+
+const DOT_ANGLES = [-50, 0, 50];
+const DOT_RADIUS = 31;
+
+/**
+ * One round indicator that shows energy, experience or streak. Three small dots on an arc above it
+ * switch between them (the active dot takes the indicator's color). Tapping the chip itself also switches to the next one.
+ */
+export function IndicatorDial({ energyPercent, value, onChange }: IndicatorDialProps) {
+  const extra = useExtraIndicators();
+  const [inner, setInner] = useState<DialKey>("energy");
+  const p = Math.max(0, Math.min(100, Math.round(energyPercent)));
+  const slots: { key: DialKey; label: string; color: string; chip: (go: () => void) => ReactNode }[] = [
+    { key: "energy", label: "Energia", color: energyColor(p), chip: (go) => <EnergyIndicator percent={p} onClick={go} /> },
+  ];
+  if (extra.exp) slots.push({ key: "exp", label: "Poziom", color: INDICATOR_COLORS.exp, chip: (go) => <ExpIndicator {...extra.exp!} onClick={go} /> });
+  if (extra.streak) slots.push({ key: "streak", label: "Seria", color: INDICATOR_COLORS.streak, chip: (go) => <StreakIndicator {...extra.streak!} onClick={go} /> });
+  const active = slots.find((x) => x.key === (value ?? inner)) ?? slots[0]!;
+  const select = (k: DialKey) => { setInner(k); onChange?.(k); };
+  const next = () => select(slots[(slots.indexOf(active) + 1) % slots.length]!.key);
+  return (
+    <div className="td-dial">
+      {active.chip(slots.length > 1 ? next : () => undefined)}
+      {slots.length > 1 && (
+        <div className="td-dial__dots" role="tablist" aria-label="Wskaźnik">
+          {slots.map((x, i) => {
+            const a = (DOT_ANGLES[slots.length === 2 ? i * 2 : i] ?? 0) * (Math.PI / 180);
+            return (
+              <button
+                key={x.key}
+                type="button"
+                role="tab"
+                aria-selected={x.key === active.key}
+                aria-label={x.label}
+                className={`td-dial__dot${x.key === active.key ? " is-active" : ""}`}
+                style={{ left: 20 + DOT_RADIUS * Math.sin(a), top: 20 - DOT_RADIUS * Math.cos(a), ["--dot" as string]: x.color }}
+                onClick={() => select(x.key)}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

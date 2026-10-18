@@ -31,7 +31,7 @@ export function Prototype() {
   const [forced, setForced] = useState<PetState | "">("");
   const [threeIndicators, setThree] = useState(true);
   const [zones, setZones] = useState(false);
-  const [layout, setLayout] = useState<IndicatorsLayout>("bar");
+  const [layout, setLayout] = useState<IndicatorsLayout>("dial");
   const [cityId, setCityId] = useState(DEFAULT_ENV.city.id);
   const [date, setDate] = useState(DEFAULT_ENV.date);
   const env: Env = useMemo(() => ({ city: CITIES.find((c) => c.id === cityId)!, date }), [cityId, date]);
@@ -118,7 +118,7 @@ export function Prototype() {
 
         <details open className="box mod"><summary><b>Wskaźniki</b> · nagłówek</summary>
           <div className="ctl"><label htmlFor="ind3">Trzy wskaźniki</label><input id="ind3" type="checkbox" checked={threeIndicators} onChange={(e) => setThree(e.target.checked)} /><span className="note">energia + EXP + seria (placeholdery; EXP rośnie z wypitą wodą)</span></div>
-          <div className="ctl"><label htmlFor="ilayout">Układ wskaźników</label><select id="ilayout" value={layout} onChange={(e) => setLayout(e.target.value as IndicatorsLayout)}><option value="bar">poziomo (kapsuła)</option><option value="rail">pionowo (szyna)</option></select></div>
+          <div className="ctl"><label htmlFor="ilayout">Układ wskaźników</label><select id="ilayout" value={layout} onChange={(e) => setLayout(e.target.value as IndicatorsLayout)}><option value="dial">okrągły z kropkami</option><option value="bar">poziomo (kapsuła)</option><option value="rail">pionowo (szyna)</option></select></div>
           <div className="ctl"><label htmlFor="zones">Strefy ekranu</label><input id="zones" type="checkbox" checked={zones} onChange={(e) => setZones(e.target.checked)} /><span className="note">żółta ramka = scena zarezerwowana na postać i animacje</span></div>
         </details>
 

@@ -1,4 +1,4 @@
-import { IndicatorBar, IndicatorRail, useIndicatorsLayout } from "../character/Indicators";
+import { IndicatorBar, IndicatorDial, IndicatorRail, useIndicatorsLayout } from "../character/Indicators";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 
@@ -40,7 +40,8 @@ export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, gh
       ) : (
         <div className="td-header__title">{title}</div>
       )}
-      <div className="td-header__right">{rail && layout === "bar" && <IndicatorBar energyPercent={percent} onEnergy={onEnergy} onExp={onExp} onStreak={onStreak} />}</div>
+      <div className="td-header__right">{rail && layout === "bar" && <IndicatorBar energyPercent={percent} onEnergy={onEnergy} onExp={onExp} onStreak={onStreak} />}
+      {rail && layout === "dial" && <IndicatorDial energyPercent={percent} onEnergy={onEnergy} onExp={onExp} onStreak={onStreak} />}</div>
     </div>
     {rail && layout === "rail" && <IndicatorRail energyPercent={percent} onEnergy={onEnergy} onExp={onExp} onStreak={onStreak} />}
     </>
