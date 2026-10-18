@@ -19,6 +19,7 @@ import { ProgressDots } from "../components/ProgressDots";
 import { Sheet } from "../components/Sheet";
 import { TimeCard } from "../components/TimeCard";
 import { TimePicker } from "../components/TimePicker";
+import { PetStage } from "../character/PetStage";
 import { Toast } from "../components/Toast";
 import { Scene, type SceneProps } from "../scene/Scene";
 import { LocationPill, SceneCard } from "../scene/SceneCard";
@@ -174,7 +175,7 @@ export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state =
   return (
     <Phone location={location} period={period}>
       <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onMenu={onMenu} onTitle={onTitle ?? (() => undefined)} onEnergy={onEnergy} />
-      <Hero float={false} top={STAGE_TOP} name={name}><Pet state={state} size={270} /></Hero>
+      <PetStage location={location} state={state} name={name} top={STAGE_TOP} />
       <ActionBar context={{ sleeping, tired }} onAction={onAction} />
       {toast && <Toast>{toast}</Toast>}
     </Phone>
@@ -186,7 +187,7 @@ export interface MenuHandlers { onClose?: () => void; onSettings?: () => void; o
 export function MenuScreen({ name, energyPercent, onClose, onSettings, onPlaces, onSchedule, onLogout }: Pick<ScreenData, "name" | "energyPercent"> & MenuHandlers) {
   return (
     <Phone {...LOC_PARK}>
-      <Hero top={STAGE_TOP} name={name} float={false}><Pet size={270} /></Hero>
+      <PetStage location="recreation.park" name={name} top={STAGE_TOP} still />
       <ActionBar context={{ sleeping: false, tired: false }} />
       <div className="td-scrim" />
       <HeaderBar left="close" title="Menu" percent={energyPercent} rail={false} onClose={onClose} />
@@ -201,7 +202,7 @@ export function WaterScreen({ name, drunkMl, goalMl, energyPercent, drinking, lo
   return (
     <Phone location={location} period={period}>
       <HeaderBar left="back" title="Woda" percent={energyPercent} onBack={onBack} />
-      <Hero top={STAGE_TOP} name={name} float={false}><Pet state={drinking ? "drinking" : "awake"} size={270} /></Hero>
+      <PetStage location={location} state={drinking ? "drinking" : "awake"} name={name} top={STAGE_TOP} />
       <WaterCounter drunkMl={drunkMl} goalMl={goalMl} gain={toast} />
       <div className="td-actionbar td-actionbar--pair">
         <RoundButton kind="minus" onClick={onMinus} /><RoundButton kind="plus" onClick={onPlus} />
@@ -251,7 +252,7 @@ export function ScenePickerScreen({ name, energyPercent, location = "work.opensp
   return (
     <Phone location={location} period={period}>
       <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onTitle={() => undefined} />
-      <Hero top={STAGE_TOP} name={name} float={false}><Pet size={270} /></Hero>
+      <PetStage location={location} name={name} top={STAGE_TOP} still />
       <div className="td-scrim" onClick={onClose} />
       <Sheet>
         <h3>Wybierz scenę</h3>
@@ -320,7 +321,7 @@ export function SchedulePromptScreen({ name, energyPercent, onYes, onChange }: P
   return (
     <Phone location="work.openspace" period="noon">
       <HeaderBar left="menu" title={getLocation("work.openspace").label} percent={energyPercent} onTitle={() => undefined} />
-      <Hero top={STAGE_TOP} name={name} float={false}><Pet size={270} /></Hero>
+      <PetStage location="work.openspace" name={name} top={STAGE_TOP} still />
       <div className="td-scrim" />
       <Dialog title="Zaczynasz pracę o 9:00?" description="Kończysz o 17:00? Pokażę wtedy open space, a w czasie lunchu kuchnię w pracy." actions={<><Button variant="secondary" onClick={onChange}>Zmień</Button><Button onClick={onYes}>Tak, ustaw</Button></>} />
     </Phone>

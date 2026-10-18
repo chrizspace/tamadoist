@@ -13,11 +13,11 @@ export function energyColor(percent: number): string {
   return percent < 25 ? "#FF5A5F" : percent < 50 ? "#FFB400" : "#1FBF8F";
 }
 
-export const INDICATOR_COLORS = { exp: "#7C84D6", streak: "#FF8A3D" } as const;
+export const INDICATOR_COLORS = { tasks: "#7C84D6", streak: "#FF8A3D" } as const;
 
 const GLYPHS = {
   bolt: "M13.2 2 4.5 13.6h6.2L9.8 22l9.7-12.2h-6.3z",
-  star: "M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.6l1.2-6.5L2.5 9.5l6.6-.9z",
+  check: "M9.3 17.4 4.9 13 2.4 15.5l6.9 6.9L22 8.7 19.5 6.2z",
   flame: "M12 2c1 3.5 5.5 5.7 5.5 11a5.5 5.5 0 0 1-11 0c0-2 1-3.4 2-4.5.2 1.6 1 2.4 1.8 2.6C10 8.6 10.5 5 12 2z",
 } as const;
 
@@ -40,7 +40,7 @@ const C = 2 * Math.PI * R;
 
 /**
  * Round indicator: a progress ring around a glyph, on a small white chip with a gray lip.
- * The header holds up to three of them (energy, experience and a third one).
+ * The header holds up to three of them (energy, tasks done today and a third one).
  */
 function Ring({ glyph, progress, color, size = 44 }: { glyph: IndicatorGlyph; progress: number; color: string; size?: number }) {
   const v = Math.max(0, Math.min(1, progress));
@@ -77,8 +77,10 @@ export function EnergyIndicator({ percent, onClick }: { percent: number; onClick
   return <IndicatorChip glyph="bolt" progress={p / 100} color={energyColor(p)} badge={p} label={`Energia ${p}%`} onClick={onClick} />;
 }
 
-export function ExpIndicator({ level, progress, onClick }: { level: number; progress: number; onClick?: () => void }) {
-  return <IndicatorChip glyph="star" progress={progress} color={INDICATOR_COLORS.exp} badge={level} label={`Poziom ${level}, ${Math.round(progress * 100)}% do następnego`} onClick={onClick} />;
+/** Tasks finished today out of today's tasks, e.g. 3/10; the ring is the share done. */
+export function TasksIndicator({ done, total, onClick }: { done: number; total: number; onClick?: () => void }) {
+  const progress = total > 0 ? Math.min(1, done / total) : 0;
+  return <IndicatorChip glyph="check" progress={progress} color={INDICATOR_COLORS.tasks} badge={`${done}/${total}`} label={`Zadania na dziś: ${done} z ${total}`} onClick={onClick} />;
 }
 
 /** Proposed third indicator: days in a row with the daily goals met; the ring is today's progress. */
@@ -87,13 +89,13 @@ export function StreakIndicator({ days, progress, onClick }: { days: number; pro
 }
 
 export interface ExtraIndicators {
-  exp?: { level: number; progress: number };
+  tasks?: { done: number; total: number };
   streak?: { days: number; progress: number };
 }
 
 /** Lets every screen's header show the extra indicators without passing them through each screen. */
-/** Placeholder values until EXP and streak are real: the rail always shows all three slots. */
-export const PLACEHOLDER_INDICATORS: ExtraIndicators = { exp: { level: 7, progress: 0.62 }, streak: { days: 12, progress: 0.7 } };
+/** Placeholder values until tasks and streak are real: the rail always shows all three slots. */
+export const PLACEHOLDER_INDICATORS: ExtraIndicators = { tasks: { done: 6, total: 10 }, streak: { days: 12, progress: 0.7 } };
 export const IndicatorsContext = createContext<ExtraIndicators>(PLACEHOLDER_INDICATORS);
 export const useExtraIndicators = () => useContext(IndicatorsContext);
 export const IndicatorsProvider = ({ value, children }: { value: ExtraIndicators; children: ReactNode }) => <IndicatorsContext.Provider value={value}>{children}</IndicatorsContext.Provider>;
@@ -101,25 +103,25 @@ export const IndicatorsProvider = ({ value, children }: { value: ExtraIndicators
 export interface IndicatorClusterProps {
   energyPercent: number;
   onEnergy?: () => void;
-  onExp?: () => void;
+  onTasks?: () => void;
   onStreak?: () => void;
 }
 
 export interface IndicatorClusterProps {
   energyPercent: number;
   onEnergy?: () => void;
-  onExp?: () => void;
+  onTasks?: () => void;
   onStreak?: () => void;
 }
 
-/** Energy always, then experience and streak when the app provides them. `collapsed` hides everything but energy. */
-export function IndicatorCluster({ energyPercent, onEnergy, onExp, onStreak, collapsed }: IndicatorClusterProps & { collapsed?: boolean }) {
+/** Energy always, then tasks done today and streak when the app provides them. `collapsed` hides everything but energy. */
+export function IndicatorCluster({ energyPercent, onEnergy, onTasks, onStreak, collapsed }: IndicatorClusterProps & { collapsed?: boolean }) {
   const extra = useExtraIndicators();
   return (
     <div className="td-indicators">
       <EnergyIndicator percent={energyPercent} onClick={onEnergy} />
       <div className={`td-indicators__more${collapsed ? " is-collapsed" : ""}`} aria-hidden={collapsed || undefined} inert={collapsed || undefined}>
-        {extra.exp && <ExpIndicator {...extra.exp} onClick={onExp} />}
+        {extra.tasks && <TasksIndicator {...extra.tasks} onClick={onTasks} />}
         {extra.streak && <StreakIndicator {...extra.streak} onClick={onStreak} />}
       </div>
     </div>
@@ -133,7 +135,7 @@ export function IndicatorCluster({ energyPercent, onEnergy, onExp, onStreak, col
 export function IndicatorRail({ defaultCollapsed = false, ...props }: IndicatorClusterProps & { defaultCollapsed?: boolean }) {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const extra = useExtraIndicators();
-  const hasMore = Boolean(extra.exp || extra.streak);
+  const hasMore = Boolean(extra.tasks || extra.streak);
   return (
     <div className="td-rail">
       <IndicatorCluster {...props} collapsed={collapsed} />
@@ -164,14 +166,14 @@ function Segment({ glyph, progress, color, value, label, onClick }: SegmentProps
   );
 }
 
-/** All indicators in one capsule (white, gray lip). Energy first, then experience and streak. */
-export function IndicatorBar({ energyPercent, onEnergy, onExp, onStreak }: IndicatorClusterProps) {
+/** All indicators in one capsule (white, gray lip). Energy first, then tasks done today and streak. */
+export function IndicatorBar({ energyPercent, onEnergy, onTasks, onStreak }: IndicatorClusterProps) {
   const extra = useExtraIndicators();
   const p = Math.max(0, Math.min(100, Math.round(energyPercent)));
   return (
     <div className="td-ibar">
       <Segment glyph="bolt" progress={p / 100} color={energyColor(p)} value={p} label={`Energia ${p}%`} onClick={onEnergy} />
-      {extra.exp && <Segment glyph="star" progress={extra.exp.progress} color={INDICATOR_COLORS.exp} value={extra.exp.level} label={`Poziom ${extra.exp.level}`} onClick={onExp} />}
+      {extra.tasks && <Segment glyph="check" progress={extra.tasks.total > 0 ? extra.tasks.done / extra.tasks.total : 0} color={INDICATOR_COLORS.tasks} value={`${extra.tasks.done}/${extra.tasks.total}`} label={`Zadania na dziś: ${extra.tasks.done} z ${extra.tasks.total}`} onClick={onTasks} />}
       {extra.streak && <Segment glyph="flame" progress={extra.streak.progress} color={INDICATOR_COLORS.streak} value={extra.streak.days} label={`Seria ${extra.streak.days} dni`} onClick={onStreak} />}
     </div>
   );
@@ -179,7 +181,7 @@ export function IndicatorBar({ energyPercent, onEnergy, onExp, onStreak }: Indic
 
 /* ---------------- Single round dial with three switch dots ---------------- */
 
-export type DialKey = "energy" | "exp" | "streak";
+export type DialKey = "energy" | "tasks" | "streak";
 
 export interface IndicatorDialProps extends IndicatorClusterProps {
   /** Controlled selection; when omitted the dial keeps its own. */
@@ -189,7 +191,7 @@ export interface IndicatorDialProps extends IndicatorClusterProps {
 
 
 /**
- * One round indicator that shows energy, experience or streak. Three small dots in a column beside it
+ * One round indicator that shows energy, tasks done today or streak. Three small dots in a column beside it
  * show which one is active (its dot takes the indicator's color). Tapping a dot or the chip always loads the next indicator.
  */
 export function IndicatorDial({ energyPercent, value, onChange }: IndicatorDialProps) {
@@ -199,7 +201,7 @@ export function IndicatorDial({ energyPercent, value, onChange }: IndicatorDialP
   const slots: { key: DialKey; label: string; color: string; chip: (go: () => void) => ReactNode }[] = [
     { key: "energy", label: "Energia", color: energyColor(p), chip: (go) => <EnergyIndicator percent={p} onClick={go} /> },
   ];
-  if (extra.exp) slots.push({ key: "exp", label: "Poziom", color: INDICATOR_COLORS.exp, chip: (go) => <ExpIndicator {...extra.exp!} onClick={go} /> });
+  if (extra.tasks) slots.push({ key: "tasks", label: "Zadania", color: INDICATOR_COLORS.tasks, chip: (go) => <TasksIndicator {...extra.tasks!} onClick={go} /> });
   if (extra.streak) slots.push({ key: "streak", label: "Seria", color: INDICATOR_COLORS.streak, chip: (go) => <StreakIndicator {...extra.streak!} onClick={go} /> });
   const active = slots.find((x) => x.key === (value ?? inner)) ?? slots[0]!;
   const select = (k: DialKey) => { setInner(k); onChange?.(k); };

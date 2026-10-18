@@ -7,13 +7,13 @@ import { SettingRow, Switch } from "../components/Places";
 import { Toast } from "../components/Toast";
 import { ActionButton } from "../actions/ActionButton";
 import { RoundButton } from "../actions/RoundButton";
-import { EnergyIndicator, ExpIndicator, StreakIndicator } from "../character/Indicators";
+import { EnergyIndicator, TasksIndicator, StreakIndicator } from "../character/Indicators";
 import { EnergyBar } from "../character/EnergyBar";
 import { NameTag } from "../character/NameTag";
 import { LocationPill } from "../scene/SceneCard";
 
 export const ELEVATION_RULES: { kind: string; title: string; text: string }[] = [
-  { kind: "3D", title: "3D = można nacisnąć", text: "Twarda, ciemniejsza krawędź 4 px u dołu. Po naciśnięciu element zapada się o 4 px. Przyciski, ikony w nagłówku, +/−, akcje, okrągłe wskaźniki w nagłówku (energia, EXP, seria) gdy można je nacisnąć, karty sceny i wiersze, które można edytować." },
+  { kind: "3D", title: "3D = można nacisnąć", text: "Twarda, ciemniejsza krawędź 4 px u dołu. Po naciśnięciu element zapada się o 4 px. Przyciski, ikony w nagłówku, +/−, akcje, okrągłe wskaźniki w nagłówku (energia, zadania, seria) gdy można je nacisnąć, karty sceny i wiersze, które można edytować." },
   { kind: "Płasko", title: "Płasko = informuje", text: "Ramka 2 px i żadnej krawędzi. Imię, licznik wody, powiadomienia, pastylki, paski postępu, pola tekstowe i przełączniki." },
   { kind: "Powierzchnia", title: "Powierzchnia = miękki cień", text: "Arkusz, dialog i menu leżą nad sceną, więc mają tylko miękki cień, bez krawędzi." },
   { kind: "Ghost", title: "Ghost = sam tekst", text: "Najcichsza akcja, np. „Nie teraz”. Bez tła i krawędzi, wielkie litery." },
@@ -46,7 +46,7 @@ export function ElevationGuide() {
             <Button>Dalej</Button><Button variant="secondary">Kontynuuj z Google</Button><Button variant="water">+ 250 ml wody</Button>
           </div>
           <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
-            <IconButton icon="menu" label="Menu" /><IconButton icon="back" label="Wstecz" /><EnergyIndicator percent={62} onClick={() => undefined} /><ExpIndicator level={7} progress={0.62} onClick={() => undefined} /><StreakIndicator days={12} progress={0.7} onClick={() => undefined} />
+            <IconButton icon="menu" label="Menu" /><IconButton icon="back" label="Wstecz" /><EnergyIndicator percent={62} onClick={() => undefined} /><TasksIndicator done={6} total={10} /><StreakIndicator days={12} progress={0.7} onClick={() => undefined} />
           </div>
           <div style={{ display: "flex", gap: 22, background: "var(--color-hill)", padding: "14px 22px", borderRadius: 18 }}>
             <RoundButton kind="minus" /><RoundButton kind="plus" /><ActionButton />
@@ -55,7 +55,7 @@ export function ElevationGuide() {
         </Group>
         <Group title="Płasko · informuje" note="Nie reaguje na dotyk, więc nie ma krawędzi." bg={sky}>
           <NameTag name="Tama" />
-          <div style={{ display: "flex", gap: 10 }}><EnergyIndicator percent={62} /><ExpIndicator level={7} progress={0.62} /><StreakIndicator days={12} progress={0.7} /></div>
+          <div style={{ display: "flex", gap: 10 }}><EnergyIndicator percent={62} /><TasksIndicator done={6} total={10} /><StreakIndicator days={12} progress={0.7} /></div>
           <div style={{ width: 260 }}><EnergyBar percent={62} label="Woda" /></div>
           <Toast inline>+250 ml wody</Toast>
           <div style={{ display: "flex", gap: 8 }}><LocationPill location="home.kitchen" /><LocationPill location="work.openspace" /><LocationPill location="recreation.gym" /></div>

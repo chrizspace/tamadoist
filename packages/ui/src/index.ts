@@ -28,3 +28,5 @@ export * from "./scene/SceneCard";
 export * from "./scene/lighting";
 export * from "./screens/Screens";
 export * from "./foundations/ElevationGuide";
+export * from "./character/PetStage";
+export * from "./character/choreography";

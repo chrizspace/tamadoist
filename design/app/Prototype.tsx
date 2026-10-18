@@ -42,7 +42,7 @@ export function Prototype() {
     drunkMl: ac.drunkMl, energyPercent: w.energy.percent, energyUntil: w.energy.energyUntil,
   };
   const scene = { location: w.scene.location, period: w.scene.period.id };
-  const xp = 640 + Math.floor(ac.drunkMl / 250) * 10; // demo: +10 EXP per glass of water
+  const tasksDone = Math.min(10, 3 + Math.floor(ac.drunkMl / 500)); // demo: 3/10 tasks done, +1 per 500 ml of water
   const go = (s: ScreenId) => setScreen(s);
   const flash = (msg: string) => { setToast(msg); window.setTimeout(() => setToast(""), 1400); };
 
@@ -80,7 +80,7 @@ export function Prototype() {
 
   return (
     <div className="proto">
-      <div className="protoframe"><Fit><div className={`phoneroot${zones ? " show-zones" : ""}`}><IndicatorsProvider value={threeIndicators ? { exp: { level: Math.floor(xp / 100), progress: (xp % 100) / 100 }, streak: { days: 12, progress: Math.min(1, ac.drunkMl / ch.goalMl) } } : {}}><IndicatorsLayoutContext.Provider value={layout}>{render()}</IndicatorsLayoutContext.Provider></IndicatorsProvider></div></Fit></div>
+      <div className="protoframe"><Fit><div className={`phoneroot${zones ? " show-zones" : ""}`}><IndicatorsProvider value={threeIndicators ? { tasks: { done: tasksDone, total: 10 }, streak: { days: 12, progress: Math.min(1, ac.drunkMl / ch.goalMl) } } : {}}><IndicatorsLayoutContext.Provider value={layout}>{render()}</IndicatorsLayoutContext.Provider></IndicatorsProvider></div></Fit></div>
       <div className="protoctl">
         <details open className="box mod"><summary><b>Ekran</b></summary>
           <div className="crumbs">
@@ -117,7 +117,7 @@ export function Prototype() {
         </details>
 
         <details open className="box mod"><summary><b>Wskaźniki</b> · nagłówek</summary>
-          <div className="ctl"><label htmlFor="ind3">Trzy wskaźniki</label><input id="ind3" type="checkbox" checked={threeIndicators} onChange={(e) => setThree(e.target.checked)} /><span className="note">energia + EXP + seria (placeholdery; EXP rośnie z wypitą wodą)</span></div>
+          <div className="ctl"><label htmlFor="ind3">Trzy wskaźniki</label><input id="ind3" type="checkbox" checked={threeIndicators} onChange={(e) => setThree(e.target.checked)} /><span className="note">energia + zadania + seria (placeholdery; zadania rosną z wypitą wodą)</span></div>
           <div className="ctl"><label htmlFor="ilayout">Układ wskaźników</label><select id="ilayout" value={layout} onChange={(e) => setLayout(e.target.value as IndicatorsLayout)}><option value="dial">okrągły z kropkami</option><option value="bar">poziomo (kapsuła)</option><option value="rail">pionowo (szyna)</option></select></div>
           <div className="ctl"><label htmlFor="zones">Strefy ekranu</label><input id="zones" type="checkbox" checked={zones} onChange={(e) => setZones(e.target.checked)} /><span className="note">żółta ramka = scena zarezerwowana na postać i animacje</span></div>
         </details>

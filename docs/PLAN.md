@@ -120,16 +120,23 @@ Jedna zasada dla całego UI (`packages/ui`, sekcja „Elevation system” w `sty
 
 ## Wskaźniki w nagłówku (okrągłe, do 3 slotów)
 - Zamiast baterii: okrągłe chipy 40 px (biała obwódka + szara „warga” 3D = klikalne) z pierścieniem postępu, ikoną w środku i licznikiem pod spodem.
-- Sloty: **Energia** (piorun, kolor wg progu: <25 czerwony, <50 żółty, reszta zielony), **EXP** (gwiazda, licznik = poziom), **Seria** (płomień, licznik = dni z rzędu; propozycja 3. wskaźnika — alternatywy: monety, nastrój).
-- Dziś widoczna tylko energia; EXP i Seria włączane przez `IndicatorsProvider` (w prototypie checkbox „Trzy wskaźniki”).
+- Sloty: **Energia** (piorun, kolor wg progu: <25 czerwony, <50 żółty, reszta zielony), **Zadania** (ptaszek, licznik = zrobione/zaplanowane na dziś, np. 3/10; pierścień = odsetek), **Seria** (płomień, licznik = dni z rzędu; propozycja 3. wskaźnika — alternatywy: monety, nastrój).
+- Dziś widoczna tylko energia; Zadania i Seria włączane przez `IndicatorsProvider` (w prototypie checkbox „Trzy wskaźniki”).
 
 ## Układ ekranu sceny (strefy)
 Stałe w `LAYOUT` (`packages/ui/src/tokens.ts`), ekran 390×844:
-1. **Pasek tytułu** (48–112): jeden przycisk z lewej (menu / wstecz / zamknij), tytuł, po prawej wskaźniki (kapsuła z energią, EXP i serią; EXP i seria na razie placeholdery). Alternatywa: pionowa szyna przy prawej krawędzi ze zwijaniem.
+1. **Pasek tytułu** (48–112): jeden przycisk z lewej (menu / wstecz / zamknij), tytuł, po prawej wskaźniki (kapsuła z energią, zadaniami i serią; Zadania i seria na razie placeholdery). Alternatywa: pionowa szyna przy prawej krawędzi ze zwijaniem.
 2. **Pasek interakcji** tuż pod paskiem tytułu (120–184): postęp bieżącej akcji (np. woda 250 / 2450 ml) albo powiadomienie (ciemny półprzezroczysty pasek, np. po kliknięciu energii). Dodanie wody nie ma osobnego powiadomienia: obok ilości pojawia się pełna niebieska pastylka „+250 ml”.
 3. **Scena** (184–704): zarezerwowana na postać (stoi w jednym miejscu na każdym ekranie) i jej animacje; bez innego UI.
 4. **Pasek akcji (dock)** na dole (od 712): duże kwadratowe przyciski 3D akcji (przewijane poziomo); po wejściu w akcję — okrągłe przyciski interakcji (−/+) w tym samym miejscu.
 W prototypie checkbox „Strefy ekranu” podświetla scenę.
-- Wskaźniki mają dwa układy (`IndicatorsLayoutContext`): **kapsuła pozioma** (`IndicatorBar`, domyślnie: jeden biały komponent z szarą krawędzią 3D na linii hamburgera, pierścień + liczba dla energii / EXP / serii; długie tytuły lokacji skracane wielokropkiem) oraz **szyna pionowa** (wariant opisany wyżej). W prototypie przełącznik „Układ wskaźników”.
-- Domyślny układ wskaźników to teraz **okrągły chip z trzema kropkami** (`IndicatorDial`): jeden chip pokazuje energię, EXP albo serię; trzy kropki w pionie po prawej stronie chipa (chip 48 px, tak duży jak hamburger; plakietka z liczbą może wystawać poniżej) pokazują, który jest aktywny (kolor kropki = kolor wskaźnika), a dotknięcie dowolnej kropki lub samego chipa zawsze ładuje następny (energia → EXP → seria → energia). Kapsuła pozioma i szyna pionowa zostają jako warianty w prototypie.
+- Wskaźniki mają dwa układy (`IndicatorsLayoutContext`): **kapsuła pozioma** (`IndicatorBar`, domyślnie: jeden biały komponent z szarą krawędzią 3D na linii hamburgera, pierścień + liczba dla energii / zadań / serii; długie tytuły lokacji skracane wielokropkiem) oraz **szyna pionowa** (wariant opisany wyżej). W prototypie przełącznik „Układ wskaźników”.
+- Domyślny układ wskaźników to teraz **okrągły chip z trzema kropkami** (`IndicatorDial`): jeden chip pokazuje energię, zadania albo serię; trzy kropki w pionie po prawej stronie chipa (chip 48 px, tak duży jak hamburger; plakietka z liczbą może wystawać poniżej) pokazują, który jest aktywny (kolor kropki = kolor wskaźnika), a dotknięcie dowolnej kropki lub samego chipa zawsze ładuje następny (energia → zadania → seria → energia). Kapsuła pozioma i szyna pionowa zostają jako warianty w prototypie.
 - Tytuł na pasku to biała pastylka (czytelna na każdej scenie, także jasnej): klikalna (wybór sceny) ma krawędź 3D, zwykła jest płaska.
+
+## Postać w scenach (choreografia)
+- Każda scena ma wpis w `PLACEMENTS` (`packages/ui/src/character/choreography.ts`): miejsce postaci (x, y, skala względem stóp, tak żeby stała na podłodze lokacji) oraz pętlę animacji z `IDLES`. To czyste dane, bez biblioteki, więc te same tabele posłużą później w Expo (Reanimated/Moti).
+- Animacje: sypialnia — oddychanie, biuro i open space — pisanie (drobne podskoki), kuchnia — mieszanie (kołysanie), kuchnia w pracy — łyk kawy (pochylenie), park — spacer lewo–prawo z podskokami (razem z imieniem), basen — unoszenie się na wodzie (fala przed brzuchem), siłownia — przysiady, rower — pedałowanie (kołysanie).
+- Stan postaci wygrywa ze sceną: śpi → oddychanie, zmęczona → opadanie, pije → podskok.
+- Silnik: Framer Motion (`framer-motion`, komponent `PetStage`), z poszanowaniem „ogranicz ruch” systemu. Story „Postać w scenie” w Storybooku.
+- Wskaźnik „EXP” zastąpiony wskaźnikiem **zadań**: zrobione/zaplanowane na dziś (np. 3/10), pierścień = odsetek.

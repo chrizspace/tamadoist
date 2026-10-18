@@ -276,3 +276,9 @@ button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outli
 .td-header__title { flex: 0 1 auto; margin: 0 auto; background: #fff; padding: 9px 16px; border-radius: 999px; border: 2px solid #fff; box-sizing: border-box; box-shadow: 0 2px 6px rgba(15,40,34,.12); max-width: 100%; }
 .td-header__title--btn { overflow: hidden; box-shadow: 0 3px 0 #BFC9C7; cursor: pointer; transition: transform .05s, box-shadow .05s; }
 .td-header__title--btn:active { transform: translateY(3px); box-shadow: 0 0 0 transparent; }
+
+/* Character on its stage: scaled around the feet, name tag above */
+.td-stage { position: absolute; left: 0; right: 0; display: flex; justify-content: center; transform-origin: 50% 100%; z-index: 2; pointer-events: none; }
+.td-stage__group { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.td-stage__pet { transform-origin: 50% 100%; display: block; line-height: 0; }
+.td-stage__water { display: block; margin-top: -58px; position: relative; z-index: 1; }

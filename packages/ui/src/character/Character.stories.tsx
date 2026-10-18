@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { PET_STATES } from "@tamadoist/core";
-import { EnergyIndicator, ExpIndicator, StreakIndicator, energyRange } from "./Indicators";
+import { EnergyIndicator, TasksIndicator, StreakIndicator, energyRange } from "./Indicators";
 import { Egg } from "./Egg";
 import { NameTag } from "./NameTag";
 import { Pet } from "./Pet";
@@ -52,10 +52,10 @@ export const EnergyRanges: Story = {
 };
 
 export const ThreeIndicators: Story = {
-  name: "Trzy wskaźniki (energia, EXP, seria)",
+  name: "Trzy wskaźniki (energia, zadania, seria)",
   render: () => (
     <div style={{ display: "flex", gap: 12, background: "var(--color-sky)", padding: 24, borderRadius: 16 }}>
-      <EnergyIndicator percent={62} onClick={() => undefined} /><ExpIndicator level={7} progress={0.62} onClick={() => undefined} /><StreakIndicator days={12} progress={0.7} onClick={() => undefined} />
+      <EnergyIndicator percent={62} onClick={() => undefined} /><TasksIndicator done={6} total={10} onClick={() => undefined} /><StreakIndicator days={12} progress={0.7} onClick={() => undefined} />
     </div>
   ),
 };

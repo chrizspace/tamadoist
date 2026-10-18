@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BASE_ENERGY_SHARE, DEFAULT_PROFILE, PET_STATES, computeEnergy, derivePetState, sleepWindow, waterGoalMl, type PetState } from "@tamadoist/core";
 import {
-  EnergyIndicator, ExpIndicator, StreakIndicator, IndicatorsProvider, IndicatorRail, IndicatorBar, IndicatorDial, Egg, EnergyExplainScreen, EnergyIndicatorScreen, LoginScreen, NameScreen, NameTag, Pet, PetScale, RenameDialogScreen,
+  EnergyIndicator, TasksIndicator, StreakIndicator, IndicatorsProvider, IndicatorRail, IndicatorBar, IndicatorDial, Egg, EnergyExplainScreen, EnergyIndicatorScreen, LoginScreen, NameScreen, NameTag, Pet, PetScale, RenameDialogScreen,
   SAMPLE, SettingsScreen, SleepScreen, WeightScreen, energyRange, TimePicker,
 } from "@tamadoist/ui";
 import { Gallery, Section, Spec, SpecGrid } from "../chrome";
@@ -79,17 +79,17 @@ export function CharacterTab() {
         </SpecGrid>
       </Section>
 
-      <Section title="Wskaźniki (HUD)" lead="Okrągłe wskaźniki stoją w pionie przy prawej krawędzi, pod paskiem tytułu: biała obwódka z szarą krawędzią 3D, pierścień postępu i symbol w środku. Na razie działa energia, a EXP i seria są zaproponowane na później.">
+      <Section title="Wskaźniki (HUD)" lead="Okrągłe wskaźniki stoją w pionie przy prawej krawędzi, pod paskiem tytułu: biała obwódka z szarą krawędzią 3D, pierścień postępu i symbol w środku. Na razie działa energia, a zadania i seria są zaproponowane na później.">
         <SpecGrid>
           <Spec title="Na razie: sama energia" stage="sky">
             <div className="railwrap"><IndicatorRail energyPercent={62} onEnergy={() => undefined} /></div>
           </Spec>
           <Spec title="Docelowo: trzy wskaźniki" note="Trzy w pionie zajmują ok. 170 px przy krawędzi i nie dotykają środka sceny." stage="sky">
-            <IndicatorsProvider value={{ exp: { level: 7, progress: 0.62 }, streak: { days: 12, progress: 0.7 } }}>
+            <IndicatorsProvider value={{ tasks: { done: 6, total: 10 }, streak: { days: 12, progress: 0.7 } }}>
               <div className="railwrap" style={{ height: 210 }}><IndicatorRail energyPercent={62} onEnergy={() => undefined} /></div>
             </IndicatorsProvider>
           </Spec>
-          <Spec title="Wariant okrągły: jeden chip, trzy kropki" note="Kropki w pionie po prawej stronie chipa przełączają energię / EXP / serię; kolor aktywnej kropki = kolor wskaźnika. Dotknięcie chipa też przełącza na następny wskaźnik." stage="sky">
+          <Spec title="Wariant okrągły: jeden chip, trzy kropki" note="Kropki w pionie po prawej stronie chipa przełączają energię / zadania / serię; kolor aktywnej kropki = kolor wskaźnika. Dotknięcie chipa też przełącza na następny wskaźnik." stage="sky">
             <div style={{ padding: "18px 40px 24px" }}><IndicatorDial energyPercent={62} /></div>
           </Spec>
           <Spec title="Wariant poziomy: jedna kapsuła" note="Wszystkie trzy w jednym komponencie na linii hamburgera; liczba obok pierścienia zamiast plakietki." stage="sky">
@@ -97,11 +97,11 @@ export function CharacterTab() {
           </Spec>
           <Spec title="Propozycje na kolejne dwa" note="Każdy wskaźnik ma pierścień (postęp), symbol i liczbę w rogu." stage="sky col">
             <div style={{ display: "flex", gap: 18, justifyContent: "center" }}>
-              <EnergyIndicator percent={62} /><ExpIndicator level={7} progress={0.62} /><StreakIndicator days={12} progress={0.7} />
+              <EnergyIndicator percent={62} /><TasksIndicator done={6} total={10} /><StreakIndicator days={12} progress={0.7} />
             </div>
             <table className="tbl"><tbody>
               <tr><th>⚡ Energia</th><td>pierścień = energia teraz, liczba = procent</td></tr>
-              <tr><th>★ EXP</th><td>pierścień = postęp do następnego poziomu, liczba = poziom. Punkty za wypitą wodę i zrealizowane cele</td></tr>
+              <tr><th>✓ Zadania</th><td>pierścień = odsetek zrobionych zadań na dziś, liczba = zrobione/wszystkie (np. 3/10)</td></tr>
               <tr><th>🔥 Seria</th><td>pierścień = dzisiejszy postęp celów dnia, liczba = dni z rzędu. Zachęca do codziennego powrotu</td></tr>
             </tbody></table>
             <p className="note">Inne pomysły na trzeci wskaźnik: monety do wydania w sklepie (ubranka, nowe sceny) albo nastrój postaci.</p>
