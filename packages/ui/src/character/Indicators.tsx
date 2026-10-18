@@ -156,7 +156,7 @@ export const useIndicatorsLayout = () => useContext(IndicatorsLayoutContext);
 interface SegmentProps { glyph: IndicatorGlyph; progress: number; color: string; value: string | number; label: string; onClick?: () => void }
 
 function Segment({ glyph, progress, color, value, label, onClick }: SegmentProps) {
-  const body = (<><Ring glyph={glyph} progress={progress} color={color} size={26} /><b>{value}</b></>);
+  const body = (<><Ring glyph={glyph} progress={progress} color={color} size={22} /><b>{value}</b></>);
   return onClick ? (
     <button type="button" className="td-ibar__seg" onClick={onClick} aria-label={`${label}. Pokaż szczegóły`}>{body}</button>
   ) : (

@@ -247,11 +247,12 @@ button.td-ichip:focus-visible { outline: 3px solid var(--color-water); outline-o
 .td-rail { gap: 18px; }
 
 /* Horizontal capsule */
-.td-ibar { display: flex; align-items: center; gap: 4px; height: 40px; padding: 0 10px; border-radius: 20px; background: #fff; border: 2px solid #fff; box-shadow: 0 var(--lip) 0 #BFC9C7; }
-.td-ibar__seg { display: flex; align-items: center; gap: 3px; background: none; border: 0; padding: 0 3px; cursor: pointer; font: inherit; color: var(--color-text); border-radius: 12px; }
+.td-ibar { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 12px; border-radius: 17px; background: #fff; border: 2px solid #fff; box-shadow: 0 3px 0 #BFC9C7; }
+.td-ibar__seg { display: flex; align-items: center; gap: 3px; background: none; border: 0; padding: 0; cursor: pointer; font: inherit; color: var(--color-text); border-radius: 12px; }
 span.td-ibar__seg { cursor: default; }
 .td-ibar__seg svg { display: block; flex: none; }
-.td-ibar__seg b { font: 800 13px var(--font); font-variant-numeric: tabular-nums; min-width: 16px; text-align: left; }
+.td-ibar__seg b { font: 800 12px/1 var(--font); font-variant-numeric: tabular-nums; }
 button.td-ibar__seg:active { transform: translateY(2px); }
 button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outline-offset: 2px; }
-.td-header__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.td-header__title--btn { justify-content: safe center; } .td-header__label { flex: 0 1 auto; }
+.td-header__title--btn { overflow: visible; } .td-header__label { max-width: calc(100% - 18px); }
