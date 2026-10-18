@@ -131,7 +131,7 @@ Stałe w `LAYOUT` (`packages/ui/src/tokens.ts`), ekran 390×844:
 4. **Pasek akcji (dock)** na dole (od 712): duże kwadratowe przyciski 3D akcji (przewijane poziomo); po wejściu w akcję — okrągłe przyciski interakcji (−/+) w tym samym miejscu.
 W prototypie checkbox „Strefy ekranu” podświetla scenę.
 - Wskaźniki mają dwa układy (`IndicatorsLayoutContext`): **kapsuła pozioma** (`IndicatorBar`, domyślnie: jeden biały komponent z szarą krawędzią 3D na linii hamburgera, pierścień + liczba dla energii / zadań / serii; długie tytuły lokacji skracane wielokropkiem) oraz **szyna pionowa** (wariant opisany wyżej). W prototypie przełącznik „Układ wskaźników”.
-- Domyślny układ wskaźników to teraz **okrągły chip z trzema kropkami** (`IndicatorDial`): jeden chip pokazuje energię, zadania albo serię; trzy kropki w pionie po prawej stronie chipa (chip 48 px, tak duży jak hamburger; plakietka z liczbą może wystawać poniżej) pokazują, który jest aktywny (kolor kropki = kolor wskaźnika), a dotknięcie dowolnej kropki lub samego chipa zawsze ładuje następny (energia → zadania → seria → energia). Kapsuła pozioma i szyna pionowa zostają jako warianty w prototypie.
+- Domyślny układ wskaźników to teraz **okrągły chip z trzema kropkami** (`IndicatorDial`): jeden chip pokazuje energię, zadania albo serię; trzy kropki w pionie po prawej stronie chipa (chip 48 px, tak duży jak hamburger; plakietka z liczbą może wystawać poniżej) pokazują, który jest aktywny (kolor kropki = kolor wskaźnika), a dotknięcie dowolnej kropki zawsze ładuje następny wskaźnik, a dotknięcie samego chipa otwiera **kartę statusu** (energia → zadania → seria → energia). Kapsuła pozioma i szyna pionowa zostają jako warianty w prototypie.
 - Tytuł na pasku to biała pastylka (czytelna na każdej scenie, także jasnej): klikalna (wybór sceny) ma krawędź 3D, zwykła jest płaska.
 
 ## Postać w scenach (choreografia)
@@ -140,3 +140,10 @@ W prototypie checkbox „Strefy ekranu” podświetla scenę.
 - Stan postaci wygrywa ze sceną: śpi → oddychanie, zmęczona → opadanie, pije → podskok.
 - Silnik: Framer Motion (`framer-motion`, komponent `PetStage`), z poszanowaniem „ogranicz ruch” systemu. Story „Postać w scenie” w Storybooku.
 - Wskaźnik „EXP” zastąpiony wskaźnikiem **zadań**: zrobione/zaplanowane na dziś (np. 3/10), pierścień = odsetek.
+
+## Karta statusu
+Otwierana dotknięciem wskaźnika (z Home i z ekranu akcji); wskaźnik, który był na wierzchu, jest podświetlony i karta przewija się do jego sekcji. Zawiera:
+1. **Energia**: dokładny procent, pasek, „energii starczy do …” (albo „śpi do …”) oraz o której pójdziesz spać (i pobudka).
+2. **Zadania na dziś**: lista z odhaczeniem (zrobione/wszystkie).
+3. **Seria**: nawyki, które trzeba ukończyć dziś, żeby podtrzymać serię (np. cel wody, sen na czas, wszystkie zadania), z postępem każdego.
+Zadania i nawyki to na razie dane przykładowe (w prototypie rosną z wypitą wodą).

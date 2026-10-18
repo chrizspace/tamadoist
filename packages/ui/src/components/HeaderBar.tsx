@@ -1,4 +1,4 @@
-import { IndicatorBar, IndicatorDial, IndicatorRail, useIndicatorsLayout } from "../character/Indicators";
+import { IndicatorBar, IndicatorDial, type DialKey, IndicatorRail, useIndicatorsLayout } from "../character/Indicators";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 
@@ -20,10 +20,15 @@ export interface HeaderBarProps {
   onStreak?: () => void;
   /** Show the indicator rail under the bar (scene screens). Off on full-content screens. */
   rail?: boolean;
+  /** Tapping an indicator opens its status card (the dial reports which one is shown). */
+  onIndicator?: (key: DialKey) => void;
 }
 
 /** Left: one button (hamburger, back or close), center: title, right: indicators, either one capsule here ("bar") or a rail under the bar ("rail", see IndicatorsLayoutContext). */
-export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, ghost, onTitle, onMenu, onBack, onClose, onEnergy, onTasks, onStreak, rail = true }: HeaderBarProps) {
+export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, ghost, onTitle, onMenu, onBack, onClose, onEnergy, onTasks, onStreak, rail = true, onIndicator }: HeaderBarProps) {
+  const openEnergy = onEnergy ?? (onIndicator ? () => onIndicator("energy") : undefined);
+  const openTasks = onTasks ?? (onIndicator ? () => onIndicator("tasks") : undefined);
+  const openStreak = onStreak ?? (onIndicator ? () => onIndicator("streak") : undefined);
   const layout = useIndicatorsLayout();
   return (
     <>
@@ -40,10 +45,10 @@ export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, gh
       ) : (
         <div className="td-header__title">{title}</div>
       )}
-      <div className="td-header__right">{rail && layout === "bar" && <IndicatorBar energyPercent={percent} onEnergy={onEnergy} onTasks={onTasks} onStreak={onStreak} />}
-      {rail && layout === "dial" && <IndicatorDial energyPercent={percent} onEnergy={onEnergy} onTasks={onTasks} onStreak={onStreak} />}</div>
+      <div className="td-header__right">{rail && layout === "bar" && <IndicatorBar energyPercent={percent} onEnergy={openEnergy} onTasks={openTasks} onStreak={openStreak} />}
+      {rail && layout === "dial" && <IndicatorDial energyPercent={percent} onOpen={onIndicator} />}</div>
     </div>
-    {rail && layout === "rail" && <IndicatorRail energyPercent={percent} onEnergy={onEnergy} onTasks={onTasks} onStreak={onStreak} />}
+    {rail && layout === "rail" && <IndicatorRail energyPercent={percent} onEnergy={openEnergy} onTasks={openTasks} onStreak={openStreak} />}
     </>
   );
 }

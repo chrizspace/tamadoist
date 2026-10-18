@@ -19,6 +19,7 @@ import { ProgressDots } from "../components/ProgressDots";
 import { Sheet } from "../components/Sheet";
 import { TimeCard } from "../components/TimeCard";
 import { TimePicker } from "../components/TimePicker";
+import type { DialKey } from "../character/Indicators";
 import { PetStage } from "../character/PetStage";
 import { Toast } from "../components/Toast";
 import { Scene, type SceneProps } from "../scene/Scene";
@@ -165,16 +166,16 @@ export interface HomeProps extends SceneProps, Pick<ScreenData, "name" | "energy
   toast?: string;
   onMenu?: () => void;
   onTitle?: () => void;
-  onEnergy?: () => void;
+  onIndicator?: (key: DialKey) => void;
   onAction?: (id: string) => void;
 }
 
-export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state = "awake", toast, location = "recreation.park", period = "noon", onMenu, onTitle, onEnergy, onAction }: HomeProps) {
+export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state = "awake", toast, location = "recreation.park", period = "noon", onMenu, onTitle, onIndicator, onAction }: HomeProps) {
   const sleeping = state === "sleeping";
   const tired = state === "tired";
   return (
     <Phone location={location} period={period}>
-      <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onMenu={onMenu} onTitle={onTitle ?? (() => undefined)} onEnergy={onEnergy} />
+      <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onMenu={onMenu} onTitle={onTitle ?? (() => undefined)} onIndicator={onIndicator} />
       <PetStage location={location} state={state} name={name} top={STAGE_TOP} />
       <ActionBar context={{ sleeping, tired }} onAction={onAction} />
       {toast && <Toast>{toast}</Toast>}
@@ -198,10 +199,10 @@ export function MenuScreen({ name, energyPercent, onClose, onSettings, onPlaces,
 
 /* ---------------- Actions: water ---------------- */
 
-export function WaterScreen({ name, drunkMl, goalMl, energyPercent, drinking, location = "recreation.park", period = "noon", onBack, onPlus, onMinus, toast }: Pick<ScreenData, "name" | "drunkMl" | "goalMl" | "energyPercent"> & SceneProps & { drinking?: boolean; onBack?: () => void; onPlus?: () => void; onMinus?: () => void; toast?: string }) {
+export function WaterScreen({ name, drunkMl, goalMl, energyPercent, drinking, location = "recreation.park", period = "noon", onBack, onPlus, onMinus, toast, onIndicator }: Pick<ScreenData, "name" | "drunkMl" | "goalMl" | "energyPercent"> & SceneProps & { onIndicator?: (key: DialKey) => void; drinking?: boolean; onBack?: () => void; onPlus?: () => void; onMinus?: () => void; toast?: string }) {
   return (
     <Phone location={location} period={period}>
-      <HeaderBar left="back" title="Woda" percent={energyPercent} onBack={onBack} />
+      <HeaderBar left="back" title="Woda" percent={energyPercent} onBack={onBack} onIndicator={onIndicator} />
       <PetStage location={location} state={drinking ? "drinking" : "awake"} name={name} top={STAGE_TOP} />
       <WaterCounter drunkMl={drunkMl} goalMl={goalMl} gain={toast} />
       <div className="td-actionbar td-actionbar--pair">

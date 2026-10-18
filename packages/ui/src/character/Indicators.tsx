@@ -187,28 +187,30 @@ export interface IndicatorDialProps extends IndicatorClusterProps {
   /** Controlled selection; when omitted the dial keeps its own. */
   value?: DialKey;
   onChange?: (key: DialKey) => void;
+  /** Tapping the chip opens the status card for the shown indicator. Dots only switch indicators. */
+  onOpen?: (key: DialKey) => void;
 }
 
 
 /**
  * One round indicator that shows energy, tasks done today or streak. Three small dots in a column beside it
- * show which one is active (its dot takes the indicator's color). Tapping a dot or the chip always loads the next indicator.
+ * show which one is active (its dot takes the indicator's color). Tapping a dot always loads the next indicator; tapping the chip opens the status card (`onOpen`).
  */
-export function IndicatorDial({ energyPercent, value, onChange }: IndicatorDialProps) {
+export function IndicatorDial({ energyPercent, value, onChange, onOpen }: IndicatorDialProps) {
   const extra = useExtraIndicators();
   const [inner, setInner] = useState<DialKey>("energy");
   const p = Math.max(0, Math.min(100, Math.round(energyPercent)));
-  const slots: { key: DialKey; label: string; color: string; chip: (go: () => void) => ReactNode }[] = [
-    { key: "energy", label: "Energia", color: energyColor(p), chip: (go) => <EnergyIndicator percent={p} onClick={go} /> },
+  const slots: { key: DialKey; label: string; color: string; chip: (open?: () => void) => ReactNode }[] = [
+    { key: "energy", label: "Energia", color: energyColor(p), chip: (open) => <EnergyIndicator percent={p} onClick={open} /> },
   ];
-  if (extra.tasks) slots.push({ key: "tasks", label: "Zadania", color: INDICATOR_COLORS.tasks, chip: (go) => <TasksIndicator {...extra.tasks!} onClick={go} /> });
-  if (extra.streak) slots.push({ key: "streak", label: "Seria", color: INDICATOR_COLORS.streak, chip: (go) => <StreakIndicator {...extra.streak!} onClick={go} /> });
+  if (extra.tasks) slots.push({ key: "tasks", label: "Zadania", color: INDICATOR_COLORS.tasks, chip: (open) => <TasksIndicator {...extra.tasks!} onClick={open} /> });
+  if (extra.streak) slots.push({ key: "streak", label: "Seria", color: INDICATOR_COLORS.streak, chip: (open) => <StreakIndicator {...extra.streak!} onClick={open} /> });
   const active = slots.find((x) => x.key === (value ?? inner)) ?? slots[0]!;
   const select = (k: DialKey) => { setInner(k); onChange?.(k); };
   const next = () => select(slots[(slots.indexOf(active) + 1) % slots.length]!.key);
   return (
     <div className="td-dial">
-      {active.chip(slots.length > 1 ? next : () => undefined)}
+      {active.chip(onOpen ? () => onOpen(active.key) : undefined)}
       {slots.length > 1 && (
         <div className="td-dial__dots" role="tablist" aria-label="Wskaźnik">
           {slots.map((x, i) => {

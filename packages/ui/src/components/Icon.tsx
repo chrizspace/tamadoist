@@ -11,6 +11,7 @@ export const ICON_PATHS = {
   chevron: <path d="M9 5l7 7-7 7" />,
   pin: (<><path d="M12 21s7-6.2 7-11.5a7 7 0 0 0-14 0C5 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></>),
   check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
+  moon: <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />,
   clock: (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>),
   chevronDown: <path d="M6 9l6 6 6-6" />,
   target: (<><circle cx="12" cy="12" r="4" /><path d="M12 2v4M12 18v4M2 12h4M18 12h4" /></>),

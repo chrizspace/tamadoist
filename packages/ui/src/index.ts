@@ -30,3 +30,4 @@ export * from "./screens/Screens";
 export * from "./foundations/ElevationGuide";
 export * from "./character/PetStage";
 export * from "./character/choreography";
+export * from "./screens/Status";

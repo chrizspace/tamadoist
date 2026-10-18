@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
 import {
-  IndicatorsProvider, IndicatorsLayoutContext, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
+  IndicatorsProvider, IndicatorsLayoutContext, StatusScreen, SAMPLE_TASKS, type DialKey, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
   PlacesScreen, RenameDialogScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
   SleepScreen, WaterScreen, WeightScreen,
 } from "@tamadoist/ui";
@@ -11,7 +11,7 @@ import { useCharacter } from "./modules/character";
 import { useScene, type SimPosition } from "./modules/scene";
 import { CITIES, SEASONS, deriveWorld, fmt, isoDate, parseIso, type Env, DEFAULT_ENV } from "./world";
 
-type ScreenId = "login" | "name" | "energy" | "indicator" | "sleep" | "weight" | "home" | "menu" | "water" | "settings" | "rename" | "scenes" | "places" | "locperm" | "schedule" | "prompt";
+type ScreenId = "login" | "name" | "energy" | "indicator" | "sleep" | "weight" | "home" | "menu" | "water" | "settings" | "rename" | "scenes" | "places" | "locperm" | "schedule" | "prompt" | "status";
 
 const CRUMBS: [ScreenId, string][] = [
   ["login", "Login"], ["name", "Imię"], ["energy", "Energia"], ["indicator", "Wskaźnik"], ["sleep", "Sen"], ["weight", "Waga"],
@@ -31,6 +31,8 @@ export function Prototype() {
   const [forced, setForced] = useState<PetState | "">("");
   const [threeIndicators, setThree] = useState(true);
   const [zones, setZones] = useState(false);
+  const [statusFocus, setStatusFocus] = useState<DialKey>("energy");
+  const [statusBack, setStatusBack] = useState<ScreenId>("home");
   const [layout, setLayout] = useState<IndicatorsLayout>("dial");
   const [cityId, setCityId] = useState(DEFAULT_ENV.city.id);
   const [date, setDate] = useState(DEFAULT_ENV.date);
@@ -44,6 +46,13 @@ export function Prototype() {
   const scene = { location: w.scene.location, period: w.scene.period.id };
   const tasksDone = Math.min(10, 3 + Math.floor(ac.drunkMl / 500)); // demo: 3/10 tasks done, +1 per 500 ml of water
   const go = (s: ScreenId) => setScreen(s);
+  const openStatus = (from: ScreenId) => (key: DialKey) => { setStatusFocus(key); setStatusBack(from); go("status"); };
+  const statusTasks = SAMPLE_TASKS.map((t, i) => ({ ...t, done: i < tasksDone }));
+  const habits = [
+    { id: "h1", title: "Wypij cały cel wody", detail: `${ac.drunkMl} / ${ch.goalMl} ml`, done: ac.drunkMl >= ch.goalMl },
+    { id: "h2", title: "Połóż się spać na czas", detail: `do ${ch.profile.sleepStart}`, done: false },
+    { id: "h3", title: "Zrób wszystkie zadania na dziś", detail: `${tasksDone} / 10`, done: tasksDone >= 10 },
+  ];
   const flash = (msg: string) => { setToast(msg); window.setTimeout(() => setToast(""), 1400); };
 
   const render = () => {
@@ -54,15 +63,16 @@ export function Prototype() {
       case "indicator": return <EnergyIndicatorScreen name={w.name} energyPercent={d.energyPercent} onNext={() => go("sleep")} />;
       case "sleep": return <SleepScreen name={w.name} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} onSleepStart={ch.setSleepStart} onNext={() => go("weight")} />;
       case "weight": return <WeightScreen name={w.name} weightKg={d.weightKg} goalMl={d.goalMl} onWeight={ch.setWeight} onNext={() => go("home")} />;
-      case "home": return <HomeScreen {...d} {...scene} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onEnergy={() => flash(w.energy.state === "sleeping" ? `${d.name} śpi do ${d.sleepEnd}. Dobranoc!` : w.petState === "tired" ? "Brak energii – napij się wody!" : `Energii starczy do ${w.energy.energyUntil}`)} onAction={(id) => id === "water" && go("water")} />;
+      case "home": return <HomeScreen {...d} {...scene} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onIndicator={openStatus("home")} onAction={(id) => id === "water" && go("water")} />;
       case "menu": return <MenuScreen name={w.name} energyPercent={d.energyPercent} onClose={() => go("home")} onSettings={() => go("settings")} onPlaces={() => go("places")} onSchedule={() => go("schedule")} onLogout={() => { ch.reset(); ac.reset(); sc.setManual(undefined); sc.setPos("none"); go("login"); }} />;
-      case "water": return <WaterScreen {...d} {...scene} drinking={ac.justDrank} toast={toast} onBack={() => go("home")} onPlus={() => { ac.add(); flash("+250 ml"); }} onMinus={() => { ac.remove(); flash("−250 ml"); }} />;
+      case "water": return <WaterScreen {...d} {...scene} onIndicator={openStatus("water")} drinking={ac.justDrank} toast={toast} onBack={() => go("home")} onPlus={() => { ac.add(); flash("+250 ml"); }} onMinus={() => { ac.remove(); flash("−250 ml"); }} />;
       case "settings": return <SettingsScreen {...d} onBack={() => go("home")} onEditName={() => { setDraft(ch.profile.name); go("rename"); }} />;
       case "rename": return <RenameDialogScreen {...d} draft={draft} onDraft={setDraft} onCancel={() => go("settings")} onSave={() => { if (!validateName(draft)) { ch.saveName(draft); go("settings"); } }} />;
       case "scenes": return <ScenePickerScreen name={w.name} energyPercent={d.energyPercent} {...scene} auto={!sc.manual} onPick={(l) => { sc.setManual(l); go("home"); }} onAuto={(on) => { if (on) sc.setManual(undefined); go("home"); }} onClose={() => go("home")} />;
       case "places": return <PlacesScreen energyPercent={d.energyPercent} onBack={() => go("home")} onUseLocation={() => go("locperm")} />;
       case "locperm": return <LocationPermissionScreen name={w.name} onAllow={() => { sc.setPos("home"); go("places"); }} onLater={() => go("places")} />;
       case "schedule": return <ScheduleScreen energyPercent={d.energyPercent} onBack={() => go("home")} />;
+      case "status": return <StatusScreen {...scene} name={w.name} focus={statusFocus} energyPercent={d.energyPercent} energyUntil={d.energyUntil} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} sleeping={w.energy.state === "sleeping"} tasks={statusTasks} habits={habits} streakDays={12} onClose={() => go(statusBack)} />;
       case "prompt": return <SchedulePromptScreen name={w.name} energyPercent={d.energyPercent} onYes={() => go("home")} onChange={() => go("schedule")} />;
     }
   };
