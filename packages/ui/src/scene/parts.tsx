@@ -5,17 +5,25 @@ export const W = 390;
 export const H = 844;
 
 export function Sky({ light, id }: { light: Lighting; id: string }) {
+  const sun = light.sun;
   return (
     <>
       <defs>
         <linearGradient id={`${id}-sky`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor={light.skyTop} />
+          {light.skyMid && <stop offset="0.55" stopColor={light.skyMid} />}
           <stop offset="1" stopColor={light.skyBottom} />
         </linearGradient>
+        {sun && (
+          <radialGradient id={`${id}-sun`}>
+            <stop offset="0" stopColor={sun.glow} stopOpacity=".85" />
+            <stop offset="1" stopColor={sun.glow} stopOpacity="0" />
+          </radialGradient>
+        )}
       </defs>
       <rect width={W} height={H} fill={`url(#${id}-sky)`} />
-      {light.stars && [[40, 80], [120, 50], [200, 110], [260, 60], [340, 90], [60, 190], [330, 210], [170, 40]].map(([x, y]) => <circle key={`${x}-${y}`} cx={x} cy={y} r="2" fill="#fff" opacity=".8" />)}
-      {light.sun && <circle cx={light.sun.x} cy={light.sun.y} r="30" fill={light.sun.color} opacity=".95" />}
+      {light.starsOpacity > 0 && [[40, 80], [120, 50], [200, 110], [260, 60], [340, 90], [60, 190], [330, 210], [170, 40]].map(([x, y]) => <circle key={`${x}-${y}`} cx={x} cy={y} r="2" fill="#fff" opacity={0.8 * light.starsOpacity} />)}
+      {sun && (<><circle cx={sun.x} cy={sun.y} r={sun.r * 3.2} fill={`url(#${id}-sun)`} /><circle cx={sun.x} cy={sun.y} r={sun.r} fill={sun.color} opacity=".95" /></>)}
       {light.moon && (<><circle cx={light.moon.x} cy={light.moon.y} r="26" fill="#FFF6D6" /><circle cx={light.moon.x + 10} cy={light.moon.y - 6} r="22" fill={light.skyTop} /></>)}
     </>
   );
@@ -35,7 +43,7 @@ export function Win({ x, y, w, h, light, children }: { x: number; y: number; w: 
   return (
     <g>
       <rect x={x} y={y} width={w} height={h} rx="14" fill={light.windowSky} />
-      {light.stars && [[0.2, 0.2], [0.7, 0.3], [0.45, 0.6]].map(([a, b]) => <circle key={`${a}`} cx={x + w * a} cy={y + h * b} r="2" fill="#fff" />)}
+      {light.starsOpacity > 0.5 && [[0.2, 0.2], [0.7, 0.3], [0.45, 0.6]].map(([a, b]) => <circle key={`${a}`} cx={x + w * a} cy={y + h * b} r="2" fill="#fff" />)}
       {children}
       <rect x={x} y={y} width={w} height={h} rx="14" fill="none" stroke="#fff" strokeWidth="8" />
       <path d={`M${x + w / 2} ${y}V${y + h}M${x} ${y + h / 2}H${x + w}`} stroke="#fff" strokeWidth="6" />
