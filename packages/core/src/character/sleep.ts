@@ -1,4 +1,4 @@
-import { MINUTES_PER_DAY, formatTime, minutesOfDay, parseTime } from "./time";
+import { MINUTES_PER_DAY, formatTime, minutesOfDay, parseTime } from "../shared/time";
 
 export const SLEEP_HOURS = 8;
 export const SLEEP_MINUTES = SLEEP_HOURS * 60;

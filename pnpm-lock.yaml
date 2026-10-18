@@ -25,6 +25,10 @@ importers:
         version: 2.1.9
 
   packages/ui:
+    dependencies:
+      '@tamadoist/core':
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
       '@storybook/addon-a11y':
         specifier: ^8.6.0

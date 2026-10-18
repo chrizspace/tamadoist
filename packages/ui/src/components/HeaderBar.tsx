@@ -1,4 +1,4 @@
-import { Battery } from "./Battery";
+import { Battery } from "../character/Battery";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 

@@ -1,25 +1,5 @@
 import type { ReactNode } from "react";
 import { Icon, type IconName } from "./Icon";
-import { Scene, type SceneKind } from "./Scene";
-
-export const SCENE_NAMES: Record<SceneKind, string> = { meadow: "Zielona Łąka", home: "Dom", office: "Biuro", lunch: "Lunch" };
-export const SCENE_HINTS: Record<SceneKind, string> = { meadow: "Domyślna scena", home: "Salon, kanapa i dywan", office: "Biurko i widok na miasto", lunch: "Stół i kuchnia" };
-
-export function ScenePill({ scene }: { scene: SceneKind }) {
-  const cls = scene === "office" ? "td-pill td-pill--water" : scene === "lunch" ? "td-pill td-pill--sun" : "td-pill";
-  return <span className={cls}>{SCENE_NAMES[scene]}</span>;
-}
-
-export interface SceneCardProps { scene: SceneKind; selected?: boolean; onSelect?: () => void }
-
-export function SceneCard({ scene, selected, onSelect }: SceneCardProps) {
-  return (
-    <button type="button" className="td-scenecard" aria-pressed={!!selected} onClick={onSelect}>
-      <div className="td-scenecard__thumb"><div><Scene scene={scene} /></div></div>
-      <div className="td-scenecard__label">{SCENE_NAMES[scene]}{selected && <Icon name="check" className="td-pill" />}</div>
-    </button>
-  );
-}
 
 export interface ListCardProps { icon: IconName; title: string; sub?: string; right?: ReactNode; onClick?: () => void }
 

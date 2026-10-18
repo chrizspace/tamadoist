@@ -7,7 +7,7 @@ import {
   parseTime,
   sleepWindow,
   waterGoalMl,
-} from "./index";
+} from "../index";
 
 const at = (h: number, m = 0) => new Date(2026, 0, 15, h, m);
 
@@ -68,5 +68,22 @@ describe("energy", () => {
   });
   it("water above goal is capped", () => {
     expect(computeEnergy({ now: at(7), sleepStart: "22:00", drunkMl: 9999, goalMl: 2000 }).waterRatio).toBe(1);
+  });
+});
+
+import { DEFAULT_PROFILE, dailyWaterGoalMl, normalizeName, validateName } from "../index";
+
+describe("profile", () => {
+  it("validates the name", () => {
+    expect(validateName("")).not.toBeNull();
+    expect(validateName("   ")).not.toBeNull();
+    expect(validateName("Tama")).toBeNull();
+    expect(validateName("x".repeat(21))).not.toBeNull();
+    expect(normalizeName("  Kiwi  ")).toBe("Kiwi");
+  });
+  it("derives the water goal from weight unless overridden", () => {
+    expect(dailyWaterGoalMl({ weightKg: 70 })).toBe(2450);
+    expect(dailyWaterGoalMl({ weightKg: 70, waterGoalOverrideMl: 3000 })).toBe(3000);
+    expect(DEFAULT_PROFILE.sleepStart).toBe("22:00");
   });
 });

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { EnergyBar } from "./EnergyBar";
 
 const meta: Meta<typeof EnergyBar> = {
-  title: "Primitives/EnergyBar",
+  title: "Character/EnergyBar",
   component: EnergyBar,
   args: { percent: 70 },
   argTypes: { percent: { control: { type: "range", min: 0, max: 100 } } },

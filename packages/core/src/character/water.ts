@@ -1,7 +1,6 @@
 export const ML_PER_KG = 35;
 export const MIN_GOAL_ML = 1500;
 export const MAX_GOAL_ML = 4000;
-export const GLASS_ML = 250;
 
 /**
  * Daily water goal from body weight: the common 30-35 ml/kg rule of thumb

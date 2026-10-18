@@ -1,10 +1,10 @@
-import { MINUTES_PER_DAY, formatTime, minutesOfDay } from "./time";
+import { MINUTES_PER_DAY, formatTime, minutesOfDay } from "../shared/time";
 import { ACTIVE_MINUTES, isSleeping, wakeMinutes } from "./sleep";
 
 /** Without any water, energy lasts for this share of the active day. */
 export const BASE_ENERGY_SHARE = 0.3;
 
-export type PetState = "awake" | "tired" | "sleeping";
+export type EnergyState = "awake" | "tired" | "sleeping";
 
 export interface EnergyInput {
   now: Date;
@@ -14,7 +14,7 @@ export interface EnergyInput {
 }
 
 export interface EnergyResult {
-  state: PetState;
+  state: EnergyState;
   /** 0-100 */
   percent: number;
   /** Minutes of the active day the energy budget covers. */

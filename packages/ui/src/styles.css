@@ -168,7 +168,7 @@ body { font-family: var(--font); color: var(--color-text); background: var(--col
 .td-scenecard { border: 3px solid var(--color-border); border-radius: 22px; background: #fff; padding: 0; overflow: hidden; cursor: pointer; text-align: left; font: inherit; color: inherit; }
 .td-scenecard[aria-pressed="true"] { border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-soft); }
 .td-scenecard__thumb { position: relative; height: 120px; overflow: hidden; background: var(--color-sky); }
-.td-scenecard__thumb > div { position: absolute; left: 50%; top: -80px; width: 390px; height: 844px; transform: translateX(-50%) scale(.46); transform-origin: top center; }
+.td-scenecard__thumb > div { position: absolute; left: 50%; top: -170px; width: 390px; height: 844px; transform: translateX(-50%) scale(.46); transform-origin: top center; }
 .td-scenecard__label { padding: 8px 12px; font: 800 15px var(--font); display: flex; justify-content: space-between; align-items: center; }
 .td-scenecard:focus-visible { outline: 3px solid var(--color-water); outline-offset: 2px; }
 .td-switch { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--color-surface); border-radius: 20px; font: 700 15px var(--font); }
@@ -189,3 +189,11 @@ body { font-family: var(--font); color: var(--color-text); background: var(--col
 .td-editbadge svg { width: 20px; height: 20px; }
 button.td-listcard { cursor: pointer; font-family: var(--font); color: var(--color-text); }
 button.td-listcard:focus-visible { outline: 3px solid var(--color-water); outline-offset: 2px; }
+
+/* compact scene cards for the 9-location picker */
+.td-scenecard--compact .td-scenecard__thumb { height: 84px; }
+.td-scenecard--compact .td-scenecard__thumb > div { top: -130px; transform: translateX(-50%) scale(.32); }
+.td-scenecard--compact .td-scenecard__label { padding: 6px 8px; font-size: 12px; }
+.td-scenegrid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.td-grouphead { margin: 4px 0 -2px; font: 800 12px var(--font); letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-muted); }
+.td-periodbadge { position: absolute; left: 50%; transform: translateX(-50%); top: 116px; z-index: 2; }

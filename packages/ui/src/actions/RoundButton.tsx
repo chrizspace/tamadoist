@@ -1,4 +1,4 @@
-import { Icon } from "./Icon";
+import { Icon } from "../components/Icon";
 
 export interface RoundButtonProps { kind: "plus" | "minus"; amountMl?: number; onClick?: () => void }
 
