@@ -32,7 +32,7 @@ export const BatteryIndicator: Story = {
       <div style={{ width: 280, display: "flex", flexDirection: "column", gap: 16, alignItems: "center" }}>
         <div style={{ background: "#fff", padding: "12px 18px", borderRadius: 999, boxShadow: "0 3px 8px rgba(0,0,0,.1)" }}><Battery percent={p} /></div>
         <input type="range" min={0} max={100} value={p} onChange={(e) => setP(+e.target.value)} style={{ width: "100%" }} aria-label="Energia" />
-        <code>zakres {batteryRange(p)} · jednostki {(p / 25).toFixed(2)}</code>
+        <code>zakres {batteryRange(p)}</code>
       </div>
     );
   },

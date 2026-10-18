@@ -91,12 +91,12 @@ body { font-family: var(--font); color: var(--color-text); background: var(--col
 .td-iconbtn svg, .td-circle svg, .td-action__box svg, .td-menurow__badge svg { width: 24px; height: 24px; }
 .td-iconbtn:focus-visible, .td-action:focus-visible, .td-circle:focus-visible, .td-menurow:focus-visible { outline: 3px solid var(--color-water); outline-offset: 2px; }
 
-.td-battery { display: flex; align-items: center; gap: 12px; }
-.td-battery__shell { position: relative; width: 64px; height: 28px; border: 2.5px solid var(--color-text); border-radius: 9px; background: #fff; padding: 2.5px; display: flex; gap: 3px; }
-.td-battery__shell::after { content: ""; position: absolute; right: -8px; top: 7px; width: 5px; height: 11px; border-radius: 0 3px 3px 0; background: var(--color-text); }
-.td-battery__slot { flex: 1; border-radius: 4px; background: var(--color-surface); overflow: hidden; }
-.td-battery__slot > b { display: block; height: 100%; border-radius: 3px; }
-.td-battery__pct { font: 800 14px var(--font); min-width: 36px; font-variant-numeric: tabular-nums; }
+.td-battery { display: flex; align-items: center; }
+.td-battery__shell { position: relative; width: 92px; height: 34px; border: 2.5px solid var(--color-text); border-radius: 11px; background: var(--color-surface); overflow: visible; }
+.td-battery__shell::after { content: ""; position: absolute; right: -9px; top: 8px; width: 5px; height: 12px; border-radius: 0 3px 3px 0; background: var(--color-text); }
+.td-battery__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 8px 0 0 8px; transition: width .4s; }
+.td-battery__fill[style*="width: 100%"] { border-radius: 8px; }
+.td-battery__pct { position: absolute; inset: 0; display: grid; place-items: center; font: 800 14px var(--font); font-variant-numeric: tabular-nums; color: var(--color-text); }
 
 .td-nametag { display: inline-block; background: #fff; border: 2px solid var(--color-border); border-radius: 999px; padding: 6px 20px; font: 800 24px var(--font); box-shadow: 0 3px 8px rgba(0,0,0,.08); }
 .td-sheet { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; border-radius: 32px 32px 0 0; padding: 26px 24px 34px; display: flex; flex-direction: column; gap: 14px; z-index: 3; box-shadow: 0 -4px 16px rgba(0,0,0,.12); }

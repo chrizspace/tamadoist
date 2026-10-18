@@ -90,12 +90,12 @@ input[type=range]{width:100%;accent-color:var(--primary)}
 .rbtn{width:48px;height:48px;border-radius:50%;border:0;background:var(--primary-dark);display:grid;place-items:center;cursor:pointer;padding:0;color:#fff}
 .rbtn svg{width:24px;height:24px}
 .rbtn:focus-visible,.pbtn:focus-visible,.act:focus-visible,.menurow:focus-visible,.circ:focus-visible{outline:3px solid var(--water);outline-offset:2px}
-.bat{display:flex;align-items:center;gap:12px}
-.bat .shell{position:relative;width:64px;height:28px;border:2.5px solid var(--p-text);border-radius:9px;background:#fff;padding:2.5px;display:flex;gap:3px}
-.bat .shell::after{content:"";position:absolute;right:-8px;top:7px;width:5px;height:11px;border-radius:0 3px 3px 0;background:var(--p-text)}
-.bat .slot{flex:1;border-radius:4px;background:var(--p-surface);overflow:hidden}
-.bat .slot b{display:block;height:100%;border-radius:3px}
-.bat .pct{font:800 14px var(--font);min-width:36px;font-variant-numeric:tabular-nums;color:var(--p-text)}
+.bat{display:flex;align-items:center}
+.bat .shell{position:relative;width:92px;height:34px;border:2.5px solid var(--p-text);border-radius:11px;background:var(--p-surface)}
+.bat .shell::after{content:"";position:absolute;right:-9px;top:8px;width:5px;height:12px;border-radius:0 3px 3px 0;background:var(--p-text)}
+.bat .fill{position:absolute;left:0;top:0;bottom:0;border-radius:8px 0 0 8px;transition:width .4s}
+.bat .fill.full{border-radius:8px}
+.bat .pct{position:absolute;inset:0;display:grid;place-items:center;font:800 14px var(--font);font-variant-numeric:tabular-nums;color:var(--p-text)}
 .tag{display:inline-block;background:#fff;border:2px solid var(--p-border);border-radius:999px;padding:6px 20px;font:800 24px var(--font);color:var(--p-text);box-shadow:0 3px 8px rgba(0,0,0,.08)}
 .hero{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2}
 .pet-wrap{position:relative}
@@ -201,8 +201,8 @@ input[type=range]{width:100%;accent-color:var(--primary)}
           <tr><th>Budżet energii</th><td><code>16 h × (0,30 + 0,70 × woda/cel)</code></td></tr>
         </tbody></table></div>
       <div class="box"><h3>Wskaźnik baterii</h3>
-        <table class="tbl"><thead><tr><th>Zakres</th><th>Obrys</th><th>Paski</th></tr></thead><tbody id="battable"></tbody></table>
-        <p class="note">Obrys jest zawsze czarny. Cztery sloty ładują się proporcjonalnie: wypełnienie slotu to <code>clamp(procent/25 − numer, 0, 1)</code>.</p></div>
+        <table class="tbl"><thead><tr><th>Zakres</th><th>Obrys</th><th>Wypełnienie</th></tr></thead><tbody id="battable"></tbody></table>
+        <p class="note">Obrys jest zawsze czarny. Wypełnienie jest ciągłe: jego szerokość to dokładnie procent energii, a procent wypisany jest w środku.</p></div>
     </div>
     <h2>Postać</h2>
     <p class="lead">Oryginalny maskotek z zaokrąglonych kształtów. Jedna ilustracja SVG, pięć stanów.</p>
@@ -282,9 +282,8 @@ const barColor=p=>p<25?'#FF5A5F':p<50?'#FFC93C':'#1FBF8F';
 
 /* ---------- component renderers (return HTML strings) ---------- */
 function Battery(p){
-  p=Math.max(0,Math.min(100,Math.round(p)));const u=p/25,c=barColor(p);
-  const slots=[0,1,2,3].map(i=>{const f=Math.max(0,Math.min(1,u-i));return `<span class="slot"><b style="width:${f*100}%;background:${c}"></b></span>`}).join('');
-  return `<div class="bat" role="img" aria-label="Energia ${p}%"><div class="shell">${slots}</div><span class="pct">${p}%</span></div>`;
+  p=Math.max(0,Math.min(100,Math.round(p)));
+  return `<div class="bat" role="img" aria-label="Energia ${p}%"><div class="shell"><div class="fill ${p===100?'full':''}" style="width:${p}%;background:${barColor(p)}"></div><span class="pct">${p}%</span></div></div>`;
 }
 function Pet(state='awake',size=160){
   const eyes=[58,110];
@@ -365,7 +364,7 @@ document.getElementById('type').innerHTML=TYPE.map(([n,l,s,w])=>`<div><span clas
 document.getElementById('spacing').innerHTML=[4,8,12,16,24,32].map(s=>`<div><i style="width:${s}px;height:${s}px"></i>${s}</div>`).join('');
 document.getElementById('radius').innerHTML=[['sm',8],['md',16],['lg',24],['full',999]].map(([n,r])=>`<div style="border-radius:${r}px">${n}</div>`).join('');
 document.getElementById('btn3d').innerHTML='<div style="width:240px">'+Btn('Dalej')+'</div>';
-document.getElementById('battable').innerHTML=[['0%','czarny','brak'],['1–24%','czarny','1 czerwony'],['25–49%','czarny','2 żółte'],['50–74%','czarny','3 zielone'],['75–100%','czarny','4 zielone']].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
+document.getElementById('battable').innerHTML=[['0%','czarny','puste'],['1–24%','czarny','czerwone'],['25–49%','czarny','żółte'],['50–74%','czarny','zielone'],['75–100%','czarny','zielone']].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
 document.getElementById('petstates').innerHTML=['awake','tired','sleeping','happy','drinking'].map(s=>`<div style="text-align:center">${Pet(s,150)}<div class="mono" style="font-size:12px;color:#6B7C77">${s}</div></div>`).join('');
 
 /* ---------- components ---------- */
@@ -380,7 +379,7 @@ document.getElementById('spec1').innerHTML=
  spec('Dialog','Biała karta z dwoma przyciskami.',`<div style="width:290px;background:#fff;border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:12px"><div style="font:800 24px var(--font)">Zmień imię</div><div style="color:var(--p-muted);font:600 15px var(--font)">Jak ma się teraz nazywać Twoja postać?</div>${Field('Imię postaci','c4','Tama')}<div style="display:flex;gap:10px">${Btn('Anuluj','secondary')}${Btn('Zapisz')}</div></div>`)+
  spec('Toast','Krótkie potwierdzenie po akcji.',`<div class="toast" style="position:static;transform:none">${icon('drop')} +250 ml wody</div>`);
 document.getElementById('spec2').innerHTML=
- spec('BatteryIndicator','Obrys zawsze czarny, paski ładują się proporcjonalnie do procentu. Przesuń suwak.',`<div style="display:flex;flex-direction:column;gap:14px;align-items:center;width:100%"><div id="batdemo" style="background:#fff;padding:12px 18px;border-radius:999px;box-shadow:0 3px 8px rgba(0,0,0,.1)"></div><div class="ctl" style="width:100%"><label for="batr">Energia</label><input id="batr" type="range" min="0" max="100" value="62"></div><div id="batlab" class="mono" style="color:var(--p-muted);font-size:12px"></div></div>`)+
+ spec('BatteryIndicator','Obrys zawsze czarny, wypełnienie ciągłe i zmienia kolor, procent w środku. Przesuń suwak.',`<div style="display:flex;flex-direction:column;gap:14px;align-items:center;width:100%"><div id="batdemo" style="background:#fff;padding:12px 18px;border-radius:999px;box-shadow:0 3px 8px rgba(0,0,0,.1)"></div><div class="ctl" style="width:100%"><label for="batr">Energia</label><input id="batr" type="range" min="0" max="100" value="62"></div><div id="batlab" class="mono" style="color:var(--p-muted);font-size:12px"></div></div>`)+
  spec('BatteryIndicator — zakresy','Pięć zakresów obok siebie.',`<div style="display:flex;flex-direction:column;gap:12px;background:#fff;padding:16px 20px;border-radius:20px">${[0,12,37,62,100].map(p=>`<div style="display:flex;align-items:center;gap:14px">${Battery(p)}<span class="mono" style="font-size:11px;color:var(--p-muted)">${rangeOf(p)}</span></div>`).join('')}</div>`)+
  spec('HeaderBar','Trzy układy lewej strony. Tytuł pośrodku, energia po prawej.',`<div style="display:flex;flex-direction:column;gap:14px;width:100%;align-items:center">${['menu','menu+back','close'].map(k=>`<div class="hdrwrap">${HeaderBar({left:k,title:k==='close'?'Menu':k==='menu'?'Zielona Łąka':'Woda',p:62})}</div>`).join('')}</div>`,'sky')+
  spec('MenuPanel','Biały panel pod hamburgerem, wylogowanie na dole.',`<div style="position:relative;width:300px;height:250px"><div class="menupanel" style="left:8px;top:0">${MenuPanel().replace(/^<div class="menupanel"[^>]*>|<\/div>$/g,'')}</div></div>`,'sky')+
@@ -395,7 +394,7 @@ document.getElementById('spec3').innerHTML=
  spec('Scene — dzień i noc','Tło ekranów. Noc jest używana w oknie snu.',`<div style="display:flex;gap:14px"><div class="phone" style="transform:scale(.3);transform-origin:top left;width:390px;height:844px;margin:0 -273px -590px 0;box-shadow:none">${Scene(false)}</div><div class="phone" style="transform:scale(.3);transform-origin:top left;width:390px;height:844px;margin:0 -273px -590px 0;box-shadow:none">${Scene(true)}</div></div>`,'');
 // battery demo
 const batdemo=document.getElementById('batdemo'),batr=document.getElementById('batr'),batlab=document.getElementById('batlab');
-const updBat=()=>{const p=+batr.value;batdemo.innerHTML=Battery(p);batlab.textContent='zakres '+rangeOf(p)+' · jednostki '+(p/25).toFixed(2)};
+const updBat=()=>{const p=+batr.value;batdemo.innerHTML=Battery(p);batlab.textContent='zakres '+rangeOf(p)};
 batr.addEventListener('input',updBat);updBat();
 // pet demo
 const petdemo=document.getElementById('petdemo'),petsel=document.getElementById('petsel');
