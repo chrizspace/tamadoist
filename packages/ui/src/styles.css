@@ -264,7 +264,7 @@ button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outli
 
 /* Round dial: one big chip, three dots in a column on its right */
 .td-dial { position: relative; display: flex; align-items: center; gap: 4px; }
-.td-dial .td-ichip { width: 46px; height: 46px; }
+.td-dial .td-ichip { width: 48px; height: 48px; box-sizing: border-box; }
 .td-dial .td-ichip__badge { font-size: 11px; height: 20px; min-width: 26px; bottom: -11px; }
 .td-dial__dots { display: flex; flex-direction: column; align-items: center; }
 .td-dial__dot { position: relative; width: 20px; height: 20px; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 50%; }
