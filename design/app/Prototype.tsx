@@ -29,7 +29,7 @@ export function Prototype() {
   const [nameError, setNameError] = useState<string | undefined>();
   const [toast, setToast] = useState("");
   const [forced, setForced] = useState<PetState | "">("");
-  const [threeIndicators, setThree] = useState(false);
+  const [threeIndicators, setThree] = useState(true);
   const [zones, setZones] = useState(false);
   const [cityId, setCityId] = useState(DEFAULT_ENV.city.id);
   const [date, setDate] = useState(DEFAULT_ENV.date);
@@ -116,7 +116,7 @@ export function Prototype() {
         </details>
 
         <details open className="box mod"><summary><b>Wskaźniki</b> · nagłówek</summary>
-          <div className="ctl"><label htmlFor="ind3">Trzy wskaźniki</label><input id="ind3" type="checkbox" checked={threeIndicators} onChange={(e) => setThree(e.target.checked)} /><span className="note">energia + EXP + seria (EXP rośnie z wypitą wodą)</span></div>
+          <div className="ctl"><label htmlFor="ind3">Trzy wskaźniki</label><input id="ind3" type="checkbox" checked={threeIndicators} onChange={(e) => setThree(e.target.checked)} /><span className="note">energia + EXP + seria (placeholdery; EXP rośnie z wypitą wodą)</span></div>
           <div className="ctl"><label htmlFor="zones">Strefy ekranu</label><input id="zones" type="checkbox" checked={zones} onChange={(e) => setZones(e.target.checked)} /><span className="note">żółta ramka = scena zarezerwowana na postać i animacje</span></div>
         </details>
 

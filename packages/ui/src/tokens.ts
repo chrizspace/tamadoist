@@ -47,7 +47,7 @@ export const typography = {
  */
 export const LAYOUT = {
   topbar: { top: 48, bottom: 112 },
-  rail: { top: 124, right: 16, width: 40 },
+  rail: { top: 60, right: 16, width: 40 },
   scene: { top: 112, bottom: 632 },
   interaction: { top: 632, bottom: 696 },
   dock: { top: 712, bottom: 844 },

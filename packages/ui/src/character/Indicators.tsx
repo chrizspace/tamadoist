@@ -80,7 +80,9 @@ export interface ExtraIndicators {
 }
 
 /** Lets every screen's header show the extra indicators without passing them through each screen. */
-export const IndicatorsContext = createContext<ExtraIndicators>({});
+/** Placeholder values until EXP and streak are real: the rail always shows all three slots. */
+export const PLACEHOLDER_INDICATORS: ExtraIndicators = { exp: { level: 7, progress: 0.62 }, streak: { days: 12, progress: 0.7 } };
+export const IndicatorsContext = createContext<ExtraIndicators>(PLACEHOLDER_INDICATORS);
 export const useExtraIndicators = () => useContext(IndicatorsContext);
 export const IndicatorsProvider = ({ value, children }: { value: ExtraIndicators; children: ReactNode }) => <IndicatorsContext.Provider value={value}>{children}</IndicatorsContext.Provider>;
 
@@ -103,7 +105,7 @@ export function IndicatorCluster({ energyPercent, onEnergy, onExp, onStreak }: I
   );
 }
 
-/** Vertical HUD rail on the right edge, right under the top bar: up to three round indicators stacked. */
+/** Vertical HUD rail on the right edge, starting on the top bar line (level with the menu button): up to three round indicators stacked. */
 export function IndicatorRail(props: IndicatorClusterProps) {
   return <div className="td-rail"><IndicatorCluster {...props} /></div>;
 }

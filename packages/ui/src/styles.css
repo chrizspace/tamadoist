@@ -228,6 +228,6 @@ button.td-ichip:focus-visible { outline: 3px solid var(--color-water); outline-o
 
 /* Screen zones: top bar / indicator rail / scene / interaction bar / action dock */
 .td-header__right { width: 48px; margin-left: 0; flex: none; }
-.td-rail { position: absolute; right: 16px; top: 124px; z-index: 3; }
+.td-rail { position: absolute; right: 16px; top: 60px; z-index: 3; }
 .td-rail .td-indicators { flex-direction: column; gap: 22px; }
 .td-static .td-counter { bottom: auto; top: 0; left: 0; right: 0; }
