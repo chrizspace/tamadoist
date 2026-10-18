@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BASE_ENERGY_SHARE, DEFAULT_PROFILE, PET_STATES, computeEnergy, derivePetState, sleepWindow, waterGoalMl, type PetState } from "@tamadoist/core";
 import {
-  EnergyIndicator, ExpIndicator, StreakIndicator, IndicatorsProvider, HeaderBar, Egg, EnergyExplainScreen, EnergyIndicatorScreen, LoginScreen, NameScreen, NameTag, Pet, PetScale, RenameDialogScreen,
+  EnergyIndicator, ExpIndicator, StreakIndicator, IndicatorsProvider, IndicatorRail, Egg, EnergyExplainScreen, EnergyIndicatorScreen, LoginScreen, NameScreen, NameTag, Pet, PetScale, RenameDialogScreen,
   SAMPLE, SettingsScreen, SleepScreen, WeightScreen, energyRange, TimePicker,
 } from "@tamadoist/ui";
 import { Gallery, Section, Spec, SpecGrid } from "../chrome";
@@ -79,14 +79,14 @@ export function CharacterTab() {
         </SpecGrid>
       </Section>
 
-      <Section title="Wskaźniki w nagłówku" lead="Po prawej stronie nagłówka jest miejsce na trzy okrągłe wskaźniki w tym samym stylu: biała obwódka z szarą krawędzią 3D, pierścień postępu i symbol w środku. Na razie działa energia, a EXP i seria są zaproponowane na później.">
+      <Section title="Wskaźniki (HUD)" lead="Okrągłe wskaźniki stoją w pionie przy prawej krawędzi, pod paskiem tytułu: biała obwódka z szarą krawędzią 3D, pierścień postępu i symbol w środku. Na razie działa energia, a EXP i seria są zaproponowane na później.">
         <SpecGrid>
           <Spec title="Na razie: sama energia" stage="sky">
-            <div className="hdrwrap"><div style={{ position: "absolute", inset: 0, top: -48 }}><HeaderBar left="menu" title="Park" percent={62} onTitle={() => undefined} onEnergy={() => undefined} /></div></div>
+            <div className="railwrap"><IndicatorRail energyPercent={62} onEnergy={() => undefined} /></div>
           </Spec>
-          <Spec title="Docelowo: trzy wskaźniki" note="Tytuł lokacji zajmuje miejsce między hamburgerem a wskaźnikami." stage="sky">
+          <Spec title="Docelowo: trzy wskaźniki" note="Trzy w pionie zajmują ok. 170 px przy krawędzi i nie dotykają środka sceny." stage="sky">
             <IndicatorsProvider value={{ exp: { level: 7, progress: 0.62 }, streak: { days: 12, progress: 0.7 } }}>
-              <div className="hdrwrap"><div style={{ position: "absolute", inset: 0, top: -48 }}><HeaderBar left="menu" title="Park" percent={62} onTitle={() => undefined} onEnergy={() => undefined} /></div></div>
+              <div className="railwrap" style={{ height: 210 }}><IndicatorRail energyPercent={62} onEnergy={() => undefined} /></div>
             </IndicatorsProvider>
           </Spec>
           <Spec title="Propozycje na kolejne dwa" note="Każdy wskaźnik ma pierścień (postęp), symbol i liczbę w rogu." stage="sky col">

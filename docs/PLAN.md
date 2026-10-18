@@ -124,11 +124,10 @@ Jedna zasada dla całego UI (`packages/ui`, sekcja „Elevation system” w `sty
 - Dziś widoczna tylko energia; EXP i Seria włączane przez `IndicatorsProvider` (w prototypie checkbox „Trzy wskaźniki”).
 
 ## Układ ekranu sceny (strefy)
-- **Góra** (header + wskaźniki + ewentualny licznik, np. woda): nic stąd nie wchodzi na postać.
-- **Scena**: postać stoi na stałym miejscu (środek sceny, `STAGE_TOP`), na każdym ekranie tak samo, bez unoszenia; animacje per scena później.
-- **Dół (dock)**: akcje zawsze przy dolnej krawędzi. Poziom 1: kwadratowe przyciski 3D akcji (przewijane w poziomie, gdy będzie ich więcej). Wewnątrz akcji: okrągłe przyciski (−/+) w tym samym miejscu.
-- Doprecyzowanie: licznik akcji na górze ma szerokość kontenera (16 px marginesu); powiadomienia (toast) pojawiają się nad dockiem, nie u góry; dock leży nisko (28 px od dołu), żeby środek został dla postaci i animacji.
-- Strefa informacji pod headerem (pełna szerokość): licznik w akcji oraz krótkie powiadomienia. Podpis energii („Energii starczy do…”) nie jest stale widoczny — pojawia się tylko po kliknięciu wskaźnika energii. Pod postacią nic się nie wyświetla.
-
-### Zasada: scena jest nienaruszalna
-Ekran sceny ma 4 strefy (`LAYOUT` w `packages/ui/src/tokens.ts`): header (48–112), strefa informacji (120–176), **scena (184–704)**, dock akcji (704–844). W strefie sceny nie rysujemy żadnego UI poza postacią i jej imieniem — to miejsce na animacje i interakcje postaci ze sceną (ruch generowany per scena). Powiadomienia, liczniki i podpisy trafiają do strefy informacji, akcje do docka. W prototypie checkbox „Strefy ekranu” podświetla scenę.
+Stałe w `LAYOUT` (`packages/ui/src/tokens.ts`), ekran 390×844:
+1. **Pasek tytułu** (48–112): jeden przycisk z lewej (menu / wstecz / zamknij) i tytuł (nazwa lokacji lub akcji).
+2. **Wskaźniki (HUD)**: pionowa szyna przy prawej krawędzi pod paskiem (od y=124), do 3 okrągłych chipów (energia, EXP, seria).
+3. **Pasek akcji (dock)** na dole (od 712): duże kwadratowe przyciski 3D akcji (przewijane poziomo); po wejściu w akcję — okrągłe przyciski interakcji (−/+) w tym samym miejscu.
+4. **Pasek interakcji** tuż nad dockiem (632–696): postęp bieżącej akcji (np. woda 250 / 2450 ml) albo powiadomienie (ciemny półprzezroczysty pasek). Powiadomienie akcji wyskakuje nad licznikiem.
+5. **Scena** (reszta, 112–632): zarezerwowana na postać (stoi w jednym miejscu na każdym ekranie) i jej animacje; bez innego UI. Podpis energii pokazuje się tylko po kliknięciu wskaźnika energii.
+W prototypie checkbox „Strefy ekranu” podświetla scenę.

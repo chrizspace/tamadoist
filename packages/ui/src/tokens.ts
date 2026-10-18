@@ -39,14 +39,16 @@ export const typography = {
 } as const;
 
 /**
- * Vertical zones of a 390x844 scene screen (px from the top).
- * header and info slot sit above the stage, the action dock below it.
- * The stage is reserved: nothing but the character (and its name tag) is drawn there,
+ * Zones of a 390x844 scene screen (px from the top).
+ * topbar: menu/back + title. rail: round indicators stacked on the right edge.
+ * interaction: progress / notification, right above the action dock. dock: action buttons.
+ * Everything else is the scene: only the character (and its name tag) is drawn there,
  * so scene animations can use all of it.
  */
 export const LAYOUT = {
-  header: { top: 48, bottom: 112 },
-  info: { top: 120, bottom: 176 },
-  stage: { top: 184, bottom: 704 },
-  dock: { top: 704, bottom: 844 },
+  topbar: { top: 48, bottom: 112 },
+  rail: { top: 124, right: 16, width: 40 },
+  scene: { top: 112, bottom: 632 },
+  interaction: { top: 632, bottom: 696 },
+  dock: { top: 712, bottom: 844 },
 } as const;

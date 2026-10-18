@@ -102,3 +102,8 @@ export function IndicatorCluster({ energyPercent, onEnergy, onExp, onStreak }: I
     </div>
   );
 }
+
+/** Vertical HUD rail on the right edge, right under the top bar: up to three round indicators stacked. */
+export function IndicatorRail(props: IndicatorClusterProps) {
+  return <div className="td-rail"><IndicatorCluster {...props} /></div>;
+}

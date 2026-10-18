@@ -48,7 +48,7 @@ export function Phone({ location, period, children }: SceneProps & { children: R
   );
 }
 /** Where the character stands in every scene screen: centred, never covered by header or dock. */
-const STAGE_TOP = 262; // inside LAYOUT.stage
+const STAGE_TOP = 226; // inside LAYOUT.scene
 
 
 const Hero = ({ top, name, children, float = true }: { top: number; name: string; children: ReactNode; float?: boolean }) => (
@@ -176,7 +176,7 @@ export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state =
       <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onMenu={onMenu} onTitle={onTitle ?? (() => undefined)} onEnergy={onEnergy} />
       <Hero float={false} top={STAGE_TOP} name={name}><Pet state={state} size={270} /></Hero>
       <ActionBar context={{ sleeping, tired }} onAction={onAction} />
-      {toast && <Toast top={120}>{toast}</Toast>}
+      {toast && <Toast>{toast}</Toast>}
     </Phone>
   );
 }
@@ -189,7 +189,7 @@ export function MenuScreen({ name, energyPercent, onClose, onSettings, onPlaces,
       <Hero top={STAGE_TOP} name={name} float={false}><Pet size={270} /></Hero>
       <ActionBar context={{ sleeping: false, tired: false }} />
       <div className="td-scrim" />
-      <HeaderBar left="close" title="Menu" percent={energyPercent} onClose={onClose} />
+      <HeaderBar left="close" title="Menu" percent={energyPercent} rail={false} onClose={onClose} />
       <MenuPanel onSettings={onSettings} onPlaces={onPlaces} onSchedule={onSchedule} onLogout={onLogout} />
     </Phone>
   );
@@ -206,7 +206,7 @@ export function WaterScreen({ name, drunkMl, goalMl, energyPercent, drinking, lo
       <div className="td-actionbar td-actionbar--pair">
         <RoundButton kind="minus" onClick={onMinus} /><RoundButton kind="plus" onClick={onPlus} />
       </div>
-      {toast && <Toast>{toast}</Toast>}
+      {toast && <Toast bottom={222}>{toast}</Toast>}
     </Phone>
   );
 }
@@ -227,7 +227,7 @@ function SettingsRows({ name, sleepStart, sleepEnd, weightKg, goalMl, onEditName
 export function SettingsScreen({ onBack, onEditName, ...d }: ScreenData & { onBack?: () => void; onEditName?: () => void }) {
   return (
     <Phone {...LOC_PARK}>
-      <HeaderBar left="back" title="Ustawienia" percent={d.energyPercent} onBack={onBack} />
+      <HeaderBar left="back" title="Ustawienia" percent={d.energyPercent} rail={false} onBack={onBack} />
       <SettingsRows {...d} onEditName={onEditName} />
     </Phone>
   );
@@ -236,7 +236,7 @@ export function SettingsScreen({ onBack, onEditName, ...d }: ScreenData & { onBa
 export function RenameDialogScreen({ draft, onDraft, onCancel, onSave, ...d }: ScreenData & { draft?: string; onDraft?: (v: string) => void; onCancel?: () => void; onSave?: () => void }) {
   return (
     <Phone {...LOC_PARK}>
-      <HeaderBar left="back" title="Ustawienia" percent={d.energyPercent} />
+      <HeaderBar left="back" title="Ustawienia" percent={d.energyPercent} rail={false} />
       <SettingsRows {...d} />
       <div className="td-scrim" />
       <Dialog title="Zmień imię" description="Jak ma się teraz nazywać Twoja postać?" actions={<><Button variant="secondary" onClick={onCancel}>Anuluj</Button><Button onClick={onSave}>Zapisz</Button></>}>
@@ -273,7 +273,7 @@ export function ScenePickerScreen({ name, energyPercent, location = "work.opensp
 export function PlacesScreen({ energyPercent, onBack, onUseLocation }: Pick<ScreenData, "energyPercent"> & { onBack?: () => void; onUseLocation?: () => void }) {
   return (
     <Phone {...LOC_PARK}>
-      <HeaderBar left="back" title="Miejsca" percent={energyPercent} onBack={onBack} />
+      <HeaderBar left="back" title="Miejsca" percent={energyPercent} rail={false} onBack={onBack} />
       <div className="td-page">
         <MapArt />
         <ListCard icon="pin" title="Dom" sub="52.2297, 21.0122 · promień 100 m" onClick={() => undefined} right={<LocationPill location="home.office" />} />
@@ -305,7 +305,7 @@ export function LocationPermissionScreen({ name, onAllow, onLater }: Pick<Screen
 export function ScheduleScreen({ energyPercent, onBack }: Pick<ScreenData, "energyPercent"> & { onBack?: () => void }) {
   return (
     <Phone {...LOC_PARK}>
-      <HeaderBar left="back" title="Plan dnia" percent={energyPercent} onBack={onBack} />
+      <HeaderBar left="back" title="Plan dnia" percent={energyPercent} rail={false} onBack={onBack} />
       <div className="td-page">
         <h2>Bloki dnia</h2>
         <ListCard icon="clock" title="Praca" sub="09:00 – 17:00 · pon–pt" onClick={() => undefined} right={<LocationPill location="work.openspace" />} />

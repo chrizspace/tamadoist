@@ -17,7 +17,7 @@ export const Header: Story = {
       {(["menu", "back", "close"] as const).map((left) => (
         <div key={left} style={{ position: "relative", width: 390, height: 64, background: "var(--color-sky)", borderRadius: 16, overflow: "hidden" }}>
           <div style={{ position: "absolute", inset: 0, top: -48 }}>
-            <HeaderBar left={left} title={left === "close" ? "Menu" : left === "menu" ? "Kuchnia" : "Woda"} percent={62} onTitle={left === "menu" ? () => undefined : undefined} />
+            <HeaderBar left={left} title={left === "close" ? "Menu" : left === "menu" ? "Kuchnia" : "Woda"} percent={62} rail={false} onTitle={left === "menu" ? () => undefined : undefined} />
           </div>
         </div>
       ))}

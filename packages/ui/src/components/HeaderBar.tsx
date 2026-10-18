@@ -1,4 +1,4 @@
-import { IndicatorCluster } from "../character/Indicators";
+import { IndicatorRail } from "../character/Indicators";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 
@@ -18,11 +18,14 @@ export interface HeaderBarProps {
   onEnergy?: () => void;
   onExp?: () => void;
   onStreak?: () => void;
+  /** Show the indicator rail under the bar (scene screens). Off on full-content screens. */
+  rail?: boolean;
 }
 
-/** Left: one button (hamburger, back or close), center: title, right: round indicators (energy, and later experience and streak). */
-export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, ghost, onTitle, onMenu, onBack, onClose, onEnergy, onExp, onStreak }: HeaderBarProps) {
+/** Left: one button (hamburger, back or close), center: title, right: spacer (keeps the title centred). Indicators live in the rail under the bar. */
+export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, ghost, onTitle, onMenu, onBack, onClose, onEnergy, onExp, onStreak, rail = true }: HeaderBarProps) {
   return (
+    <>
     <div className="td-header">
       <div className={`td-header__left${ghost ? " td-ghost" : ""}`}>
         {left === "menu" && <IconButton icon="menu" label="Menu" onClick={onMenu} />}
@@ -36,7 +39,9 @@ export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, gh
       ) : (
         <div className="td-header__title">{title}</div>
       )}
-      <div className="td-header__right"><IndicatorCluster energyPercent={percent} onEnergy={onEnergy} onExp={onExp} onStreak={onStreak} /></div>
+      <div className="td-header__right" aria-hidden="true" />
     </div>
+    {rail && <IndicatorRail energyPercent={percent} onEnergy={onEnergy} onExp={onExp} onStreak={onStreak} />}
+    </>
   );
 }
