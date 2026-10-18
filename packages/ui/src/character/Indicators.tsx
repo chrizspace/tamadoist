@@ -1,4 +1,5 @@
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
+import { Icon } from "../components/Icon";
 
 export type EnergyRange = "0%" | "1–24%" | "25–49%" | "50–74%" | "75–100%";
 
@@ -93,19 +94,43 @@ export interface IndicatorClusterProps {
   onStreak?: () => void;
 }
 
-/** Energy always, then experience and streak when the app provides them. */
-export function IndicatorCluster({ energyPercent, onEnergy, onExp, onStreak }: IndicatorClusterProps) {
+export interface IndicatorClusterProps {
+  energyPercent: number;
+  onEnergy?: () => void;
+  onExp?: () => void;
+  onStreak?: () => void;
+}
+
+/** Energy always, then experience and streak when the app provides them. `collapsed` hides everything but energy. */
+export function IndicatorCluster({ energyPercent, onEnergy, onExp, onStreak, collapsed }: IndicatorClusterProps & { collapsed?: boolean }) {
   const extra = useExtraIndicators();
   return (
     <div className="td-indicators">
       <EnergyIndicator percent={energyPercent} onClick={onEnergy} />
-      {extra.exp && <ExpIndicator {...extra.exp} onClick={onExp} />}
-      {extra.streak && <StreakIndicator {...extra.streak} onClick={onStreak} />}
+      <div className={`td-indicators__more${collapsed ? " is-collapsed" : ""}`} aria-hidden={collapsed || undefined} inert={collapsed || undefined}>
+        {extra.exp && <ExpIndicator {...extra.exp} onClick={onExp} />}
+        {extra.streak && <StreakIndicator {...extra.streak} onClick={onStreak} />}
+      </div>
     </div>
   );
 }
 
-/** Vertical HUD rail on the right edge, starting on the top bar line (level with the menu button): up to three round indicators stacked. */
-export function IndicatorRail(props: IndicatorClusterProps) {
-  return <div className="td-rail"><IndicatorCluster {...props} /></div>;
+/**
+ * Vertical HUD rail on the right edge, starting on the top bar line (level with the menu button):
+ * up to three round indicators stacked, with a green toggle underneath that folds all but energy away.
+ */
+export function IndicatorRail({ defaultCollapsed = false, ...props }: IndicatorClusterProps & { defaultCollapsed?: boolean }) {
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
+  const extra = useExtraIndicators();
+  const hasMore = Boolean(extra.exp || extra.streak);
+  return (
+    <div className="td-rail">
+      <IndicatorCluster {...props} collapsed={collapsed} />
+      {hasMore && (
+        <button type="button" className={`td-railtoggle${collapsed ? " is-collapsed" : ""}`} aria-expanded={!collapsed} aria-label={collapsed ? "Rozwiń wskaźniki" : "Zwiń wskaźniki"} onClick={() => setCollapsed((v) => !v)}>
+          <Icon name="chevronDown" />
+        </button>
+      )}
+    </div>
+  );
 }

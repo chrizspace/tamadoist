@@ -127,6 +127,7 @@ Jedna zasada dla całego UI (`packages/ui`, sekcja „Elevation system” w `sty
 Stałe w `LAYOUT` (`packages/ui/src/tokens.ts`), ekran 390×844:
 1. **Pasek tytułu** (48–112): jeden przycisk z lewej (menu / wstecz / zamknij) i tytuł (nazwa lokacji lub akcji).
 2. **Wskaźniki (HUD)**: pionowa szyna przy prawej krawędzi, zaczyna się na linii paska tytułu (na wysokości hamburgera), do 3 okrągłych chipów jeden pod drugim (energia, EXP, seria). EXP i seria na razie jako placeholdery.
+   Pod nimi zielony przycisk ze strzałką zwija wskaźniki do samej energii (strzałka w dół) i rozwija z powrotem (strzałka w górę).
 3. **Pasek akcji (dock)** na dole (od 712): duże kwadratowe przyciski 3D akcji (przewijane poziomo); po wejściu w akcję — okrągłe przyciski interakcji (−/+) w tym samym miejscu.
 4. **Pasek interakcji** tuż nad dockiem (632–696): postęp bieżącej akcji (np. woda 250 / 2450 ml) albo powiadomienie (ciemny półprzezroczysty pasek). Powiadomienie akcji wyskakuje nad licznikiem.
 5. **Scena** (reszta, 112–632): zarezerwowana na postać (stoi w jednym miejscu na każdym ekranie) i jej animacje; bez innego UI. Podpis energii pokazuje się tylko po kliknięciu wskaźnika energii.

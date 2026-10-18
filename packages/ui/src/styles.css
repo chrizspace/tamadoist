@@ -231,3 +231,17 @@ button.td-ichip:focus-visible { outline: 3px solid var(--color-water); outline-o
 .td-rail { position: absolute; right: 16px; top: 60px; z-index: 3; }
 .td-rail .td-indicators { flex-direction: column; gap: 22px; }
 .td-static .td-counter { bottom: auto; top: 0; left: 0; right: 0; }
+
+/* Rail folding */
+.td-rail { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.td-indicators__more { display: flex; flex-direction: column; align-items: center; gap: 22px; overflow: visible; transition: opacity .2s, transform .2s, max-height .25s; max-height: 200px; }
+.td-indicators__more.is-collapsed { opacity: 0; transform: translateY(-12px); max-height: 0; pointer-events: none; }
+.td-railtoggle { width: 40px; height: 24px; border: 0; border-radius: 12px; background: var(--color-primary); color: #fff; display: grid; place-items: center; padding: 0; cursor: pointer; box-shadow: 0 3px 0 var(--color-primary-dark); transition: transform .05s, box-shadow .05s; }
+.td-railtoggle svg { width: 18px; height: 18px; transform: rotate(180deg); transition: transform .2s; }
+.td-railtoggle.is-collapsed svg { transform: none; }
+.td-railtoggle:active { transform: translateY(3px); box-shadow: 0 0 0 transparent; }
+.td-railtoggle:focus-visible { outline: 3px solid var(--color-water); outline-offset: 2px; }
+.td-rail .td-indicators { gap: 0; }
+.td-indicators__more { padding-top: 22px; }
+.td-indicators__more.is-collapsed { padding-top: 0; visibility: hidden; }
+.td-rail { gap: 18px; }
