@@ -42,6 +42,17 @@ const C = 2 * Math.PI * R;
  * Round indicator: a progress ring around a glyph, on a small white chip with a gray lip.
  * The header holds up to three of them (energy, experience and a third one).
  */
+function Ring({ glyph, progress, color, size = 44 }: { glyph: IndicatorGlyph; progress: number; color: string; size?: number }) {
+  const v = Math.max(0, Math.min(1, progress));
+  return (
+    <svg viewBox="0 0 44 44" width={size} height={size} aria-hidden="true">
+      <circle cx="22" cy="22" r={R} fill="none" stroke="#E4EAE8" strokeWidth="4.5" />
+      {v > 0 && <circle cx="22" cy="22" r={R} fill="none" stroke={color} strokeWidth="4.5" strokeLinecap="round" strokeDasharray={C} strokeDashoffset={C * (1 - v)} transform="rotate(-90 22 22)" />}
+      <g transform="translate(11.5 11.5) scale(0.875)"><path d={GLYPHS[glyph]} fill={color} /></g>
+    </svg>
+  );
+}
+
 export function IndicatorChip({ glyph, progress, color, badge, label, onClick }: IndicatorChipProps) {
   const v = Math.max(0, Math.min(1, progress));
   const body = (
@@ -131,6 +142,37 @@ export function IndicatorRail({ defaultCollapsed = false, ...props }: IndicatorC
           <Icon name="chevronDown" />
         </button>
       )}
+    </div>
+  );
+}
+
+/* ---------------- Horizontal variant: one capsule with all three ---------------- */
+
+export type IndicatorsLayout = "bar" | "rail";
+/** "bar": one horizontal capsule on the top bar line. "rail": round chips stacked on the right edge. */
+export const IndicatorsLayoutContext = createContext<IndicatorsLayout>("bar");
+export const useIndicatorsLayout = () => useContext(IndicatorsLayoutContext);
+
+interface SegmentProps { glyph: IndicatorGlyph; progress: number; color: string; value: string | number; label: string; onClick?: () => void }
+
+function Segment({ glyph, progress, color, value, label, onClick }: SegmentProps) {
+  const body = (<><Ring glyph={glyph} progress={progress} color={color} size={26} /><b>{value}</b></>);
+  return onClick ? (
+    <button type="button" className="td-ibar__seg" onClick={onClick} aria-label={`${label}. Pokaż szczegóły`}>{body}</button>
+  ) : (
+    <span className="td-ibar__seg" role="img" aria-label={label}>{body}</span>
+  );
+}
+
+/** All indicators in one capsule (white, gray lip). Energy first, then experience and streak. */
+export function IndicatorBar({ energyPercent, onEnergy, onExp, onStreak }: IndicatorClusterProps) {
+  const extra = useExtraIndicators();
+  const p = Math.max(0, Math.min(100, Math.round(energyPercent)));
+  return (
+    <div className="td-ibar">
+      <Segment glyph="bolt" progress={p / 100} color={energyColor(p)} value={p} label={`Energia ${p}%`} onClick={onEnergy} />
+      {extra.exp && <Segment glyph="star" progress={extra.exp.progress} color={INDICATOR_COLORS.exp} value={extra.exp.level} label={`Poziom ${extra.exp.level}`} onClick={onExp} />}
+      {extra.streak && <Segment glyph="flame" progress={extra.streak.progress} color={INDICATOR_COLORS.streak} value={extra.streak.days} label={`Seria ${extra.streak.days} dni`} onClick={onStreak} />}
     </div>
   );
 }

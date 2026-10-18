@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
 import {
-  IndicatorsProvider, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
+  IndicatorsProvider, IndicatorsLayoutContext, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
   PlacesScreen, RenameDialogScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
   SleepScreen, WaterScreen, WeightScreen,
 } from "@tamadoist/ui";
@@ -31,6 +31,7 @@ export function Prototype() {
   const [forced, setForced] = useState<PetState | "">("");
   const [threeIndicators, setThree] = useState(true);
   const [zones, setZones] = useState(false);
+  const [layout, setLayout] = useState<IndicatorsLayout>("bar");
   const [cityId, setCityId] = useState(DEFAULT_ENV.city.id);
   const [date, setDate] = useState(DEFAULT_ENV.date);
   const env: Env = useMemo(() => ({ city: CITIES.find((c) => c.id === cityId)!, date }), [cityId, date]);
@@ -79,7 +80,7 @@ export function Prototype() {
 
   return (
     <div className="proto">
-      <div className="protoframe"><Fit><div className={`phoneroot${zones ? " show-zones" : ""}`}><IndicatorsProvider value={threeIndicators ? { exp: { level: Math.floor(xp / 100), progress: (xp % 100) / 100 }, streak: { days: 12, progress: Math.min(1, ac.drunkMl / ch.goalMl) } } : {}}>{render()}</IndicatorsProvider></div></Fit></div>
+      <div className="protoframe"><Fit><div className={`phoneroot${zones ? " show-zones" : ""}`}><IndicatorsProvider value={threeIndicators ? { exp: { level: Math.floor(xp / 100), progress: (xp % 100) / 100 }, streak: { days: 12, progress: Math.min(1, ac.drunkMl / ch.goalMl) } } : {}}><IndicatorsLayoutContext.Provider value={layout}>{render()}</IndicatorsLayoutContext.Provider></IndicatorsProvider></div></Fit></div>
       <div className="protoctl">
         <details open className="box mod"><summary><b>Ekran</b></summary>
           <div className="crumbs">
@@ -117,6 +118,7 @@ export function Prototype() {
 
         <details open className="box mod"><summary><b>Wskaźniki</b> · nagłówek</summary>
           <div className="ctl"><label htmlFor="ind3">Trzy wskaźniki</label><input id="ind3" type="checkbox" checked={threeIndicators} onChange={(e) => setThree(e.target.checked)} /><span className="note">energia + EXP + seria (placeholdery; EXP rośnie z wypitą wodą)</span></div>
+          <div className="ctl"><label htmlFor="ilayout">Układ wskaźników</label><select id="ilayout" value={layout} onChange={(e) => setLayout(e.target.value as IndicatorsLayout)}><option value="bar">poziomo (kapsuła)</option><option value="rail">pionowo (szyna)</option></select></div>
           <div className="ctl"><label htmlFor="zones">Strefy ekranu</label><input id="zones" type="checkbox" checked={zones} onChange={(e) => setZones(e.target.checked)} /><span className="note">żółta ramka = scena zarezerwowana na postać i animacje</span></div>
         </details>
 

@@ -227,7 +227,7 @@ button.td-ichip:focus-visible { outline: 3px solid var(--color-water); outline-o
 .td-caption--slot { left: 16px; right: 16px; transform: none; width: auto; max-width: none; top: 120px; padding: 14px 20px; border-radius: 20px; font-size: 17px; }
 
 /* Screen zones: top bar / indicator rail / scene / interaction bar / action dock */
-.td-header__right { width: 48px; margin-left: 0; flex: none; }
+.td-header__right { min-width: 48px; margin-left: 0; flex: none; display: flex; justify-content: flex-end; }
 .td-rail { position: absolute; right: 16px; top: 60px; z-index: 3; }
 .td-rail .td-indicators { flex-direction: column; gap: 22px; }
 .td-static .td-counter { bottom: auto; top: 0; left: 0; right: 0; }
@@ -245,3 +245,13 @@ button.td-ichip:focus-visible { outline: 3px solid var(--color-water); outline-o
 .td-indicators__more { padding-top: 22px; }
 .td-indicators__more.is-collapsed { padding-top: 0; visibility: hidden; }
 .td-rail { gap: 18px; }
+
+/* Horizontal capsule */
+.td-ibar { display: flex; align-items: center; gap: 4px; height: 40px; padding: 0 10px; border-radius: 20px; background: #fff; border: 2px solid #fff; box-shadow: 0 var(--lip) 0 #BFC9C7; }
+.td-ibar__seg { display: flex; align-items: center; gap: 3px; background: none; border: 0; padding: 0 3px; cursor: pointer; font: inherit; color: var(--color-text); border-radius: 12px; }
+span.td-ibar__seg { cursor: default; }
+.td-ibar__seg svg { display: block; flex: none; }
+.td-ibar__seg b { font: 800 13px var(--font); font-variant-numeric: tabular-nums; min-width: 16px; text-align: left; }
+button.td-ibar__seg:active { transform: translateY(2px); }
+button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outline-offset: 2px; }
+.td-header__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }

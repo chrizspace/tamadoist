@@ -132,3 +132,4 @@ Stałe w `LAYOUT` (`packages/ui/src/tokens.ts`), ekran 390×844:
 4. **Pasek interakcji** tuż nad dockiem (632–696): postęp bieżącej akcji (np. woda 250 / 2450 ml) albo powiadomienie (ciemny półprzezroczysty pasek). Powiadomienie akcji wyskakuje nad licznikiem.
 5. **Scena** (reszta, 112–632): zarezerwowana na postać (stoi w jednym miejscu na każdym ekranie) i jej animacje; bez innego UI. Podpis energii pokazuje się tylko po kliknięciu wskaźnika energii.
 W prototypie checkbox „Strefy ekranu” podświetla scenę.
+- Wskaźniki mają dwa układy (`IndicatorsLayoutContext`): **kapsuła pozioma** (`IndicatorBar`, domyślnie: jeden biały komponent z szarą krawędzią 3D na linii hamburgera, pierścień + liczba dla energii / EXP / serii; długie tytuły lokacji skracane wielokropkiem) oraz **szyna pionowa** (wariant opisany wyżej). W prototypie przełącznik „Układ wskaźników”.
