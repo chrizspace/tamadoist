@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { darken, lighten, makePaint, mix } from "../scene/paint";
+import { darken, lighten, makePaint } from "../scene/paint";
 import { colors } from "../tokens";
 
 export type PetState = "awake" | "tired" | "sleeping" | "happy" | "drinking";
@@ -9,84 +9,115 @@ export interface PetProps {
   size?: number;
 }
 
-const FOOT = "#FF9A3C";
+const INK = "#3A1708"; // thick dark-brown outline of the eyes and the pupils
+const IRIS_TOP = "#F8CBA8";
+const IRIS_BOTTOM = "#EBA283";
+const BEAK = "#FF8A1F";
 
 /**
- * Original mascot in a soft 3D "vinyl toy" style: smooth rounded forms, matte shading from the top left,
- * a darker underside, big white eyes with a single highlight, small wings, feather marks, orange feet and a
- * big soft ground shadow. No outlines. Plain SVG, so it can move to react-native-svg.
+ * Original mascot in the "flat game illustration" style: a squat owl-like body with a light rim, big oval eyes
+ * with a thick dark outline and a warm iris, dark pupils with a cut-out highlight, a small orange beak, leaf-like
+ * brow feathers and soft marks on the belly. Flat colors with gentle shading. Plain SVG, so it can move to
+ * react-native-svg.
  */
 export function Pet({ state = "awake", size = 160 }: PetProps) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const p = makePaint(`pet${uid}`);
   const body = colors.primary;
-  const hi = mix(body, "#EAFFB0", 0.3);
-  const eyesX = [72, 128];
-  const eyeY = 80;
-  const pupilDy = state === "tired" ? 8 : state === "happy" ? 2 : 3;
+  const mark = lighten(body, 0.2);
+  const eyeY = 92;
+  const eyes = [68, 132];
+  const looking = state === "tired" ? 8 : 0;
+  const pupilRx = state === "happy" ? 15 : 13;
+  const pupilRy = state === "happy" ? 21 : 19;
 
-  const feather = (x: number, y: number, r: number, flip: number) => (
-    <path d={`M${x} ${y}c${6 * flip} -8 ${14 * flip} -10 ${18 * flip} -6c${-2 * flip} 10 ${-10 * flip} 18 ${-18 * flip} 16c${-2 * flip} -3 ${-2 * flip} -7 0 -10z`} fill={lighten(body, 0.28)} opacity=".7" transform={`rotate(${r * flip} ${x} ${y})`} />
+  const leaf = (x: number, y: number, rot: number, w: number, h: number) => (
+    <path d={`M0 0Q${w / 2} ${-h} ${w} 0Q${w / 2} ${h * 0.35} 0 0Z`} fill={mark} opacity=".85" transform={`translate(${x} ${y}) rotate(${rot})`} />
   );
+
+  const eye = (cx: number, i: number) => {
+    const clip = `${uid}clip${i}`;
+    if (state === "sleeping") {
+      return <path key={cx} d={`M${cx - 26} ${eyeY + 2}Q${cx} ${eyeY + 24} ${cx + 26} ${eyeY + 2}`} fill="none" stroke={INK} strokeWidth="8" strokeLinecap="round" />;
+    }
+    const px = cx + (i === 0 ? 2 : -2);
+    const py = eyeY - 3 + looking;
+    return (
+      <g key={cx}>
+        <clipPath id={clip}><ellipse cx={cx} cy={eyeY} rx="30" ry="36" /></clipPath>
+        <ellipse cx={cx} cy={eyeY} rx="30" ry="36" fill={`url(#${uid}iris)`} />
+        <g clipPath={`url(#${clip})`}>
+          {[[-14, 22, 5], [0, 26, 6.5], [15, 22, 5], [-6, 12, 3.5], [10, 14, 3.5]].map(([dx, dy, r]) => <circle key={`${dx}${dy}`} cx={cx + dx!} cy={eyeY + dy!} r={r} fill="#FFE27A" opacity=".55" />)}
+          <ellipse cx={px} cy={py} rx={pupilRx} ry={pupilRy} fill={INK} />
+          <ellipse cx={px - 7} cy={py - 11} rx="8.5" ry="9" fill={`url(#${uid}iris)`} />
+          {state === "happy" && <circle cx={px + 6} cy={py + 8} r="3" fill="#FFF3D6" opacity=".9" />}
+          {state === "tired" && (
+            <>
+              <rect x={cx - 34} y={eyeY - 40} width="68" height="42" fill={p.lin(body, { light: 0.06, dark: 0.12 })} />
+              <path d={`M${cx - 34} ${eyeY + 2}Q${cx} ${eyeY + 10} ${cx + 34} ${eyeY + 2}`} fill="none" stroke={INK} strokeWidth="7" />
+            </>
+          )}
+        </g>
+        <ellipse cx={cx} cy={eyeY} rx="30" ry="36" fill="none" stroke={INK} strokeWidth="8" />
+      </g>
+    );
+  };
 
   const content = (
     <>
+      <defs>
+        <linearGradient id={`${uid}iris`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor={IRIS_TOP} />
+          <stop offset="1" stopColor={IRIS_BOTTOM} />
+        </linearGradient>
+      </defs>
       {/* ground shadow */}
-      <ellipse cx="102" cy="193" rx="78" ry="9" fill="#0B2A22" opacity=".34" filter={p.blur(4.5)} />
-      {/* wings */}
-      {[[20, 1], [180, -1]].map(([x, f]) => (
-        <ellipse key={x} cx={x} cy="124" rx="15" ry="26" fill={p.lin(darken(body, 0.12), { light: 0.1, dark: 0.3 })} transform={`rotate(${(f as number) * -18} ${x} 124)`} />
-      ))}
+      <ellipse cx="100" cy="195" rx="74" ry="6" fill="#0B2A22" opacity=".3" filter={p.blur(3)} />
       {/* feet */}
-      {[[58, -10], [142, 10]].map(([x, r]) => (
-        <g key={x} transform={`rotate(${r} ${x} 186)`}>
-          <ellipse cx={x} cy="188" rx="21" ry="11" fill={darken(FOOT, 0.35)} />
-          <ellipse cx={x} cy="185" rx="20" ry="10.5" fill={p.rad(FOOT, { cx: 0.4, cy: 0.25, light: 0.35, dark: 0.22 })} />
+      {[62, 138].map((x) => (
+        <g key={x}>
+          <ellipse cx={x} cy="191" rx="19" ry="8" fill={darken(BEAK, 0.25)} />
+          <ellipse cx={x} cy="189" rx="18" ry="7.5" fill={BEAK} />
         </g>
       ))}
-      {/* body: darker underside first, then the lit form */}
-      <ellipse cx="100" cy="112" rx="83" ry="76" fill={darken(body, 0.45)} />
-      <ellipse cx="100" cy="108" rx="82" ry="75" fill={p.rad(body, { cx: 0.38, cy: 0.22, light: 0.38, dark: 0.34 })} />
-      <ellipse cx="100" cy="108" rx="82" ry="75" fill={p.rad(hi, { cx: 0.32, cy: 0.18, light: 0.2, dark: 0 })} opacity=".45" />
-      <ellipse cx="68" cy="46" rx="36" ry="15" fill="#fff" opacity=".24" transform="rotate(-24 68 46)" filter={p.blur(5)} />
-      {/* feather marks */}
-      {feather(34, 108, 8, 1)}{feather(30, 132, 14, 1)}
-      {feather(166, 108, 8, -1)}{feather(170, 132, 14, -1)}
-      {/* tuft */}
-      <ellipse cx="100" cy="30" rx="11" ry="17" fill={darken(FOOT, 0.3)} />
-      <ellipse cx="99" cy="28" rx="10" ry="16" fill={p.rad(colors.accent, { cx: 0.35, cy: 0.25, light: 0.45, dark: 0.18 })} />
-      {/* belly */}
-      <ellipse cx="100" cy="150" rx="46" ry="30" fill={darken(colors.primarySoft, 0.28)} opacity=".5" filter={p.blur(3)} />
-      <ellipse cx="100" cy="146" rx="44" ry="30" fill={p.rad(colors.primarySoft, { cx: 0.4, cy: 0.2, light: 0.55, dark: 0.15 })} />
+      {/* body with a light rim */}
+      <path
+        d="M40 42C48 22 74 24 100 36C126 24 152 22 160 42C178 72 194 112 188 150C184 182 152 192 100 192C48 192 16 182 12 150C6 112 22 72 40 42Z"
+        fill={p.lin(body, { light: 0.07, dark: 0.12 })}
+        stroke={lighten(body, 0.5)}
+        strokeWidth="5"
+        strokeLinejoin="round"
+      />
+      {/* arms */}
+      {[1, -1].map((f) => (
+        <g key={f}>
+          <path d={f === 1 ? "M18 132C10 150 14 172 30 180C34 168 34 150 30 130Z" : "M182 132C190 150 186 172 170 180C166 168 166 150 170 130Z"} fill={darken(body, 0.12)} />
+          <path d={f === 1 ? "M30 124Q36 152 32 178" : "M170 124Q164 152 168 178"} fill="none" stroke={darken(body, 0.28)} strokeWidth="3" strokeLinecap="round" />
+        </g>
+      ))}
+      {/* brow feathers */}
+      {leaf(40, 58, -62, 34, 20)}{leaf(52, 44, -30, 30, 18)}
+      {leaf(160, 58, 242, 34, 20)}{leaf(148, 44, 210, 30, 18)}
+      {/* belly marks */}
+      <path d="M58 150H96Q92 170 77 170Q62 170 58 150Z" fill={mark} opacity=".8" />
+      <path d="M104 150H142Q138 170 123 170Q108 170 104 150Z" fill={mark} opacity=".8" />
+      <path d="M88 176H112Q108 188 100 188Q92 188 88 176Z" fill={mark} opacity=".8" />
       {/* eyes */}
-      {eyesX.map((x) =>
-        state === "sleeping" ? (
-          <g key={x}>
-            <path d={`M${x - 20} ${eyeY + 4}Q${x} ${eyeY + 20} ${x + 20} ${eyeY + 4}`} fill="none" stroke={darken(body, 0.55)} strokeWidth="5.5" strokeLinecap="round" />
-          </g>
-        ) : (
-          <g key={x}>
-            <ellipse cx={x} cy={eyeY + 3} rx="25" ry="27" fill={darken(body, 0.35)} opacity=".55" />
-            <ellipse cx={x} cy={eyeY} rx="24" ry="26" fill={p.rad("#FFFFFF", { cx: 0.4, cy: 0.25, light: 0, dark: 0.1 })} />
-            <ellipse cx={x + 2} cy={eyeY + pupilDy} rx={state === "happy" ? 12.5 : 11} ry={state === "happy" ? 14 : 12.5} fill={p.rad("#2B3A36", { cx: 0.35, cy: 0.3, light: 0.2, dark: 0 })} />
-            <circle cx={x - 2} cy={eyeY + pupilDy - 4} r="4.2" fill="#fff" />
-            {state === "happy" && <circle cx={x + 7} cy={eyeY + pupilDy + 5} r="2" fill="#fff" opacity=".85" />}
-            {state === "tired" && <path d={`M${x - 24} ${eyeY}A24 26 0 0 1 ${x + 24} ${eyeY}Q${x} ${eyeY + 10} ${x - 24} ${eyeY}Z`} fill={p.lin(body, { light: 0.05, dark: 0.22 })} />}
-          </g>
-        ),
-      )}
-      {/* mouth */}
-      {state === "awake" && <><ellipse cx="100" cy="128" rx="15" ry="10" fill="#26332F" /><ellipse cx="100" cy="133" rx="8" ry="4.5" fill="#F0607A" /></>}
-      {state === "tired" && <path d="M90 130Q100 125 110 130" fill="none" stroke="#26332F" strokeWidth="4" strokeLinecap="round" />}
-      {state === "sleeping" && <ellipse cx="100" cy="129" rx="6" ry="5" fill="#26332F" />}
-      {state === "happy" && <><path d="M80 123Q100 148 120 123Q100 129 80 123Z" fill="#26332F" /><ellipse cx="100" cy="133" rx="9" ry="4.5" fill="#F0607A" /></>}
-      {state === "drinking" && <ellipse cx="100" cy="130" rx="11" ry="12" fill={p.rad(colors.waterDark, { cx: 0.4, cy: 0.3, light: 0.4, dark: 0.2 })} />}
+      {eyes.map(eye)}
+      {/* beak and mouth */}
+      {state === "happy" && <path d="M84 118Q100 150 116 118Z" fill="#7A1F2B" />}
+      {state === "happy" && <ellipse cx="100" cy="136" rx="9" ry="5" fill="#F0607A" />}
+      {state === "awake" && <path d="M92 122H108Q106 138 100 138Q94 138 92 122Z" fill="#D9552E" />}
+      {state === "awake" && <ellipse cx="100" cy="132" rx="5.5" ry="3.5" fill="#E8A1D6" />}
+      {state === "drinking" && <path d="M92 122H108Q106 140 100 140Q94 140 92 122Z" fill={colors.waterDark} />}
+      <path d="M80 108Q100 98 120 108Q116 128 100 130Q84 128 80 108Z" fill={BEAK} />
+      <path d="M86 108Q100 102 114 108Q110 114 100 114Q90 114 86 108Z" fill={lighten(BEAK, 0.4)} opacity=".75" />
       {/* extras */}
       {state === "sleeping" && <text x="150" y="30" fontFamily="Nunito, sans-serif" fontWeight="800" fontSize="18" fill={colors.night}>Zzz</text>}
       {state === "drinking" && (
         <>
-          <ellipse cx="164" cy="42" rx="9" ry="12" fill={p.rad(colors.water, { cx: 0.35, cy: 0.3, light: 0.5, dark: 0.15 })} />
-          <ellipse cx="182" cy="72" rx="6" ry="8" fill={p.rad(colors.water, { cx: 0.35, cy: 0.3, light: 0.5, dark: 0.15 })} />
+          <ellipse cx="168" cy="40" rx="9" ry="12" fill={colors.water} stroke={colors.waterDark} strokeWidth="2" />
+          <ellipse cx="184" cy="70" rx="6" ry="8" fill={colors.water} stroke={colors.waterDark} strokeWidth="2" />
         </>
       )}
     </>
