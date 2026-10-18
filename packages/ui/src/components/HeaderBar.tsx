@@ -3,7 +3,8 @@ import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 
 export interface HeaderBarProps {
-  left?: "menu" | "menu-back" | "close" | "none";
+  /** Exactly one button on the left: menu on top-level screens, back on sub-pages, close while the menu is open. */
+  left?: "menu" | "back" | "close" | "none";
   title?: string;
   /** Energy 0-100, shown on the right. */
   percent: number;
@@ -15,13 +16,13 @@ export interface HeaderBarProps {
   onClose?: () => void;
 }
 
-/** Left: hamburger (+ back), center: title, right: energy indicator. */
+/** Left: one button (hamburger, back or close), center: title, right: energy indicator. */
 export function HeaderBar({ left = "menu", title = "Zielona Łąka", percent, ghost, onTitle, onMenu, onBack, onClose }: HeaderBarProps) {
   return (
     <div className="td-header">
       <div className={`td-header__left${ghost ? " td-ghost" : ""}`}>
-        {(left === "menu" || left === "menu-back") && <IconButton icon="menu" label="Menu" onClick={onMenu} />}
-        {left === "menu-back" && <IconButton icon="back" label="Wstecz" onClick={onBack} />}
+        {left === "menu" && <IconButton icon="menu" label="Menu" onClick={onMenu} />}
+        {left === "back" && <IconButton icon="back" label="Wstecz" onClick={onBack} />}
         {left === "close" && <IconButton icon="close" label="Zamknij menu" onClick={onClose} />}
       </div>
       {onTitle ? (

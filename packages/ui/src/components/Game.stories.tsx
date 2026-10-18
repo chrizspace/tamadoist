@@ -51,7 +51,7 @@ export const BatteryRanges: Story = {
 export const Header: Story = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-      {(["menu", "menu-back", "close"] as const).map((left) => (
+      {(["menu", "back", "close"] as const).map((left) => (
         <div key={left} style={{ position: "relative", width: 390, height: 64, background: "var(--color-sky)", borderRadius: 16, overflow: "hidden" }}>
           <div style={{ position: "absolute", inset: 0, top: -48 }}>
             <HeaderBar left={left} title={left === "close" ? "Menu" : left === "menu" ? "Zielona Łąka" : "Woda"} percent={62} />

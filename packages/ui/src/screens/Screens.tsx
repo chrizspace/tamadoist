@@ -180,7 +180,7 @@ export function WaterScreen({ name, drunkMl, goalMl, energyPercent, drinking }: 
   const pct = Math.round(Math.min(1, drunkMl / goalMl) * 100);
   return (
     <Phone>
-      <HeaderBar left="menu-back" title="Woda" percent={energyPercent} />
+      <HeaderBar left="back" title="Woda" percent={energyPercent} />
       <Hero top={130} name={name} float={false}><Pet state={drinking ? "drinking" : "awake"} size={230} /></Hero>
       <WaterCounter drunkMl={drunkMl} goalMl={goalMl} />
       <div className="td-panelw" style={{ top: 560 }}><EnergyBar percent={pct} label="Woda" /></div>
@@ -208,7 +208,7 @@ export function SettingsScreen({ name, sleepStart, sleepEnd, weightKg, goalMl, e
   const rows: [string, string][] = [["Imię postaci", name], ["Godzina snu", `${sleepStart} → ${sleepEnd}`], ["Waga", `${weightKg} kg`], ["Cel wody", `${goalMl} ml`]];
   return (
     <Phone>
-      <HeaderBar left="menu-back" title="Ustawienia" percent={energyPercent} />
+      <HeaderBar left="back" title="Ustawienia" percent={energyPercent} />
       <div style={{ position: "absolute", left: 24, right: 24, top: 140, display: "flex", flexDirection: "column", gap: 12, zIndex: 2 }}>
         {rows.map(([a, b]) => <Card key={a} title={b}>{a}</Card>)}
       </div>
@@ -236,7 +236,7 @@ export function ScenePickerScreen({ name, energyPercent, scene = "office" }: Pic
 export function PlacesScreen({ energyPercent }: Pick<ScreenData, "energyPercent">) {
   return (
     <Phone>
-      <HeaderBar left="menu-back" title="Miejsca" percent={energyPercent} />
+      <HeaderBar left="back" title="Miejsca" percent={energyPercent} />
       <div className="td-page">
         <MapArt />
         <ListCard icon="pin" title="Dom" sub="52.2297, 21.0122 · promień 100 m" right={<ScenePill scene="home" />} />
@@ -268,7 +268,7 @@ export function LocationPermissionScreen({ name }: Pick<ScreenData, "name">) {
 export function ScheduleScreen({ energyPercent }: Pick<ScreenData, "energyPercent">) {
   return (
     <Phone>
-      <HeaderBar left="menu-back" title="Plan dnia" percent={energyPercent} />
+      <HeaderBar left="back" title="Plan dnia" percent={energyPercent} />
       <div className="td-page">
         <h2>Bloki dnia</h2>
         <ListCard icon="clock" title="Praca" sub="09:00 – 17:00 · pon–pt" right={<ScenePill scene="office" />} />
