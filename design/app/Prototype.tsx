@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import { MEALS_GOAL, predictNeed, completeNext, toggleItem, LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
+import { MEALS_GOAL, predictNeed, completeNext, toggleItem, completeNextStep, isTaskDone, nextStep, nextTask, toggleSubtask, toggleTask, toggleToday, todayProgress, todayTasks, LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
 import {
-  IndicatorsProvider, IndicatorsLayoutContext, StatusScreen, ChecklistActionScreen, ChecklistPage, SAMPLE_TODAY, SAMPLE_HABIT_ITEMS, type DialKey, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
+  IndicatorsProvider, IndicatorsLayoutContext, StatusScreen, ChecklistActionScreen, ChecklistPage, SAMPLE_BACKLOG, TasksPage, SAMPLE_HABIT_ITEMS, type DialKey, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
   PlacesScreen, RenameDialogScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
   SleepScreen, NutritionScreen, SleepPage, WeightScreen,
 } from "@tamadoist/ui";
@@ -31,7 +31,7 @@ export function Prototype() {
   const [forced, setForced] = useState<PetState | "">("");
   const [threeIndicators, setThree] = useState(true);
   const [zones, setZones] = useState(false);
-  const [tasks, setTasks] = useState(SAMPLE_TODAY);
+  const [backlog, setBacklog] = useState(SAMPLE_BACKLOG);
   const [habitManual, setHabitManual] = useState<Record<string, boolean>>({});
   const [statusFocus, setStatusFocus] = useState<DialKey>("energy");
   const [statusBack, setStatusBack] = useState<ScreenId>("home");
@@ -46,16 +46,19 @@ export function Prototype() {
     drunkMl: ac.drunkMl, energyPercent: w.energy.percent, energyUntil: w.energy.energyUntil,
   };
   const scene = { location: w.scene.location, period: w.scene.period.id };
-  const tasksDone = tasks.filter((t) => t.done).length;
+  const todayP = todayProgress(backlog);
+  const tasksDone = todayP.done;
+  const next = nextTask(backlog);
+  const nextStepTitle = next ? (nextStep(next) ? `${next.title} · ${nextStep(next)!.title}` : next.title) : null;
   const need = predictNeed({ minutes: clock, sleepStart: ch.profile.sleepStart, sleepEnd: w.sleepEnd, sleeping: w.energy.state === "sleeping", drunkMl: ac.drunkMl, goalMl: ch.goalMl, meals: ac.meals, mealsGoal: MEALS_GOAL });
   const go = (s: ScreenId) => setScreen(s);
   const openStatus = (from: ScreenId) => (key: DialKey) => { setStatusFocus(key); setStatusBack(from); go("status"); };
   // Habits: ticked by hand, or automatic when the underlying goal is met (water goal, all tasks).
   const habitItems = SAMPLE_HABIT_ITEMS.map((h) => ({
     ...h,
-    done: Boolean(habitManual[h.id]) || (h.id === "h1" && ac.drunkMl >= ch.goalMl) || (h.id === "h3" && tasksDone >= tasks.length),
+    done: Boolean(habitManual[h.id]) || (h.id === "h1" && ac.drunkMl >= ch.goalMl) || (h.id === "h3" && tasksDone >= todayP.total),
   }));
-  const habitDetail: Record<string, string> = { h1: `${ac.drunkMl} / ${ch.goalMl} ml`, h2: `do ${ch.profile.sleepStart}`, h3: `${tasksDone} / ${tasks.length}` };
+  const habitDetail: Record<string, string> = { h1: `${ac.drunkMl} / ${ch.goalMl} ml`, h2: `do ${ch.profile.sleepStart}`, h3: `${tasksDone} / ${todayP.total}` };
   const habits = habitItems.map((h) => ({ ...h, detail: habitDetail[h.id] ?? "" }));
   const completeNextHabit = () => { const n = habitItems.find((h) => !h.done); if (n) setHabitManual((m) => ({ ...m, [n.id]: true })); };
   const toggleHabit = (id: string) => setHabitManual((m) => ({ ...m, [id]: !habitItems.find((h) => h.id === id)?.done }));
@@ -79,9 +82,9 @@ export function Prototype() {
       case "places": return <PlacesScreen energyPercent={d.energyPercent} onBack={() => go("home")} onUseLocation={() => go("locperm")} />;
       case "locperm": return <LocationPermissionScreen name={w.name} onAllow={() => { sc.setPos("home"); go("places"); }} onLater={() => go("places")} />;
       case "schedule": return <ScheduleScreen energyPercent={d.energyPercent} onBack={() => go("home")} />;
-      case "status": return <StatusScreen {...scene} name={w.name} focus={statusFocus} energyPercent={d.energyPercent} energyUntil={d.energyUntil} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} sleeping={w.energy.state === "sleeping"} tasks={tasks} habits={habits} streakDays={12} onClose={() => go(statusBack)} />;
-      case "tasks": return <ChecklistActionScreen {...scene} title="Zadania" name={w.name} energyPercent={d.energyPercent} state={w.petState} items={tasks} gain={toast} onBack={() => go("home")} onDone={() => { setTasks(completeNext); flash("+1"); }} onList={() => go("tasks-list")} onIndicator={openStatus("tasks")} />;
-      case "tasks-list": return <ChecklistPage title="Zadania" items={tasks} onToggle={(id) => setTasks((t) => toggleItem(t, id))} onClose={() => go("tasks")} />;
+      case "status": return <StatusScreen {...scene} name={w.name} focus={statusFocus} energyPercent={d.energyPercent} energyUntil={d.energyUntil} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} sleeping={w.energy.state === "sleeping"} tasks={todayTasks(backlog).map((t) => ({ id: t.id, title: t.title, done: isTaskDone(t) }))} habits={habits} streakDays={12} onClose={() => go(statusBack)} />;
+      case "tasks": return <ChecklistActionScreen {...scene} title="Zadania" name={w.name} energyPercent={d.energyPercent} state={w.petState} progress={todayP} nextLabel={nextStepTitle} gain={toast} onBack={() => go("home")} onDone={() => { setBacklog(completeNextStep); flash("+1"); }} onList={() => go("tasks-list")} onIndicator={openStatus("tasks")} />;
+      case "tasks-list": return <TasksPage backlog={backlog} onToggleTask={(id) => setBacklog((b) => toggleTask(b, id))} onToggleSubtask={(t, sId) => setBacklog((b) => toggleSubtask(b, t, sId))} onToggleToday={(id) => setBacklog((b) => toggleToday(b, id))} onClose={() => go("tasks")} />;
       case "habits": return <ChecklistActionScreen {...scene} title="Nawyki" name={w.name} energyPercent={d.energyPercent} state={w.petState} items={habitItems} gain={toast} onBack={() => go("home")} onDone={() => { completeNextHabit(); flash("+1"); }} onList={() => go("habits-list")} onIndicator={openStatus("habits")} />;
       case "habits-list": return <ChecklistPage title="Nawyki" color="#FF8A3D" items={habitItems} onToggle={toggleHabit} onClose={() => go("habits")} />;
       case "prompt": return <SchedulePromptScreen name={w.name} energyPercent={d.energyPercent} onYes={() => go("home")} onChange={() => go("schedule")} />;
@@ -102,7 +105,7 @@ export function Prototype() {
 
   return (
     <div className="proto">
-      <div className="protoframe"><Fit><div className={`phoneroot${zones ? " show-zones" : ""}`}><IndicatorsProvider value={threeIndicators ? { tasks: { done: tasksDone, total: 10 }, streak: { days: 12, progress: Math.min(1, ac.drunkMl / ch.goalMl) } } : {}}><IndicatorsLayoutContext.Provider value={layout}>{render()}</IndicatorsLayoutContext.Provider></IndicatorsProvider></div></Fit></div>
+      <div className="protoframe"><Fit><div className={`phoneroot${zones ? " show-zones" : ""}`}><IndicatorsProvider value={threeIndicators ? { tasks: { done: tasksDone, total: todayP.total }, streak: { days: 12, progress: Math.min(1, ac.drunkMl / ch.goalMl) } } : {}}><IndicatorsLayoutContext.Provider value={layout}>{render()}</IndicatorsLayoutContext.Provider></IndicatorsProvider></div></Fit></div>
       <div className="protoctl">
         <details open className="box mod"><summary><b>Ekran</b></summary>
           <div className="crumbs">

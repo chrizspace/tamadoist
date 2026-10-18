@@ -161,3 +161,10 @@ Zadania i nawyki to na razie dane przykładowe (w prototypie rosną z wypitą wo
 - Cel posiłków: `MEALS_GOAL = 4` na dzień (`applyMeal` w core). Do ustalenia: czy jedzenie ma wpływać na wzór energii (dziś energię liczą tylko sen i woda).
 - Akcja nazywa się **Zadbaj**, a jej ikona (`care`) składa się z trzech małych symboli: jedzenie (sztućce), sen (księżyc) i picie (kropla). Bateria z piorunem (`recharge`) zostaje w zestawie ikon jako wariant. Ikony Nawyków (powtarzanie) i Zadań (lista) pozostają osobne.
 - **Ikona akcji Zadbaj zmienia się z najbliższą potrzebą** (`predictNeed` w core): kropla (picie), sztućce (jedzenie) albo księżyc (sen). Sen wygrywa podczas snu i w ostatniej godzinie przed zaśnięciem; wcześniej porównujemy, o ile woda i posiłki są w tyle względem przebiegu dnia (od pobudki do zaśnięcia), a wygrywa to bardziej zaległe (remis → picie). Zmiana ikony ma krótką animację.
+
+## Zadania: backlog, sekcje, podzadania, cele
+- Model (`packages/core/src/tasks`): **Backlog** = sekcje (Praca, Dom, Zdrowie, …) + zadania + cele. Każde zadanie ma opcjonalne **podzadania** (kroki), opcjonalny **cel** (`goalId`) i flagę **„na dziś”**. Zadanie z podzadaniami jest zrobione, gdy wszystkie kroki są zrobione; odhaczenie zadania odhacza wszystkie kroki.
+- **Cel** to np. „Korona Gór Polski”: łączy 26 zadań (wyjazdów), każde z własnymi podzadaniami (zaplanować trasę, sprawdzić pogodę, dojazd i nocleg, spakować się, wejść na szczyt). Postęp celu = ile jego zadań jest zrobionych (np. 3/26).
+- Lista „dziś” (wskaźnik 3/10, karta statusu, nawyk „zrób wszystkie zadania”) to zadania z flagą „na dziś”; do dziś dodajesz zadanie z backlogu słoneczkiem.
+- Ekran akcji Zadania: „Zrobione” kończy kolejny krok następnego zadania (lub samo zadanie, gdy nie ma kroków); pasek pokazuje „Teraz: zadanie · krok”.
+- Pełnoekranowe **Zadania** mają trzy widoki: **Dziś**, **Backlog** (sekcje) i **Cele** (karty z postępem, po dotknięciu lista zadań celu). Dotknięcie zadania rozwija podzadania. Do zrobienia później: dodawanie/edycja zadań, sekcji i celów, daty, synchronizacja z Todoist.

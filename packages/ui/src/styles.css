@@ -345,3 +345,35 @@ button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outli
 .td-action__icon { display: grid; place-items: center; animation: td-iconswap .3s ease-out; }
 @keyframes td-iconswap { from { transform: scale(.5) rotate(-20deg); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .td-action__icon { animation: none; } }
+
+/* Tasks page: tabs, backlog rows with subtasks, goal cards */
+.td-seg { display: flex; gap: 4px; padding: 4px; background: #E9EFED; border-radius: 16px; margin: 0 4px 12px; flex: none; }
+.td-seg button { flex: 1; border: 0; background: none; padding: 9px 0; border-radius: 12px; font: 800 14px var(--font); color: var(--color-text-muted); cursor: pointer; }
+.td-seg button.is-on { background: #fff; color: var(--color-text); box-shadow: 0 2px 0 var(--lip-neutral); }
+.td-trows, .td-trow__subs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.td-trow { border-top: 1px solid var(--color-border); }
+.td-trow:first-child { border-top: 0; }
+.td-trow__main { display: flex; align-items: center; gap: 12px; min-height: 48px; }
+.td-trow__title { flex: 1; min-width: 0; text-align: left; background: none; border: 0; padding: 6px 0; font: 700 15px/1.25 var(--font); color: var(--color-text); cursor: pointer; display: flex; flex-direction: column; }
+.td-trow__title:disabled { cursor: default; }
+.td-trow.is-done > .td-trow__main .td-trow__title > span { color: var(--color-text-muted); text-decoration: line-through; }
+.td-trow__goal { font: 700 12px var(--font); }
+.td-trow__steps { display: flex; align-items: center; gap: 2px; border: 0; background: #F0F4F3; border-radius: 999px; padding: 3px 8px 3px 10px; font: 800 12px var(--font); color: var(--color-text-muted); cursor: pointer; font-variant-numeric: tabular-nums; }
+.td-trow__steps svg { width: 14px; height: 14px; transition: transform .2s; }
+.td-trow:has([aria-expanded="true"]) .td-trow__steps svg { transform: rotate(180deg); }
+.td-trow__today { width: 34px; height: 34px; flex: none; border-radius: 50%; border: 2px solid var(--color-border); background: #fff; color: var(--color-text-muted); display: grid; place-items: center; padding: 0; cursor: pointer; }
+.td-trow__today svg { width: 18px; height: 18px; }
+.td-trow__today.is-on { background: #FFC93C; border-color: #E0A800; color: #fff; }
+.td-trow__subs { margin: 0 0 8px 36px; padding-left: 12px; border-left: 3px solid color-mix(in srgb, var(--c) 30%, #fff); gap: 2px; }
+.td-trow__subs li { display: flex; align-items: center; gap: 10px; min-height: 38px; font: 600 14px var(--font); }
+.td-trow__subs li.is-done > span { color: var(--color-text-muted); text-decoration: line-through; }
+.td-trow__subs .td-status__check { width: 20px; height: 20px; }
+.td-goalcard { display: flex; flex-direction: column; gap: 8px; text-align: left; background: #fff; border: 2px solid var(--color-border); border-bottom-width: 5px; border-radius: 20px; padding: 14px 16px; cursor: pointer; font: inherit; color: inherit; }
+.td-goalcard:active { transform: translateY(3px); border-bottom-width: 2px; }
+.td-goalcard__top { display: flex; justify-content: space-between; align-items: baseline; font: 800 17px var(--font); }
+.td-goalcard__top > span { color: var(--c); font-variant-numeric: tabular-nums; }
+.td-goalcard__bar { height: 12px; border-radius: 6px; background: color-mix(in srgb, var(--c) 16%, #fff); overflow: hidden; display: block; }
+.td-goalcard__bar > span { display: block; height: 100%; background: var(--c); border-radius: 6px; }
+.td-goalcard small { color: var(--color-text-muted); font: 600 13px var(--font); }
+.td-linkback { border: 0; background: none; padding: 0 6px 0 0; margin-right: 2px; cursor: pointer; color: var(--c); vertical-align: -4px; }
+.td-linkback svg { width: 20px; height: 20px; }

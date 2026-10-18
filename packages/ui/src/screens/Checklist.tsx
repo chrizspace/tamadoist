@@ -30,7 +30,11 @@ export const SAMPLE_HABIT_ITEMS: ChecklistItem[] = [
 export interface ChecklistActionScreenProps {
   /** "Zadania" or "Nawyki". */
   title: string;
-  items: ChecklistItem[];
+  items?: ChecklistItem[];
+  /** Overrides the counter computed from `items` (tasks count today's tasks, not steps). */
+  progress?: { done: number; total: number };
+  /** Overrides the "Teraz:" line, e.g. a task and its next step. */
+  nextLabel?: string | null;
   name?: string;
   energyPercent?: number;
   location?: LocationId;
@@ -49,13 +53,13 @@ export interface ChecklistActionScreenProps {
  * the dock has two round buttons: tick off the next item and open the whole list.
  */
 export function ChecklistActionScreen({
-  title, items, name = SAMPLE.name, energyPercent = SAMPLE.energyPercent, location = "recreation.park", period = "noon",
+  title, items = [], progress, nextLabel, name = SAMPLE.name, energyPercent = SAMPLE.energyPercent, location = "recreation.park", period = "noon",
   state = "awake", gain, onBack, onDone, onList, onIndicator,
 }: ChecklistActionScreenProps) {
-  const done = items.filter((i) => i.done).length;
-  const total = items.length;
+  const done = progress ? progress.done : items.filter((i) => i.done).length;
+  const total = progress ? progress.total : items.length;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  const next = nextOpenItem(items);
+  const next = nextLabel !== undefined ? nextLabel : nextOpenItem(items)?.title;
   return (
     <Phone location={location} period={period}>
       <HeaderBar left="back" title={title} percent={energyPercent} onBack={onBack} onIndicator={onIndicator} />
@@ -66,7 +70,7 @@ export function ChecklistActionScreen({
         <div className="td-counter__track" role="progressbar" aria-label={title} aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
           <div className="td-counter__fill" style={{ width: `${pct}%` }} />
         </div>
-        <div className="td-counter__next">{next ? <>Teraz: <b>{next.title}</b></> : "Wszystko zrobione. Brawo!"}</div>
+        <div className="td-counter__next">{next ? <>Teraz: <b>{next}</b></> : "Wszystko zrobione. Brawo!"}</div>
       </div>
       <div className="td-actionbar td-actionbar--pair">
         <RoundAction tone="primary" icon="check" label="Zrobione" disabled={!next} onClick={onDone} />

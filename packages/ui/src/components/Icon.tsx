@@ -20,6 +20,7 @@ export const ICON_PATHS = {
     <g transform="translate(5.75 11.2) scale(0.53)" strokeWidth="3.8"><path d="M12 2.5s6 6.500 6 11a6 6 0 0 1-12 0c0-4.500 6-11 6-11z" /></g>
   </>),
   recharge: (<><rect x="2.5" y="6.5" width="16" height="11" rx="3" /><path d="M21.5 10.5v3" /><path d="M11.8 8.8 9.2 12.2h3.6l-2.6 3.2" /></>),
+  sun: (<><circle cx="12" cy="12" r="4" /><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.600 5.600l1.400 1.400M17 17l1.400 1.400M18.400 5.600 17 7M7 17l-1.400 1.400" /></>),
   moon: <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />,
   clock: (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>),
   chevronDown: <path d="M6 9l6 6 6-6" />,
