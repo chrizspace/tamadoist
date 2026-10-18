@@ -15,3 +15,12 @@ Decided by the owner.
 
 - `main` starts with a minimal commit; the spec and every later step go through a branch and a pull request.
 - The spec stays in English (code and UI are English; `pl` locale comes later).
+
+## 2026-10-18: Core engine defaults
+
+Picked as defaults; the owner can change them.
+
+- **Pet day** runs from one wake time to the next, not from midnight, so a bedtime after midnight (e.g. 01:00) stays in the same day. Task due dates still use the calendar date.
+- **DST:** bedtime, wake and cutoff are wall-clock times. On a DST night the user's 8 hours on the clock are 7 or 9 real hours.
+- **Energy** = awake time left until the (projected) sleep time ÷ full day (wake → bedtime), 0 while asleep. Unfinished tasks pull the sleep time earlier, so the bar drains faster; completing a task raises it.
+- **Mood**, by precedence: `sleeping` (asleep) > `happy` (task completed in the last 2 minutes, or every planned task done) > `sad` (slept early 3 days in a row) > `tired` (energy below 30 %) > `idle`.
