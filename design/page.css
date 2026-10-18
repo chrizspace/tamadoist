@@ -90,3 +90,8 @@ button.mini:hover{border-color:var(--accent)}
 .phoneroot{width:390px;height:844px}
 
 input[type=range]{accent-color:var(--color-primary)}
+.timeline{position:relative;height:16px;border-radius:8px;overflow:hidden;background:#1B2060;width:100%;min-width:160px}
+.timeline i{position:absolute;top:0;bottom:0}
+.timeline u{position:absolute;top:0;bottom:0;width:2px;background:#fff;text-decoration:none}
+.seasons .tbl td,.seasons .tbl th{white-space:nowrap}
+.seasons .tbl td:last-child{width:34%;min-width:200px}

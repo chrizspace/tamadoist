@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { LOCATIONS, LOCATION_GROUPS, PERIODS, getGroup, locationsOf, type LocationId, type PeriodId } from "@tamadoist/core";
+import { LOCATIONS, LOCATION_GROUPS, PERIODS, getGroup, locationsOf, periodWindows, sunTimes, type LocationId, type PeriodId } from "@tamadoist/core";
 import { Scene } from "./Scene";
 import { SceneCard } from "./SceneCard";
 
@@ -23,21 +23,30 @@ export const Single: Story = {
   render: ({ location, period }) => frame(location, period, 0.8),
 };
 
+const WARSAW = { lat: 52.2297, lng: 21.0122 };
+const hm = (v: number) => { const m = Math.round(((v % 1440) + 1440) % 1440); return `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`; };
+
 export const TimeOfDay: Story = {
   name: "Pory dnia",
   args: { location: "home.office" },
   argTypes: { location: { control: "select", options: LOCATIONS.map((l) => l.id) } },
-  render: ({ location }) => (
-    <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-      {PERIODS.map((p) => (
-        <div key={p.id} style={{ textAlign: "center" }}>
-          {frame(location, p.id, 0.42)}
-          <b style={{ display: "block", marginTop: 8 }}>{p.label}</b>
-          <code style={{ fontSize: 12 }}>{p.start}–{p.end}{p.artificialLight ? " · światło włączone" : ""}</code>
-        </div>
-      ))}
-    </div>
-  ),
+  render: ({ location }) => {
+    const winter = periodWindows(sunTimes({ year: 2025, month: 12, day: 21 }, WARSAW, 60));
+    const summer = periodWindows(sunTimes({ year: 2026, month: 6, day: 21 }, WARSAW, 120));
+    return (
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+        {PERIODS.map((p, i) => (
+          <div key={p.id} style={{ textAlign: "center" }}>
+            {frame(location, p.id, 0.42)}
+            <b style={{ display: "block", marginTop: 8 }}>{p.label}</b>
+            <code style={{ display: "block", fontSize: 12 }}>zima {hm(winter[i]!.start)}–{hm(winter[i]!.end)}</code>
+            <code style={{ display: "block", fontSize: 12 }}>lato {hm(summer[i]!.start)}–{hm(summer[i]!.end)}</code>
+            <span style={{ fontSize: 12 }}>{p.artificialLight ? "światło włączone" : `światło dzienne ${Math.round(p.daylight * 100)}%`}</span>
+          </div>
+        ))}
+      </div>
+    );
+  },
 };
 
 export const Locations: Story = {
@@ -65,7 +74,7 @@ export const Card: Story = {
   render: () => (
     <div style={{ display: "flex", gap: 12, width: 380 }}>
       <SceneCard location="home.bedroom" period="night" selected />
-      <SceneCard location="recreation.pool" period="afternoon" />
+      <SceneCard location="recreation.pool" period="noon" />
     </div>
   ),
 };

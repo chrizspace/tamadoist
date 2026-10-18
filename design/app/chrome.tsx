@@ -71,3 +71,24 @@ export function copyText(txt: string, done: () => void) {
   const fin = () => done();
   try { navigator.clipboard.writeText(txt).then(fin, fin); } catch { fin(); }
 }
+
+const PERIOD_COLORS: Record<string, string> = { morning: "#FFD9A8", noon: "#8ED0FF", evening: "#F2A36B", night: "#1B2060" };
+
+/** 24-hour bar with the four times of day; the night window wraps around midnight. */
+export function Timeline({ windows, sunrise, sunset }: { windows: { id: string; start: number; end: number }[]; sunrise?: number; sunset?: number }) {
+  const pct = (v: number) => `${(v / 1440) * 100}%`;
+  const segs: { id: string; a: number; b: number }[] = [];
+  for (const w of windows) {
+    const a = w.start, b = w.end;
+    if (b <= 1440 && a >= 0) segs.push({ id: w.id, a, b });
+    else if (a < 0) { segs.push({ id: w.id, a: 0, b }); segs.push({ id: w.id, a: a + 1440, b: 1440 }); }
+    else { segs.push({ id: w.id, a, b: 1440 }); segs.push({ id: w.id, a: 0, b: b - 1440 }); }
+  }
+  return (
+    <div className="timeline" aria-hidden="true">
+      {segs.map((g, i) => <i key={i} style={{ left: pct(g.a), width: pct(g.b - g.a), background: PERIOD_COLORS[g.id] }} />)}
+      {sunrise !== undefined && <u style={{ left: pct(((sunrise % 1440) + 1440) % 1440) }} />}
+      {sunset !== undefined && <u style={{ left: pct(((sunset % 1440) + 1440) % 1440) }} />}
+    </div>
+  );
+}

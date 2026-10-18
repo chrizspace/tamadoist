@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { distanceMeters, resolveScene, slotActive, type Place, type ScheduleSlot } from "../index";
+import { distanceMeters, resolveScene, slotActive, sunTimes, type Place, type ScheduleSlot } from "../index";
 
 // 2026-01-14 is a Wednesday (day 3)
 const at = (h: number, m = 0, day = 14) => new Date(2026, 0, day, h, m);
@@ -76,7 +76,16 @@ describe("manual override", () => {
 
 describe("time of day", () => {
   it("is reported next to the location and does not change it", () => {
+    const r = resolveScene({ now: at(7), schedule: [], places: [] });
+    expect(r.period.id).toBe("morning");
+    expect(r.location).toBe("recreation.park");
+    expect(resolveScene({ now: at(15), schedule: [], places: [] }).period.id).toBe("noon");
+    expect(resolveScene({ now: at(19), schedule: [], places: [] }).period.id).toBe("evening");
+  });
+  it("follows the sun of the user's location and season", () => {
+    const winter = sunTimes({ year: 2026, month: 1, day: 14 }, { lat: 52.2297, lng: 21.0122 }, 60);
+    expect(resolveScene({ now: at(16), schedule: [], places: [], sun: winter }).period.id).toBe("evening");
+    expect(resolveScene({ now: at(7), schedule: [], places: [], sun: winter }).period.id).toBe("night");
     expect(resolveScene({ now: at(7), schedule: [], places: [] }).period.id).toBe("morning");
-    expect(resolveScene({ now: at(15), schedule: [], places: [] }).period.id).toBe("afternoon");
   });
 });

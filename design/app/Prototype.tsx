@@ -1,15 +1,15 @@
 import { useMemo, useState } from "react";
-import { LOCATIONS, PERIODS, PET_STATES, validateName, type LocationId, type PetState } from "@tamadoist/core";
+import { LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
 import {
   EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
   PlacesScreen, RenameDialogScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
   SleepScreen, WaterScreen, WeightScreen,
 } from "@tamadoist/ui";
-import { Fit } from "./chrome";
+import { Fit, Timeline } from "./chrome";
 import { useActions } from "./modules/actions";
 import { useCharacter } from "./modules/character";
 import { useScene, type SimPosition } from "./modules/scene";
-import { deriveWorld, fmt } from "./world";
+import { CITIES, SEASONS, deriveWorld, fmt, isoDate, parseIso, type Env, DEFAULT_ENV } from "./world";
 
 type ScreenId = "login" | "name" | "energy" | "indicator" | "sleep" | "weight" | "home" | "menu" | "water" | "settings" | "rename" | "scenes" | "places" | "locperm" | "schedule" | "prompt";
 
@@ -29,8 +29,11 @@ export function Prototype() {
   const [nameError, setNameError] = useState<string | undefined>();
   const [toast, setToast] = useState("");
   const [forced, setForced] = useState<PetState | "">("");
+  const [cityId, setCityId] = useState(DEFAULT_ENV.city.id);
+  const [date, setDate] = useState(DEFAULT_ENV.date);
+  const env: Env = useMemo(() => ({ city: CITIES.find((c) => c.id === cityId)!, date }), [cityId, date]);
 
-  const w = useMemo(() => deriveWorld(ch, sc, ac, clock, forced || undefined), [ch, sc, ac, clock, forced]);
+  const w = useMemo(() => deriveWorld(ch, sc, ac, clock, forced || undefined, env), [ch, sc, ac, clock, forced, env]);
   const d = {
     name: w.name, sleepStart: ch.profile.sleepStart, sleepEnd: w.sleepEnd, weightKg: ch.profile.weightKg, goalMl: ch.goalMl,
     drunkMl: ac.drunkMl, energyPercent: w.energy.percent, energyUntil: w.energy.energyUntil,
@@ -81,9 +84,14 @@ export function Prototype() {
           </div>
         </details>
 
-        <details open className="box mod"><summary><b>Środowisko</b> · zegar</summary>
+        <details open className="box mod"><summary><b>Środowisko</b> · czas i miejsce</summary>
           <div className="ctl"><label htmlFor="clock">Godzina</label><input id="clock" type="range" min={0} max={1435} step={5} value={clock} onChange={(e) => setClock(+e.target.value)} /><b className="mono">{fmt(clock)}</b></div>
-          <p className="note">Środa. Zegar zmienia porę dnia (światło), energię i plan dnia.</p>
+          <div className="ctl"><label htmlFor="e-city">Miasto</label>
+            <select id="e-city" value={cityId} onChange={(e) => setCityId(e.target.value)}>{CITIES.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}</select></div>
+          <div className="ctl"><label htmlFor="e-date">Data</label><input id="e-date" type="date" value={isoDate(date)} onChange={(e) => e.target.value && setDate(parseIso(e.target.value))} /></div>
+          <div className="crumbs">{SEASONS.map((x) => <button key={x.id} aria-current={isoDate(x.date) === isoDate(date)} onClick={() => setDate(x.date)}>{x.label}</button>)}</div>
+          <p className="note">Wschód {w.sun.polar ? "—" : fmt(w.sun.sunrise)}, zachód {w.sun.polar ? "—" : fmt(w.sun.sunset)}{w.sun.polar ? ` (${w.sun.polar === "day" ? "dzień polarny" : "noc polarna"})` : ""}. Zegar, miasto i data zmieniają porę dnia (światło), energię i plan dnia.</p>
+          <Timeline windows={periodWindows(w.sun)} sunrise={w.sun.polar ? undefined : w.sun.sunrise} sunset={w.sun.polar ? undefined : w.sun.sunset} />
         </details>
 
         <details open className="box mod"><summary><b>1 · Postać</b></summary>
@@ -101,7 +109,7 @@ export function Prototype() {
             <select id="s-pos" value={sc.pos} onChange={(e) => sc.setPos(e.target.value as SimPosition)}><option value="none">Nieznane miejsce</option><option value="home">Dom</option><option value="work">Praca</option><option value="gym">Siłownia</option></select></div>
           <div className="ctl"><label htmlFor="s-man">Ręcznie</label>
             <select id="s-man" value={sc.manual ?? ""} onChange={(e) => sc.setManual((e.target.value || undefined) as LocationId | undefined)}><option value="">(automatycznie)</option>{LOCATIONS.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}</select></div>
-          <p className="note">Pory: {PERIODS.map((p) => `${p.label} ${p.start}–${p.end}`).join(" · ")}</p>
+          <p className="note">Pory dziś: {periodWindows(w.sun).map((x, i) => `${PERIODS[i]!.label} ${fmt(x.start)}–${fmt(x.end)}`).join(" · ")}</p>
         </details>
 
         <details open className="box mod"><summary><b>3 · Akcje</b> · woda</summary>

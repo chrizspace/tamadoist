@@ -31,9 +31,9 @@ export const WaterDrinking: Story = { name: "Woda – po dodaniu szklanki", rend
 export const S14_OpenSpace: Story = { name: "14 Home – open space", render: () => <HomeScreen {...d} location="work.openspace" period="noon" /> };
 export const S15_WorkKitchen: Story = { name: "15 Home – kuchnia w pracy", render: () => <HomeScreen {...d} location="work.kitchen" period="noon" state="happy" /> };
 export const S16_HomeOffice: Story = { name: "16 Home – biuro domowe", render: () => <HomeScreen {...d} location="home.office" period="evening" /> };
-export const S17_Gym: Story = { name: "17 Home – siłownia", render: () => <HomeScreen {...d} location="recreation.gym" period="afternoon" /> };
+export const S17_Gym: Story = { name: "17 Home – siłownia", render: () => <HomeScreen {...d} location="recreation.gym" period="evening" /> };
 export const S18_Pool: Story = { name: "18 Home – basen", render: () => <HomeScreen {...d} location="recreation.pool" period="morning" /> };
-export const S19_Bike: Story = { name: "19 Home – rower", render: () => <HomeScreen {...d} location="recreation.bike" period="afternoon" /> };
+export const S19_Bike: Story = { name: "19 Home – rower", render: () => <HomeScreen {...d} location="recreation.bike" period="noon" /> };
 export const S20_ParkNight: Story = { name: "20 Park – noc", render: () => <HomeScreen {...d} location="recreation.park" period="night" /> };
 export const S21_ScenePicker: Story = { name: "21 Wybór sceny", render: () => <ScenePickerScreen name={d.name} energyPercent={d.energyPercent} /> };
 export const S22_Places: Story = { name: "22 Miejsca", render: () => <PlacesScreen energyPercent={d.energyPercent} /> };

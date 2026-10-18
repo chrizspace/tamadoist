@@ -2,6 +2,7 @@ import { MINUTES_PER_DAY, minutesOfDay, parseTime } from "../shared/time";
 import { isSleeping } from "../character/sleep";
 import { DEFAULT_LOCATION, getLocation, type GroupId, type LocationId } from "./locations";
 import { periodAt, type Period } from "./periods";
+import type { GeoPoint, SunTimes } from "./sun";
 
 export interface ScheduleSlot {
   id: string;
@@ -25,8 +26,6 @@ export interface Place {
   location: LocationId;
 }
 
-export interface GeoPoint { lat: number; lng: number }
-
 export interface SceneInput {
   now: Date;
   schedule: ScheduleSlot[];
@@ -37,6 +36,8 @@ export interface SceneInput {
   manual?: { location: LocationId; until?: Date };
   /** When given, the pet goes to bed (home.bedroom) inside the sleep window. */
   sleepStart?: string;
+  /** Sun times for today at the user's location; drives the time of day. A mid-latitude equinox day when omitted. */
+  sun?: SunTimes;
 }
 
 export type SceneSource = "manual" | "sleep" | "schedule" | "place" | "default";
@@ -77,9 +78,9 @@ export function slotActive(slot: ScheduleSlot, now: Date): boolean {
   return slot.days.includes(day);
 }
 
-function result(location: LocationId, source: SceneSource, now: Date): SceneResult {
+function result(location: LocationId, source: SceneSource, now: Date, sun?: SunTimes): SceneResult {
   const loc = getLocation(location);
-  return { location, group: loc.group, label: loc.label, period: periodAt(now), source };
+  return { location, group: loc.group, label: loc.label, period: periodAt(now, sun), source };
 }
 
 /**
@@ -88,21 +89,21 @@ function result(location: LocationId, source: SceneSource, now: Date): SceneResu
  * the workday), the place you are standing in, then the default park.
  * The time of day is independent: it only changes the light.
  */
-export function resolveScene({ now, schedule, places, position, manual, sleepStart }: SceneInput): SceneResult {
-  if (manual && (!manual.until || now < manual.until)) return result(manual.location, "manual", now);
+export function resolveScene({ now, schedule, places, position, manual, sleepStart, sun }: SceneInput): SceneResult {
+  if (manual && (!manual.until || now < manual.until)) return result(manual.location, "manual", now, sun);
 
-  if (sleepStart && isSleeping(now, sleepStart)) return result("home.bedroom", "sleep", now);
+  if (sleepStart && isSleeping(now, sleepStart)) return result("home.bedroom", "sleep", now, sun);
 
   const active = schedule.filter((s) => slotActive(s, now)).sort((a, b) => slotLength(a) - slotLength(b));
-  if (active[0]) return result(active[0].location, "schedule", now);
+  if (active[0]) return result(active[0].location, "schedule", now, sun);
 
   if (position) {
     const inside = places
       .map((p) => ({ p, d: distanceMeters(position, p) }))
       .filter(({ p, d }) => d <= p.radiusM)
       .sort((a, b) => a.d - b.d);
-    if (inside[0]) return result(inside[0].p.location, "place", now);
+    if (inside[0]) return result(inside[0].p.location, "place", now, sun);
   }
 
-  return result(DEFAULT_LOCATION, "default", now);
+  return result(DEFAULT_LOCATION, "default", now, sun);
 }
