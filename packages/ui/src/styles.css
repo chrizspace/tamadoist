@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap");
+
+:root {
+  --color-primary: #1fbf8f;
+  --color-primary-dark: #159a72;
+  --color-primary-soft: #ddf7ee;
+  --color-accent: #ffc93c;
+  --color-accent-dark: #e0a800;
+  --color-water: #4cc3ff;
+  --color-water-dark: #2a9bd8;
+  --color-water-soft: #dff4ff;
+  --color-night: #4b4fa8;
+  --color-night-soft: #e6e7fa;
+  --color-danger: #ff5a5f;
+  --color-bg: #ffffff;
+  --color-surface: #f4f7f6;
+  --color-border: #e2e8e6;
+  --color-text: #1f2d2a;
+  --color-text-muted: #6b7c77;
+  --color-on-primary: #ffffff;
+  --space-4: 4px; --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px;
+  --radius-sm: 8px; --radius-md: 16px; --radius-lg: 24px; --radius-full: 999px;
+  --font: Nunito, system-ui, sans-serif;
+}
+
+body { font-family: var(--font); color: var(--color-text); background: var(--color-bg); margin: 0; font-weight: 600; }
+
+.td-btn {
+  font: 800 16px/1 var(--font); border: 0; border-radius: var(--radius-md); padding: 18px 24px; width: 100%;
+  cursor: pointer; color: var(--btn-fg); background: var(--btn-bg); box-shadow: 0 4px 0 var(--btn-shadow);
+  transition: transform 0.05s, box-shadow 0.05s;
+}
+.td-btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 var(--btn-shadow); }
+.td-btn:focus-visible { outline: 3px solid var(--color-water); outline-offset: 2px; }
+.td-btn:disabled { cursor: not-allowed; }
+.td-btn--primary { --btn-bg: var(--color-primary); --btn-fg: var(--color-on-primary); --btn-shadow: var(--color-primary-dark); }
+.td-btn--water { --btn-bg: var(--color-water); --btn-fg: var(--color-on-primary); --btn-shadow: var(--color-water-dark); }
+.td-btn--secondary { --btn-bg: var(--color-bg); --btn-fg: var(--color-primary-dark); --btn-shadow: var(--color-border); border: 2px solid var(--color-border); }
+.td-btn--disabled, .td-btn:disabled { --btn-bg: var(--color-border); --btn-fg: var(--color-text-muted); --btn-shadow: var(--color-border); }
+
+.td-field { display: flex; flex-direction: column; gap: var(--space-8); width: 100%; }
+.td-field__label { font: 700 13px var(--font); color: var(--color-text-muted); }
+.td-field__input {
+  font: 600 16px var(--font); color: var(--color-text); padding: 14px 16px; border-radius: var(--radius-md);
+  background: var(--color-surface); border: 2px solid var(--color-border); outline: none; width: 100%; box-sizing: border-box;
+}
+.td-field__input:focus { border-color: var(--color-primary); background: var(--color-bg); }
+.td-field--error .td-field__input { border-color: var(--color-danger); }
+.td-field__error { font: 700 13px var(--font); color: var(--color-danger); }
+
+.td-card { background: var(--color-bg); border: 2px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-16); display: flex; flex-direction: column; gap: var(--space-8); }
+.td-card__title { font: 700 18px var(--font); margin: 0; }
+.td-card__body { font: 600 16px var(--font); color: var(--color-text-muted); margin: 0; }
+
+.td-energy { width: 100%; display: flex; flex-direction: column; gap: var(--space-8); }
+.td-energy__row { display: flex; gap: var(--space-8); font: 700 18px var(--font); }
+.td-energy__value { color: var(--color-primary-dark); }
+.td-energy__track { height: 20px; border-radius: 10px; background: var(--color-surface); border: 2px solid var(--color-border); overflow: hidden; }
+.td-energy__fill { height: 100%; border-radius: 8px; background: var(--color-primary); transition: width 0.4s; }
+.td-energy__fill--low { background: var(--color-accent); }
+
+.td-dots { display: flex; gap: var(--space-8); justify-content: center; }
+.td-dots__dot { height: 10px; width: 10px; border-radius: 5px; background: var(--color-border); }
+.td-dots__dot--done { background: var(--color-primary); }
+.td-dots__dot--active { background: var(--color-primary); width: 28px; }
+
+.td-pet { display: block; }
+@keyframes td-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+.td-pet--awake .td-pet__body { transform-origin: 100px 190px; animation: td-breathe 3s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .td-pet--awake .td-pet__body { animation: none; } }

@@ -1,0 +1,19 @@
+{
+  "name": "tamadoist",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "dev": "turbo run dev --filter=@tamadoist/web",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "storybook": "pnpm --filter @tamadoist/ui storybook",
+    "build-storybook": "pnpm --filter @tamadoist/ui build-storybook",
+    "e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "turbo": "^2.3.0",
+    "typescript": "^5.7.0"
+  }
+}
