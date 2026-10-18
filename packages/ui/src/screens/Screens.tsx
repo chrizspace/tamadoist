@@ -176,7 +176,7 @@ export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state =
       <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onMenu={onMenu} onTitle={onTitle ?? (() => undefined)} onEnergy={onEnergy} />
       <Hero float={false} top={STAGE_TOP} name={name}><Pet state={state} size={270} /></Hero>
       <ActionBar context={{ sleeping, tired }} onAction={onAction} />
-      {toast && <Toast>{toast}</Toast>}
+      {toast && <Toast top={120}>{toast}</Toast>}
     </Phone>
   );
 }
