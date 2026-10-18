@@ -43,7 +43,7 @@ p.lead{color:var(--muted);margin:0 0 20px;max-width:68ch}
 .spec .box{display:flex;flex-direction:column;gap:14px;min-width:0}
 .spec h3{margin:0;font-size:17px;font-weight:800}
 .spec .note{font-size:13px;color:var(--muted);margin:0}
-.stage{border-radius:16px;padding:20px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:center;background:var(--p-surface);color:var(--p-text)}
+.stage{overflow-x:auto;border-radius:16px;padding:20px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:center;background:var(--p-surface);color:var(--p-text)}
 .stage.sky{background:linear-gradient(var(--sky),#cdeee6)}
 .stage.hillbg{background:var(--hill)}
 .stage.night{background:#C9CCF2}
@@ -90,12 +90,13 @@ input[type=range]{width:100%;accent-color:var(--primary)}
 .rbtn{width:48px;height:48px;border-radius:50%;border:0;background:var(--primary-dark);display:grid;place-items:center;cursor:pointer;padding:0;color:#fff}
 .rbtn svg{width:24px;height:24px}
 .rbtn:focus-visible,.pbtn:focus-visible,.act:focus-visible,.menurow:focus-visible,.circ:focus-visible{outline:3px solid var(--water);outline-offset:2px}
-.bat{display:flex;align-items:center;gap:12px}
-.bat .shell{position:relative;width:64px;height:28px;border:2.5px solid var(--p-text);border-radius:9px;background:#fff;padding:2.5px;display:flex;gap:3px}
-.bat .shell::after{content:"";position:absolute;right:-8px;top:7px;width:5px;height:11px;border-radius:0 3px 3px 0;background:var(--p-text)}
-.bat .slot{flex:1;border-radius:4px;background:var(--p-surface);overflow:hidden}
+.bat{display:flex;align-items:center}
+.bat .shell{position:relative;width:92px;height:42px;border:2.5px solid var(--p-text);border-radius:12px;background:#fff;padding:3px 6px 6px;display:flex;flex-direction:column;justify-content:space-between}
+.bat .shell::after{content:"";position:absolute;right:-9px;top:11px;width:5px;height:14px;border-radius:0 3px 3px 0;background:var(--p-text)}
+.bat .slot{flex:1;border-radius:3px;background:var(--p-surface);overflow:hidden}
 .bat .slot b{display:block;height:100%;border-radius:3px}
-.bat .pct{font:800 14px var(--font);min-width:36px;font-variant-numeric:tabular-nums;color:var(--p-text)}
+.bat .pct{text-align:center;font:800 15px/18px var(--font);font-variant-numeric:tabular-nums;color:var(--p-text)}
+.bat .slots{display:flex;gap:3px;height:10px}
 .tag{display:inline-block;background:#fff;border:2px solid var(--p-border);border-radius:999px;padding:6px 20px;font:800 24px var(--font);color:var(--p-text);box-shadow:0 3px 8px rgba(0,0,0,.08)}
 .hero{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2}
 .pet-wrap{position:relative}
@@ -160,7 +161,7 @@ input[type=range]{width:100%;accent-color:var(--primary)}
 .counter{position:absolute;left:50%;transform:translateX(-50%);background:#fff;border-radius:24px;padding:12px 28px;text-align:center;z-index:2;box-shadow:0 4px 10px rgba(0,0,0,.1)}
 .counter b{display:block;white-space:nowrap;font:800 24px var(--font);color:var(--water-dark);font-variant-numeric:tabular-nums}.counter span{white-space:nowrap;font:600 13px var(--font);color:var(--p-muted)}
 .panelw{position:absolute;left:45px;right:45px;background:#fff;border-radius:20px;padding:10px 16px;z-index:2}
-.hdrwrap{position:relative;width:390px;max-width:100%;height:64px;background:var(--sky);border-radius:16px;overflow:hidden}.hdrwrap .hdr{top:0}
+.hdrwrap{zoom:.8;position:relative;width:390px;flex:none;height:64px;background:var(--sky);border-radius:16px;overflow:hidden}.hdrwrap .hdr{top:0}
 .ring{position:absolute;border:4px dashed var(--accent-y);border-radius:22px;z-index:4;pointer-events:none}
 .ghost{opacity:.35}
 </style>
@@ -284,7 +285,7 @@ const barColor=p=>p<25?'#FF5A5F':p<50?'#FFC93C':'#1FBF8F';
 function Battery(p){
   p=Math.max(0,Math.min(100,Math.round(p)));const u=p/25,c=barColor(p);
   const slots=[0,1,2,3].map(i=>{const f=Math.max(0,Math.min(1,u-i));return `<span class="slot"><b style="width:${f*100}%;background:${c}"></b></span>`}).join('');
-  return `<div class="bat" role="img" aria-label="Energia ${p}%"><div class="shell">${slots}</div><span class="pct">${p}%</span></div>`;
+  return `<div class="bat" role="img" aria-label="Energia ${p}%"><div class="shell"><span class="pct">${p}%</span><div class="slots">${slots}</div></div></div>`;
 }
 function Pet(state='awake',size=160){
   const eyes=[58,110];
