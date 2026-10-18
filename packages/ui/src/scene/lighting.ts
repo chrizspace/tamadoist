@@ -17,18 +17,20 @@ export interface Lighting {
   moon?: { x: number; y: number };
   /** 0 = no stars, 1 = full night sky. */
   starsOpacity: number;
+  /** 0 = clear sky. */
+  cloudOpacity: number;
 }
 
 /**
- * Sunrise and sunset get different palettes on purpose. Morning is fresh and pastel (blue, pink, gold) with
- * a small sun rising on the left. Evening is deep and fiery (indigo, magenta, orange), already dark enough to
- * lead into the night, with a big red sun setting on the right and the first stars.
+ * Four looks. Morning is fresh and pastel (blue, pink, gold) with a small sun rising on the left. Noon is a
+ * clear, vivid blue sky without clouds. Evening is a medium blue dusk that is not dark yet but already leans
+ * toward night. Night is near black navy with stars and a moon.
  */
 const TABLE: Record<PeriodId, Omit<Lighting, "period" | "lit">> = {
-  morning: { skyTop: "#9ED0F5", skyMid: "#FFC6D0", skyBottom: "#FFE7B0", windowSky: "#FFD9C2", tint: "#FFC9B0", tintOpacity: 0.1, sun: { x: 62, y: 330, color: "#FFD36B", glow: "#FFF1B8", r: 30 }, starsOpacity: 0 },
-  noon: { skyTop: "#8ED0FF", skyBottom: "#E6FAF6", windowSky: "#BFE3FF", tint: "#FFFFFF", tintOpacity: 0, sun: { x: 195, y: 90, color: "#FFE066", glow: "#FFF6B0", r: 30 }, starsOpacity: 0 },
-  evening: { skyTop: "#2B2A6E", skyMid: "#B0457A", skyBottom: "#FF7A3D", windowSky: "#D9603A", tint: "#3A1B5E", tintOpacity: 0.38, sun: { x: 332, y: 340, color: "#FF5E2E", glow: "#FF8A4D", r: 40 }, starsOpacity: 0.4 },
-  night: { skyTop: "#0A0E3A", skyBottom: "#252B70", windowSky: "#1B2160", tint: "#0A0E3A", tintOpacity: 0.5, moon: { x: 90, y: 140 }, starsOpacity: 1 },
+  morning: { skyTop: "#9ED0F5", skyMid: "#FFC6D0", skyBottom: "#FFE7B0", windowSky: "#FFD9C2", tint: "#FFC9B0", tintOpacity: 0.1, sun: { x: 62, y: 330, color: "#FFD36B", glow: "#FFF1B8", r: 30 }, starsOpacity: 0, cloudOpacity: 0.8 },
+  noon: { skyTop: "#3FA2FF", skyBottom: "#BFE6FF", windowSky: "#9DD3FF", tint: "#FFFFFF", tintOpacity: 0, sun: { x: 195, y: 90, color: "#FFE066", glow: "#FFF6B0", r: 30 }, starsOpacity: 0, cloudOpacity: 0 },
+  evening: { skyTop: "#27408B", skyBottom: "#7FA3DE", windowSky: "#5C82CC", tint: "#2B45B0", tintOpacity: 0.3, starsOpacity: 0.25, cloudOpacity: 0.3 },
+  night: { skyTop: "#02030C", skyBottom: "#0A1130", windowSky: "#0B1235", tint: "#050A26", tintOpacity: 0.72, moon: { x: 90, y: 140 }, starsOpacity: 1, cloudOpacity: 0.12 },
 };
 
 export function lightingFor(period: PeriodId): Lighting {

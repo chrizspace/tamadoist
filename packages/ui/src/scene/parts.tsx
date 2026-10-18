@@ -30,9 +30,9 @@ export function Sky({ light, id }: { light: Lighting; id: string }) {
 }
 
 export function Cloud({ x, y, w, light }: { x: number; y: number; w: number; light: Lighting }) {
-  const o = light.lit ? 0.25 : 0.8;
+  if (light.cloudOpacity <= 0) return null;
   return (
-    <g opacity={o} fill="#fff">
+    <g opacity={light.cloudOpacity} fill="#fff">
       <ellipse cx={x + w / 2} cy={y + w * 0.19} rx={w / 2} ry={w * 0.19} />
       <ellipse cx={x + w * 0.47} cy={y + w * 0.06} rx={w * 0.27} ry={w * 0.2} />
     </g>
