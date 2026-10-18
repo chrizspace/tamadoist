@@ -1,13 +1,14 @@
 import type { ActionDef } from "./types";
 
 /**
+ * The icon is "recharge" (a battery with a bolt): eating, drinking and sleeping all renew energy.
  * Nutrition is one action that groups what keeps the character going: drinking, eating and sleeping.
  * You can drink and eat in the evening and at night too, so it stays available during sleep.
  */
 export const NUTRITION_ACTION: ActionDef = {
   id: "nutrition",
   label: "Odżywianie",
-  icon: "apple",
+  icon: "recharge",
   screen: "nutrition",
   blockedWhenSleeping: false,
   highlightedWhenTired: true,

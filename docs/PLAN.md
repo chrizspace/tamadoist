@@ -159,3 +159,4 @@ Zadania i nawyki to na razie dane przykładowe (w prototypie rosną z wypitą wo
 - Pasek interakcji pod paskiem tytułu to karta z trzema kolumnami: **Woda** (np. 1700 / 2450 ml + pasek), **Jedzenie** (posiłki, np. 2 / 4 + pasek) i **Sen** (okno 22:00 → 06:00). Po akcji wyskakuje pastylka („+250 ml”, „+1 posiłek”).
 - Dock ma trzy okrągłe przyciski: niebieski **+250 ml**, żółty **Posiłek** i fioletowy **Sen**. Sen otwiera pełnoekranową stronę z oknem snu (zawsze 8 h) i wyborem godziny zaśnięcia, zamykaną X.
 - Cel posiłków: `MEALS_GOAL = 4` na dzień (`applyMeal` w core). Do ustalenia: czy jedzenie ma wpływać na wzór energii (dziś energię liczą tylko sen i woda).
+- Ikona akcji Odżywianie to **bateria z piorunem** (`recharge`): jedzenie, picie i sen odnawiają energię. Ikony Nawyków (powtarzanie) i Zadań (lista) pozostają osobne.
