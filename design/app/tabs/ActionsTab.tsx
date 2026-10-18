@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ACTIONS, GLASS_ML, applyWater } from "@tamadoist/core";
-import { ActionBar, ActionButton, HomeScreen, RoundButton, SAMPLE, WaterCounter, WaterScreen } from "@tamadoist/ui";
+import { SleepPage, ActionBar, ActionButton, HomeScreen, RoundButton, SAMPLE, WaterCounter, NutritionScreen } from "@tamadoist/ui";
 import { Gallery, Section, Spec, SpecGrid } from "../chrome";
 
 export function ActionsTab() {
@@ -13,16 +13,16 @@ export function ActionsTab() {
           <tbody>{ACTIONS.map((a) => <tr key={a.id}><td className="mono">{a.id}</td><td>{a.label}</td><td className="mono">{a.icon}</td><td className="mono">{a.screen}</td><td>{a.blockedWhenSleeping ? "tak" : "nie"}</td><td>{a.highlightedWhenTired ? "tak" : "nie"}</td></tr>)}</tbody></table></div>
       </Section>
 
-      <Section title="Woda" lead="Jedyna akcja na ten moment. Dodajesz lub odejmujesz po szklance (250 ml), a postać pije i energia rośnie.">
+      <Section title="Odżywianie" lead="Jedna akcja łączy sen, jedzenie i picie. Pasek interakcji pokazuje wodę, posiłki i okno snu, a w docku są trzy okrągłe przyciski: +250 ml, Posiłek i Sen.">
         <SpecGrid>
-          <Spec title="Pasek akcji" note="Trzy stany: zwykły, zmęczony (akcja podświetlona) i śpi (nadal dostępna, bo wodę można pić też wieczorem i w nocy)." stage="hillbg col">
+          <Spec title="Pasek akcji" note="Trzy stany: zwykły, zmęczony (akcja podświetlona) i śpi (Odżywianie nadal dostępne, bo pić i jeść można też wieczorem i w nocy; Zadania i Nawyki zablokowane)." stage="hillbg col">
             {([["zwykły", false, false], ["zmęczony", false, true], ["śpi", true, false]] as const).map(([l, sleeping, tired]) => (
               <div key={l} className="barrow"><span className="mono">{l}</span><div className="td-actionbar" style={{ position: "static" }}><ActionBar context={{ sleeping, tired }} /></div></div>
             ))}
           </Spec>
           <Spec title="Przycisk akcji" stage="hillbg"><ActionButton /><ActionButton active /><ActionButton disabled /></Spec>
-          <Spec title="Dodawanie wody" note={`Zapis w applyWater: krok ${GLASS_ML} ml, wynik nigdy poniżej zera.`} stage="hillbg col">
-            <div style={{ position: "relative", height: 112, width: 320 }}><WaterCounter drunkMl={ml} goalMl={2450} top={0} /></div>
+          <Spec title="Dodawanie wody (składnik Odżywiania)" note={`Zapis w applyWater: krok ${GLASS_ML} ml, wynik nigdy poniżej zera.`} stage="hillbg col">
+            <div className="td-static" style={{ position: "relative", height: 76, width: 320 }}><WaterCounter drunkMl={ml} goalMl={2450} /></div>
             <div style={{ display: "flex", gap: 56 }}>
               <RoundButton kind="minus" onClick={() => setMl((v) => applyWater(v, -GLASS_ML))} />
               <RoundButton kind="plus" onClick={() => setMl((v) => applyWater(v, GLASS_ML))} />
@@ -34,10 +34,11 @@ export function ActionsTab() {
       <Section title="Ekrany akcji">
         <Gallery items={[
           { title: "Home z paskiem akcji", node: <HomeScreen {...d} /> },
-          { title: "Home zmęczony", note: "Akcja Woda jest podświetlona.", node: <HomeScreen {...d} state="tired" energyPercent={0} /> },
-          { title: "Home śpi", note: "Akcja Woda nadal dostępna.", node: <HomeScreen {...d} state="sleeping" energyPercent={50} location="home.bedroom" period="night" /> },
-          { title: "Woda", node: <WaterScreen {...d} /> },
-          { title: "Woda po dodaniu szklanki", node: <WaterScreen {...d} drinking /> },
+          { title: "Home zmęczony", note: "Akcja Odżywianie jest podświetlona.", node: <HomeScreen {...d} state="tired" energyPercent={0} /> },
+          { title: "Home śpi", note: "Odżywianie nadal dostępne.", node: <HomeScreen {...d} state="sleeping" energyPercent={50} location="home.bedroom" period="night" /> },
+          { title: "Odżywianie", node: <NutritionScreen /> },
+          { title: "Odżywianie po dodaniu szklanki", node: <NutritionScreen state="drinking" gain="+250 ml" /> },
+          { title: "Sen", node: <SleepPage sleepStart="22:00" sleepEnd="06:00" /> },
         ]} />
       </Section>
     </>

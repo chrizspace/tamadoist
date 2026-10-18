@@ -2,9 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react";
 import {
   EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LoginScreen, MenuScreen, NameScreen,
   LocationPermissionScreen, PlacesScreen, RenameDialogScreen, SAMPLE, ScenePickerScreen, ScheduleScreen,
-  SchedulePromptScreen, SettingsScreen, SleepScreen, WaterScreen, WeightScreen,
+  SchedulePromptScreen, SettingsScreen, SleepScreen, WeightScreen,
 } from "./Screens";
 import { StatusScreen } from "./Status";
+import { NutritionScreen, SleepPage } from "./Nutrition";
 import { ChecklistActionScreen, ChecklistPage, SAMPLE_HABIT_ITEMS, SAMPLE_TODAY } from "./Checklist";
 
 const meta: Meta = {
@@ -23,13 +24,14 @@ export const S05_Sleep: Story = { name: "05 Sen", render: () => <SleepScreen nam
 export const S06_Weight: Story = { name: "06 Waga", render: () => <WeightScreen name={d.name} weightKg={d.weightKg} goalMl={d.goalMl} /> };
 export const S07_Home: Story = { name: "07 Home", render: () => <HomeScreen {...d} /> };
 export const S08_Menu: Story = { name: "08 Menu", render: () => <MenuScreen name={d.name} energyPercent={d.energyPercent} /> };
-export const S09_Water: Story = { name: "09 Woda", render: () => <WaterScreen {...d} /> };
+export const S09_Nutrition: Story = { name: "09 Odżywianie", render: () => <NutritionScreen /> };
 export const S07b_EnergyInfo: Story = { name: "07b Home – po kliknięciu energii", render: () => <HomeScreen {...d} toast={`Energii starczy do ${d.energyUntil}`} /> };
 export const S10_Tired: Story = { name: "10 Zmęczony", render: () => <HomeScreen {...d} energyPercent={0} state="tired" /> };
 export const S11_Sleeping: Story = { name: "11 Śpi", render: () => <HomeScreen {...d} energyPercent={50} state="sleeping" location="home.bedroom" period="night" /> };
 export const S12_Rename: Story = { name: "12 Zmiana imienia", render: () => <RenameDialogScreen {...d} /> };
 export const S13_Settings: Story = { name: "13 Ustawienia", render: () => <SettingsScreen {...d} /> };
-export const WaterDrinking: Story = { name: "Woda – po dodaniu szklanki", render: () => <WaterScreen {...d} drinking /> };
+export const NutritionDrank: Story = { name: "Odżywianie – po dodaniu szklanki", render: () => <NutritionScreen state="drinking" gain="+250 ml" /> };
+export const S27_SleepPage: Story = { name: "27 Sen (pełny ekran)", render: () => <SleepPage sleepStart="22:00" sleepEnd="06:00" /> };
 
 export const S14_OpenSpace: Story = { name: "14 Home – open space", render: () => <HomeScreen {...d} location="work.openspace" period="noon" /> };
 export const S15_WorkKitchen: Story = { name: "15 Home – kuchnia w pracy", render: () => <HomeScreen {...d} location="work.kitchen" period="noon" state="happy" /> };

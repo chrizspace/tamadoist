@@ -9,7 +9,7 @@ import { dateAt, fmt } from "../world";
 
 const RULES: Record<PetState, string> = {
   sleeping: "W oknie snu. Ma najwyższy priorytet, ale wodę można pić także we śnie.",
-  tired: "Energia spadła do 0%. Akcja Woda jest podświetlona.",
+  tired: "Energia spadła do 0%. Akcja Odżywianie jest podświetlona.",
   drinking: "Krótko po dodaniu szklanki wody.",
   happy: "Dzieje się coś dobrego, np. lunch w kuchni.",
   awake: "Stan domyślny, gdy nic z powyższych nie zachodzi.",

@@ -1,20 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { ACTIONS, applyWater, checklistProgress, completeNext, nextOpenItem, toggleItem, availableActions, derivePetState, getAction, isActionHighlighted } from "../index";
+import { ACTIONS, applyMeal, applyWater, checklistProgress, completeNext, nextOpenItem, toggleItem, availableActions, derivePetState, getAction, isActionHighlighted } from "../index";
 
-describe("water action", () => {
+describe("nutrition action", () => {
   it("adds and removes a glass, never below zero", () => {
     expect(applyWater(0)).toBe(250);
     expect(applyWater(500, -250)).toBe(250);
     expect(applyWater(100, -250)).toBe(0);
   });
-  it("stays available while sleeping and is highlighted only when tired and awake", () => {
-    expect(availableActions({ sleeping: true, tired: false }).map((a) => a.id)).toEqual(["water"]);
-    expect(availableActions({ sleeping: false, tired: false }).map((a) => a.id)).toEqual(["water", "tasks", "habits"]);
-    expect(isActionHighlighted(getAction("water")!, { sleeping: false, tired: true })).toBe(true);
-    expect(isActionHighlighted(getAction("water")!, { sleeping: true, tired: true })).toBe(false);
+  it("stays available while sleeping (you can drink and eat at night) and is highlighted only when tired and awake", () => {
+    expect(availableActions({ sleeping: true, tired: false }).map((a) => a.id)).toEqual(["nutrition"]);
+    expect(availableActions({ sleeping: false, tired: false }).map((a) => a.id)).toEqual(["nutrition", "tasks", "habits"]);
+    expect(isActionHighlighted(getAction("nutrition")!, { sleeping: false, tired: true })).toBe(true);
+    expect(isActionHighlighted(getAction("nutrition")!, { sleeping: true, tired: true })).toBe(false);
   });
-  it("registers water, tasks and habits in that order", () => {
-    expect(ACTIONS.map((a) => a.id)).toEqual(["water", "tasks", "habits"]);
+  it("registers nutrition, tasks and habits in that order", () => {
+    expect(ACTIONS.map((a) => a.id)).toEqual(["nutrition", "tasks", "habits"]);
   });
 });
 
@@ -43,5 +43,13 @@ describe("checklists (tasks and habits)", () => {
     expect(completeNext(items).map((i) => i.done)).toEqual([true, true, false]);
     expect(completeNext(completeNext(completeNext(items))).every((i) => i.done)).toBe(true);
     expect(nextOpenItem(completeNext(completeNext(items)))).toBeUndefined();
+  });
+});
+
+describe("meals", () => {
+  it("counts meals between zero and twelve", () => {
+    expect(applyMeal(0)).toBe(1);
+    expect(applyMeal(0, -1)).toBe(0);
+    expect(applyMeal(12)).toBe(12);
   });
 });

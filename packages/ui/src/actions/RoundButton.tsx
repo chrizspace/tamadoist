@@ -15,8 +15,8 @@ export function RoundButton({ kind, amountMl = 250, onClick }: RoundButtonProps)
 }
 
 export interface RoundActionProps {
-  /** "primary" is the green main action ("Zrobione"), "plain" the white secondary one ("Lista"). */
-  tone: "primary" | "plain";
+  /** "primary" is the green main action ("Zrobione"), "plain" the white secondary one ("Lista"); water, food and sleep are the nutrition buttons. */
+  tone: "primary" | "plain" | "water" | "food" | "sleep";
   icon: IconName;
   label: string;
   disabled?: boolean;

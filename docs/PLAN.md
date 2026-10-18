@@ -148,8 +148,14 @@ Otwierana dotknięciem wskaźnika (z Home i z ekranu akcji) na cały ekran (bez 
 3. **Seria**: nawyki, które trzeba ukończyć dziś, żeby podtrzymać serię (np. cel wody, sen na czas, wszystkie zadania), z postępem każdego.
 Zadania i nawyki to na razie dane przykładowe (w prototypie rosną z wypitą wodą).
 
-## Akcje: Woda, Zadania, Nawyki
-- Pasek akcji (dock) buduje się z rejestru `ACTIONS` w `@tamadoist/core`: **Woda**, **Zadania**, **Nawyki** (kwadratowe przyciski 3D, przewijane poziomo gdy będzie więcej). Zadania i nawyki są zablokowane, gdy postać śpi; woda nie.
+## Akcje: Odżywianie, Zadania, Nawyki
+- Pasek akcji (dock) buduje się z rejestru `ACTIONS` w `@tamadoist/core`: **Odżywianie**, **Zadania**, **Nawyki** (kwadratowe przyciski 3D, przewijane poziomo gdy będzie więcej). Zadania i nawyki są zablokowane, gdy postać śpi; Odżywianie nie (pić i jeść można też wieczorem i w nocy).
 - Wejście w **Zadania** / **Nawyki**: scena z postacią zostaje wolna. Pasek interakcji pod paskiem tytułu pokazuje postęp (np. 4 / 10), pasek i „Teraz: <następna pozycja>”. W docku dwa okrągłe przyciski: zielony **Zrobione** (odhacza następną pozycję, wyskakuje „+1”) i biały **Lista** (pełnoekranowa lista z odhaczaniem, zamykana X).
 - Nawyki odhaczasz ręcznie albo same, gdy spełniony jest warunek (cel wody, wszystkie zadania na dziś). Postęp zadań zasila wskaźnik zadań i kartę statusu.
 - Logika list (`checklistProgress`, `nextOpenItem`, `toggleItem`, `completeNext`) jest w core z testami.
+
+### Odżywianie = sen + jedzenie + picie
+- Dawna akcja „Woda” to teraz **Odżywianie** (`nutrition` w rejestrze akcji): jedna zakładka łączy picie, jedzenie i sen.
+- Pasek interakcji pod paskiem tytułu to karta z trzema kolumnami: **Woda** (np. 1700 / 2450 ml + pasek), **Jedzenie** (posiłki, np. 2 / 4 + pasek) i **Sen** (okno 22:00 → 06:00). Po akcji wyskakuje pastylka („+250 ml”, „+1 posiłek”).
+- Dock ma trzy okrągłe przyciski: niebieski **+250 ml**, żółty **Posiłek** i fioletowy **Sen**. Sen otwiera pełnoekranową stronę z oknem snu (zawsze 8 h) i wyborem godziny zaśnięcia, zamykaną X.
+- Cel posiłków: `MEALS_GOAL = 4` na dzień (`applyMeal` w core). Do ustalenia: czy jedzenie ma wpływać na wzór energii (dziś energię liczą tylko sen i woda).

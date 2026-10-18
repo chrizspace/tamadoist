@@ -13,6 +13,8 @@ export const ICON_PATHS = {
   check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
   list: (<><path d="M9 6h11M9 12h11M9 18h11" /><path d="M4 6h.01M4 12h.01M4 18h.01" strokeWidth="3" /></>),
   repeat: (<><path d="M17 3l3 3-3 3" /><path d="M4 11V9a3 3 0 0 1 3-3h13" /><path d="M7 21l-3-3 3-3" /><path d="M20 13v2a3 3 0 0 1-3 3H4" /></>),
+  apple: (<><path d="M12 8c-2.3-2-6.5-1-6.5 3.2 0 4 2.6 8.8 6.5 8.8s6.5-4.800 6.500-8.800C18.500 7 14.300 6 12 8z" /><path d="M12 8c0-2.200 1-4 3-5" /></>),
+  utensils: (<><path d="M7 3v7a2 2 0 0 0 2 2v9M5 3v6M9 3v6" /><path d="M17 21V3c-2.200 1-3.500 3.500-3.500 7 0 1.800.8 3 2 3h1.500" /></>),
   moon: <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />,
   clock: (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>),
   chevronDown: <path d="M6 9l6 6 6-6" />,

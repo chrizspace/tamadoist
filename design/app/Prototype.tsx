@@ -3,7 +3,7 @@ import { completeNext, toggleItem, LOCATIONS, PERIODS, PET_STATES, periodWindows
 import {
   IndicatorsProvider, IndicatorsLayoutContext, StatusScreen, ChecklistActionScreen, ChecklistPage, SAMPLE_TODAY, SAMPLE_HABIT_ITEMS, type DialKey, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
   PlacesScreen, RenameDialogScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
-  SleepScreen, WaterScreen, WeightScreen,
+  SleepScreen, NutritionScreen, SleepPage, WeightScreen,
 } from "@tamadoist/ui";
 import { Fit, Timeline } from "./chrome";
 import { useActions } from "./modules/actions";
@@ -11,11 +11,11 @@ import { useCharacter } from "./modules/character";
 import { useScene, type SimPosition } from "./modules/scene";
 import { CITIES, SEASONS, deriveWorld, fmt, isoDate, parseIso, type Env, DEFAULT_ENV } from "./world";
 
-type ScreenId = "login" | "name" | "energy" | "indicator" | "sleep" | "weight" | "home" | "menu" | "water" | "settings" | "rename" | "scenes" | "places" | "locperm" | "schedule" | "prompt" | "status" | "tasks" | "tasks-list" | "habits" | "habits-list";
+type ScreenId = "login" | "name" | "energy" | "indicator" | "sleep" | "weight" | "home" | "menu" | "nutrition" | "sleep-edit" | "settings" | "rename" | "scenes" | "places" | "locperm" | "schedule" | "prompt" | "status" | "tasks" | "tasks-list" | "habits" | "habits-list";
 
 const CRUMBS: [ScreenId, string][] = [
   ["login", "Login"], ["name", "Imię"], ["energy", "Energia"], ["indicator", "Wskaźnik"], ["sleep", "Sen"], ["weight", "Waga"],
-  ["home", "Home"], ["menu", "Menu"], ["water", "Woda"], ["tasks", "Zadania"], ["habits", "Nawyki"], ["status", "Status"], ["scenes", "Wybór sceny"], ["places", "Miejsca"], ["locperm", "Lokalizacja"],
+  ["home", "Home"], ["menu", "Menu"], ["nutrition", "Odżywianie"], ["tasks", "Zadania"], ["habits", "Nawyki"], ["status", "Status"], ["scenes", "Wybór sceny"], ["places", "Miejsca"], ["locperm", "Lokalizacja"],
   ["schedule", "Plan dnia"], ["prompt", "Pytanie o plan"], ["settings", "Ustawienia"], ["rename", "Zmiana imienia"],
 ];
 
@@ -68,9 +68,10 @@ export function Prototype() {
       case "indicator": return <EnergyIndicatorScreen name={w.name} energyPercent={d.energyPercent} onNext={() => go("sleep")} />;
       case "sleep": return <SleepScreen name={w.name} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} onSleepStart={ch.setSleepStart} onNext={() => go("weight")} />;
       case "weight": return <WeightScreen name={w.name} weightKg={d.weightKg} goalMl={d.goalMl} onWeight={ch.setWeight} onNext={() => go("home")} />;
-      case "home": return <HomeScreen {...d} {...scene} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onIndicator={openStatus("home")} onAction={(id) => id === "water" ? go("water") : id === "tasks" ? go("tasks") : id === "habits" && go("habits")} />;
+      case "home": return <HomeScreen {...d} {...scene} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onIndicator={openStatus("home")} onAction={(id) => id === "nutrition" ? go("nutrition") : id === "tasks" ? go("tasks") : id === "habits" && go("habits")} />;
       case "menu": return <MenuScreen name={w.name} energyPercent={d.energyPercent} onClose={() => go("home")} onSettings={() => go("settings")} onPlaces={() => go("places")} onSchedule={() => go("schedule")} onLogout={() => { ch.reset(); ac.reset(); sc.setManual(undefined); sc.setPos("none"); go("login"); }} />;
-      case "water": return <WaterScreen {...d} {...scene} onIndicator={openStatus("water")} drinking={ac.justDrank} toast={toast} onBack={() => go("home")} onPlus={() => { ac.add(); flash("+250 ml"); }} onMinus={() => { ac.remove(); flash("−250 ml"); }} />;
+      case "nutrition": return <NutritionScreen {...scene} name={w.name} energyPercent={d.energyPercent} state={ac.justDrank ? "drinking" : ac.justAte && w.petState !== "sleeping" ? "happy" : w.petState} drunkMl={ac.drunkMl} goalMl={ch.goalMl} meals={ac.meals} sleepStart={ch.profile.sleepStart} sleepEnd={w.sleepEnd} gain={toast} onBack={() => go("home")} onWater={() => { ac.add(); flash("+250 ml"); }} onMeal={() => { ac.eat(); flash("+1 posiłek"); }} onSleep={() => go("sleep-edit")} onIndicator={openStatus("nutrition")} />;
+      case "sleep-edit": return <SleepPage sleepStart={ch.profile.sleepStart} sleepEnd={w.sleepEnd} onSleepStart={ch.setSleepStart} onClose={() => go("nutrition")} />;
       case "settings": return <SettingsScreen {...d} onBack={() => go("home")} onEditName={() => { setDraft(ch.profile.name); go("rename"); }} />;
       case "rename": return <RenameDialogScreen {...d} draft={draft} onDraft={setDraft} onCancel={() => go("settings")} onSave={() => { if (!validateName(draft)) { ch.saveName(draft); go("settings"); } }} />;
       case "scenes": return <ScenePickerScreen name={w.name} energyPercent={d.energyPercent} {...scene} auto={!sc.manual} onPick={(l) => { sc.setManual(l); go("home"); }} onAuto={(on) => { if (on) sc.setManual(undefined); go("home"); }} onClose={() => go("home")} />;

@@ -326,3 +326,17 @@ button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outli
 .td-status__list button.td-status__check { cursor: pointer; padding: 0; background: #fff; }
 .td-status__list button.td-status__check.is-done { background: var(--c); }
 .td-status__list li { min-height: 40px; }
+
+.td-circle--water { background: var(--color-water); box-shadow: 0 var(--lip) 0 var(--color-water-dark); color: #fff; }
+.td-circle--food { background: #FFC93C; box-shadow: 0 var(--lip) 0 #E0A800; color: #fff; }
+.td-circle--sleep { background: #6B70C9; box-shadow: 0 var(--lip) 0 #4B4FA8; color: #fff; }
+.td-actionbar--trio { gap: 34px; }
+/* Nutrition card in the interaction bar: water, food, sleep side by side */
+.td-nutri { position: absolute; top: 120px; left: 16px; right: 16px; background: #fff; border: 2px solid var(--color-border); border-radius: 20px; padding: 10px 14px 12px; display: grid; grid-template-columns: 1.25fr 1fr 1.1fr; gap: 12px; z-index: 2; }
+.td-nutri__stat { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.td-nutri__label { display: flex; align-items: center; gap: 4px; font: 700 12px var(--font); color: var(--color-text-muted); }
+.td-nutri__label svg { width: 14px; height: 14px; color: var(--c); }
+.td-nutri__stat b { font: 800 14px var(--font); color: var(--c); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.td-nutri__track { height: 8px; border-radius: 4px; background: color-mix(in srgb, var(--c) 16%, #fff); overflow: hidden; }
+.td-nutri__track > div { height: 100%; border-radius: 4px; background: var(--c); transition: width .3s; }
+.td-nutri__gain { top: auto; bottom: -14px; right: 12px; }

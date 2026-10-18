@@ -2,8 +2,6 @@ import type { ReactNode } from "react";
 import { getGroup, getLocation, LOCATION_GROUPS, locationsOf, type LocationId, type PeriodId } from "@tamadoist/core";
 import type { PetState } from "../character/Pet";
 import { ActionBar } from "../actions/ActionBar";
-import { RoundButton } from "../actions/RoundButton";
-import { WaterCounter } from "../actions/WaterCounter";
 import { Egg } from "../character/Egg";
 import { EnergyBar } from "../character/EnergyBar";
 import { NameTag } from "../character/NameTag";
@@ -193,21 +191,6 @@ export function MenuScreen({ name, energyPercent, onClose, onSettings, onPlaces,
       <div className="td-scrim" />
       <HeaderBar left="close" title="Menu" percent={energyPercent} rail={false} onClose={onClose} />
       <MenuPanel onSettings={onSettings} onPlaces={onPlaces} onSchedule={onSchedule} onLogout={onLogout} />
-    </Phone>
-  );
-}
-
-/* ---------------- Actions: water ---------------- */
-
-export function WaterScreen({ name, drunkMl, goalMl, energyPercent, drinking, location = "recreation.park", period = "noon", onBack, onPlus, onMinus, toast, onIndicator }: Pick<ScreenData, "name" | "drunkMl" | "goalMl" | "energyPercent"> & SceneProps & { onIndicator?: (key: DialKey) => void; drinking?: boolean; onBack?: () => void; onPlus?: () => void; onMinus?: () => void; toast?: string }) {
-  return (
-    <Phone location={location} period={period}>
-      <HeaderBar left="back" title="Woda" percent={energyPercent} onBack={onBack} onIndicator={onIndicator} />
-      <PetStage location={location} state={drinking ? "drinking" : "awake"} name={name} top={STAGE_TOP} />
-      <WaterCounter drunkMl={drunkMl} goalMl={goalMl} gain={toast} />
-      <div className="td-actionbar td-actionbar--pair">
-        <RoundButton kind="minus" onClick={onMinus} /><RoundButton kind="plus" onClick={onPlus} />
-      </div>
     </Phone>
   );
 }

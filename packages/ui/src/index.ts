@@ -32,3 +32,4 @@ export * from "./character/PetStage";
 export * from "./character/choreography";
 export * from "./screens/Status";
 export * from "./screens/Checklist";
+export * from "./screens/Nutrition";
