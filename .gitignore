@@ -1,4 +1,10 @@
 node_modules/
+.turbo/
+dist/
+coverage/
+.next/
+storybook-static/
+.expo/
 .env
 .env.*
 !.env.example
