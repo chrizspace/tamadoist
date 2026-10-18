@@ -168,3 +168,10 @@ Zadania i nawyki to na razie dane przykładowe (w prototypie rosną z wypitą wo
 - Lista „dziś” (wskaźnik 3/10, karta statusu, nawyk „zrób wszystkie zadania”) to zadania z flagą „na dziś”; do dziś dodajesz zadanie z backlogu słoneczkiem.
 - Ekran akcji Zadania: „Zrobione” kończy kolejny krok następnego zadania (lub samo zadanie, gdy nie ma kroków); pasek pokazuje „Teraz: zadanie · krok”.
 - Pełnoekranowe **Zadania** mają trzy widoki: **Dziś**, **Backlog** (sekcje) i **Cele** (karty z postępem, po dotknięciu lista zadań celu). Dotknięcie zadania rozwija podzadania. Do zrobienia później: dodawanie/edycja zadań, sekcji i celów, daty, synchronizacja z Todoist.
+
+### Zadania: Teraz / Wszystko / Cele
+- Zakładki zadań: **Teraz** (lista na dziś), **Wszystko** (backlog w sekcjach) i **Cele**.
+- **Domyślne sortowanie to data i godzina** (`sortByDateAndTime`): najpierw dziś, potem jutro, potem bez daty; w obrębie dnia wg godziny, zadania bez godziny na końcu (przy remisie kolejność z backlogu). Dotyczy listy dziś, sekcji backlogu, zadań celu i listy na jutro.
+- **Przeciągnięcie** zadania na liście „dziś” ustawia własną kolejność (`todayOrder`). Ustawienie godziny któremukolwiek zadaniu albo przycisk „Wg godziny” wraca do sortowania po dacie i godzinie. Nowe zadanie nie wyłącza domyślnego sortowania.
+- Na samym dole „Teraz” jest sekcja **Jutro**: zadania przesunięte na jutro (przycisk „Na dziś” je przywraca), przycisk **Przenieś niezrobione na jutro** spycha z dziś wszystko, co nie jest zrobione, a pojedyncze zadanie przesuwasz przyciskiem „Na jutro” w jego szczegółach.
+- Backlog: dodawanie i usuwanie zadań i podzadań, wybór, co jest na dziś (słoneczko), tworzenie i usuwanie (pustych) sekcji. Cele: opis własnymi słowami, edycja, usuwanie, łączenie zadań z celem (z poziomu zadania lub celu).

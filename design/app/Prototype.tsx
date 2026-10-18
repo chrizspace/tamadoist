@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { MEALS_GOAL, predictNeed, completeNext, toggleItem, completeNextStep, isTaskDone, nextStep, nextTask, toggleSubtask, toggleTask, toggleToday, todayProgress, todayTasks, LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
+import { useMemo, useRef, useState } from "react";
+import { MEALS_GOAL, predictNeed, completeNext, toggleItem, completeNextStep, isTaskDone, nextStep, nextTask, toggleSubtask, toggleTask, toggleToday, todayProgress, todayTasks, bringBackToToday, deferOpenToTomorrow, deferToTomorrow, addGoal, addSection, addSubtask, addTask, moveToday, removeGoal, removeSection, removeSubtask, removeTask, reorderToday, setTaskGoal, setTaskTime, sortTodayByTime, updateGoal, LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
 import {
   IndicatorsProvider, IndicatorsLayoutContext, StatusScreen, ChecklistActionScreen, ChecklistPage, SAMPLE_BACKLOG, TasksPage, SAMPLE_HABIT_ITEMS, type DialKey, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
   PlacesScreen, RenameDialogScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
@@ -32,6 +32,8 @@ export function Prototype() {
   const [threeIndicators, setThree] = useState(true);
   const [zones, setZones] = useState(false);
   const [backlog, setBacklog] = useState(SAMPLE_BACKLOG);
+  const nextId = useRef(1);
+  const uid = (prefix: string) => `${prefix}-n${nextId.current++}`;
   const [habitManual, setHabitManual] = useState<Record<string, boolean>>({});
   const [statusFocus, setStatusFocus] = useState<DialKey>("energy");
   const [statusBack, setStatusBack] = useState<ScreenId>("home");
@@ -84,7 +86,31 @@ export function Prototype() {
       case "schedule": return <ScheduleScreen energyPercent={d.energyPercent} onBack={() => go("home")} />;
       case "status": return <StatusScreen {...scene} name={w.name} focus={statusFocus} energyPercent={d.energyPercent} energyUntil={d.energyUntil} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} sleeping={w.energy.state === "sleeping"} tasks={todayTasks(backlog).map((t) => ({ id: t.id, title: t.title, done: isTaskDone(t) }))} habits={habits} streakDays={12} onClose={() => go(statusBack)} />;
       case "tasks": return <ChecklistActionScreen {...scene} title="Zadania" name={w.name} energyPercent={d.energyPercent} state={w.petState} progress={todayP} nextLabel={nextStepTitle} gain={toast} onBack={() => go("home")} onDone={() => { setBacklog(completeNextStep); flash("+1"); }} onList={() => go("tasks-list")} onIndicator={openStatus("tasks")} />;
-      case "tasks-list": return <TasksPage backlog={backlog} onToggleTask={(id) => setBacklog((b) => toggleTask(b, id))} onToggleSubtask={(t, sId) => setBacklog((b) => toggleSubtask(b, t, sId))} onToggleToday={(id) => setBacklog((b) => toggleToday(b, id))} onClose={() => go("tasks")} />;
+      case "tasks-list": return (
+        <TasksPage
+          backlog={backlog}
+          onToggleTask={(id) => setBacklog((b) => toggleTask(b, id))}
+          onToggleSubtask={(t, sId) => setBacklog((b) => toggleSubtask(b, t, sId))}
+          onToggleToday={(id) => setBacklog((b) => toggleToday(b, id))}
+          onReorderToday={(ids) => setBacklog((b) => reorderToday(b, ids))}
+          onSetTime={(id, time) => setBacklog((b) => setTaskTime(b, id, time))}
+          onSortByTime={() => setBacklog((b) => sortTodayByTime(b))}
+          onAddTask={(input) => setBacklog((b) => addTask(b, { id: uid("t"), ...input }))}
+          onRemoveTask={(id) => setBacklog((b) => removeTask(b, id))}
+          onAddSubtask={(t, title) => setBacklog((b) => addSubtask(b, t, uid("s"), title))}
+          onRemoveSubtask={(t, sId) => setBacklog((b) => removeSubtask(b, t, sId))}
+          onDeferTask={(id) => setBacklog((b) => deferToTomorrow(b, id))}
+          onDeferAll={() => setBacklog((b) => deferOpenToTomorrow(b))}
+          onBringBack={(id) => setBacklog((b) => bringBackToToday(b, id))}
+          onAddSection={(title) => setBacklog((b) => addSection(b, uid("sec"), title))}
+          onRemoveSection={(id) => setBacklog((b) => removeSection(b, id))}
+          onAddGoal={(title, description) => setBacklog((b) => addGoal(b, uid("g"), title, description))}
+          onUpdateGoal={(id, patch) => setBacklog((b) => updateGoal(b, id, patch))}
+          onRemoveGoal={(id) => setBacklog((b) => removeGoal(b, id))}
+          onSetTaskGoal={(t, g) => setBacklog((b) => setTaskGoal(b, t, g))}
+          onClose={() => go("tasks")}
+        />
+      );
       case "habits": return <ChecklistActionScreen {...scene} title="Nawyki" name={w.name} energyPercent={d.energyPercent} state={w.petState} items={habitItems} gain={toast} onBack={() => go("home")} onDone={() => { completeNextHabit(); flash("+1"); }} onList={() => go("habits-list")} onIndicator={openStatus("habits")} />;
       case "habits-list": return <ChecklistPage title="Nawyki" color="#FF8A3D" items={habitItems} onToggle={toggleHabit} onClose={() => go("habits")} />;
       case "prompt": return <SchedulePromptScreen name={w.name} energyPercent={d.energyPercent} onYes={() => go("home")} onChange={() => go("schedule")} />;

@@ -53,7 +53,7 @@ export const S21_StatusTasks: Story = { name: "21 Karta statusu – zadania", re
 export const S22_StatusStreak: Story = { name: "22 Karta statusu – seria", render: () => <StatusScreen focus="streak" /> };
 export const S23_Tasks: Story = { name: "23 Zadania (akcja)", render: () => <ChecklistActionScreen title="Zadania" items={SAMPLE_TODAY} /> };
 export const S24_TasksList: Story = { name: "24 Zadania – Dziś", render: () => <TasksPage backlog={SAMPLE_BACKLOG} expanded={["w3"]} /> };
-export const S24b_TasksBacklog: Story = { name: "24b Zadania – Backlog (sekcje)", render: () => <TasksPage backlog={SAMPLE_BACKLOG} tab="backlog" expanded={["w3"]} /> };
+export const S24b_TasksBacklog: Story = { name: "24b Zadania – Backlog (sekcje)", render: () => <TasksPage backlog={SAMPLE_BACKLOG} tab="all" expanded={["w3"]} /> };
 export const S24c_TasksGoals: Story = { name: "24c Zadania – Cele", render: () => <TasksPage backlog={SAMPLE_BACKLOG} tab="goals" /> };
 export const S24d_TasksGoal: Story = { name: "24d Zadania – cel z wyjazdami i podzadaniami", render: () => <TasksPage backlog={SAMPLE_BACKLOG} goalId="kgp" expanded={["kgp-1"]} /> };
 export const S25_Habits: Story = { name: "25 Nawyki (akcja)", render: () => <ChecklistActionScreen title="Nawyki" items={SAMPLE_HABIT_ITEMS.map((h, i) => ({ ...h, done: i === 0 }))} /> };
