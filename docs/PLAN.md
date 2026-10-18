@@ -142,7 +142,7 @@ W prototypie checkbox „Strefy ekranu” podświetla scenę.
 - Wskaźnik „EXP” zastąpiony wskaźnikiem **zadań**: zrobione/zaplanowane na dziś (np. 3/10), pierścień = odsetek.
 
 ## Karta statusu
-Otwierana dotknięciem wskaźnika (z Home i z ekranu akcji); wskaźnik, który był na wierzchu, jest podświetlony i karta przewija się do jego sekcji. Zawiera:
+Otwierana dotknięciem wskaźnika (z Home i z ekranu akcji) na cały ekran (bez sceny w tle), zamykana przyciskiem X; wskaźnik, który był na wierzchu, jest podświetlony i karta przewija się do jego sekcji. Zawiera:
 1. **Energia**: dokładny procent, pasek, „energii starczy do …” (albo „śpi do …”) oraz o której pójdziesz spać (i pobudka).
 2. **Zadania na dziś**: lista z odhaczeniem (zrobione/wszystkie).
 3. **Seria**: nawyki, które trzeba ukończyć dziś, żeby podtrzymać serię (np. cel wody, sen na czas, wszystkie zadania), z postępem każdego.

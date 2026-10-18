@@ -1,11 +1,8 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { Icon } from "../components/Icon";
-import { Sheet } from "../components/Sheet";
-import { Phone, SAMPLE, type ScreenData } from "./Screens";
-import { PetStage } from "../character/PetStage";
+import { SAMPLE, type ScreenData } from "./Screens";
 import { energyColor, INDICATOR_COLORS, type DialKey } from "../character/Indicators";
-import type { SceneProps } from "../scene/Scene";
 
 export interface StatusTask { id: string; title: string; done: boolean }
 export interface StatusHabit { id: string; title: string; detail: string; done: boolean }
@@ -22,7 +19,7 @@ export interface StatusData {
   streakDays: number;
 }
 
-export interface StatusSheetProps extends StatusData {
+export interface StatusCardProps extends StatusData {
   /** Which indicator was tapped: its section is highlighted and scrolled into view. */
   focus?: DialKey;
   onClose?: () => void;
@@ -66,18 +63,18 @@ function Section({ id, title, summary, color, focus, children }: { id: DialKey; 
   );
 }
 
-/** Status card: exact energy and when it runs out, today's tasks, and the habits that keep the streak alive. */
-export function StatusSheet({ energyPercent, energyUntil, sleepStart, sleepEnd, sleeping, tasks, habits, streakDays, focus, onClose }: StatusSheetProps) {
+/** Full-screen status card: exact energy and when it runs out, today's tasks, and the habits that keep the streak alive. */
+export function StatusCard({ energyPercent, energyUntil, sleepStart, sleepEnd, sleeping, tasks, habits, streakDays, focus, onClose }: StatusCardProps) {
   const p = Math.max(0, Math.min(100, Math.round(energyPercent)));
   const done = tasks.filter((t) => t.done).length;
   const habitsDone = habits.filter((h) => h.done).length;
   return (
-    <Sheet>
+    <div className="td-statusfull">
+      <header className="td-status__head">
+        <h3>Status</h3>
+        <button type="button" className="td-status__close" onClick={onClose} aria-label="Zamknij"><Icon name="close" /></button>
+      </header>
       <div className="td-status">
-        <header className="td-status__head">
-          <h3>Status</h3>
-          <button type="button" className="td-status__close" onClick={onClose} aria-label="Zamknij"><Icon name="close" /></button>
-        </header>
         <Section id="energy" title="Energia" summary={`${p}%`} color={energyColor(p)} focus={focus}>
           <div className="td-status__bar" role="progressbar" aria-valuenow={p} aria-valuemin={0} aria-valuemax={100} aria-label="Energia"><div style={{ width: `${p}%` }} /></div>
           <ul className="td-status__facts">
@@ -101,28 +98,25 @@ export function StatusSheet({ energyPercent, energyUntil, sleepStart, sleepEnd, 
           </ul>
         </Section>
       </div>
-    </Sheet>
+    </div>
   );
 }
 
-export interface StatusScreenProps extends Partial<StatusData>, SceneProps {
-  name?: string;
+export interface StatusScreenProps extends Partial<StatusData> {
   focus?: DialKey;
   onClose?: () => void;
 }
 
-/** The status card over the dimmed scene. */
-export function StatusScreen({ name = SAMPLE.name, location = "recreation.park", period = "noon", focus, onClose, ...data }: StatusScreenProps) {
+/** The status card as its own full screen (no scene behind), closed with the X. */
+export function StatusScreen({ focus, onClose, ...data }: StatusScreenProps) {
   const base: StatusData = {
     energyPercent: 58, energyUntil: "10:48", sleepStart: SAMPLE.sleepStart, sleepEnd: SAMPLE.sleepEnd,
     tasks: SAMPLE_TASKS, habits: SAMPLE_HABITS, streakDays: 12, ...data,
   };
   return (
-    <Phone location={location} period={period}>
-      <PetStage location={location} name={name} top={226} still />
-      <div className="td-scrim" onClick={onClose} />
-      <StatusSheet {...base} focus={focus} onClose={onClose} />
-    </Phone>
+    <div className="td-phone td-phone--plain">
+      <StatusCard {...base} focus={focus} onClose={onClose} />
+    </div>
   );
 }
 

@@ -43,6 +43,6 @@ export const S23_LocationPermission: Story = { name: "23 Zgoda na lokalizację",
 export const S24_Schedule: Story = { name: "24 Plan dnia", render: () => <ScheduleScreen energyPercent={d.energyPercent} /> };
 export const S25_SchedulePrompt: Story = { name: "25 Pytanie o plan", render: () => <SchedulePromptScreen name={d.name} energyPercent={d.energyPercent} /> };
 
-export const S20_StatusEnergy: Story = { name: "20 Karta statusu – energia", render: () => <StatusScreen focus="energy" /> };
+export const S20_StatusEnergy: Story = { name: "20 Karta statusu (pełny ekran) – energia", render: () => <StatusScreen focus="energy" /> };
 export const S21_StatusTasks: Story = { name: "21 Karta statusu – zadania", render: () => <StatusScreen focus="tasks" /> };
 export const S22_StatusStreak: Story = { name: "22 Karta statusu – seria", render: () => <StatusScreen focus="streak" /> };
