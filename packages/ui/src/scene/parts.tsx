@@ -22,7 +22,7 @@ export function Sky({ light, id }: { light: Lighting; id: string }) {
         )}
       </defs>
       <rect width={W} height={H} fill={`url(#${id}-sky)`} />
-      {light.starsOpacity > 0 && [[40, 80], [120, 50], [200, 110], [260, 60], [340, 90], [60, 190], [330, 210], [170, 40]].map(([x, y]) => <circle key={`${x}-${y}`} cx={x} cy={y} r="2" fill="#fff" opacity={0.8 * light.starsOpacity} />)}
+      {light.starsOpacity > 0 && [[40, 80, 2], [120, 50, 2.6], [200, 110, 2], [260, 60, 3], [340, 90, 2], [60, 190, 2.4], [330, 210, 2], [170, 40, 2.2], [24, 130, 1.6], [300, 30, 1.8], [230, 170, 1.6], [90, 250, 1.8], [360, 160, 2.4], [150, 220, 1.6], [280, 250, 1.8], [10, 40, 2]].map(([x, y, r]) => <circle key={`${x}-${y}`} cx={x} cy={y} r={r} fill="#fff" opacity={0.85 * light.starsOpacity} />)}
       {sun && (<><circle cx={sun.x} cy={sun.y} r={sun.r * 3.2} fill={`url(#${id}-sun)`} /><circle cx={sun.x} cy={sun.y} r={sun.r} fill={sun.color} opacity=".95" /></>)}
       {light.moon && (<><circle cx={light.moon.x} cy={light.moon.y} r="26" fill="#FFF6D6" /><circle cx={light.moon.x + 10} cy={light.moon.y - 6} r="22" fill={light.skyTop} /></>)}
     </>

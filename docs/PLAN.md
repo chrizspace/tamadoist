@@ -8,7 +8,7 @@ Stack (uzgodniony): pnpm + Turborepo, Next.js (web, Vercel), Supabase (Auth Goog
 ## Zasady produktowe (MVP)
 **Sen**
 - Zawsze 8h. Użytkownik wybiera tylko godzinę zaśnięcia; pobudka = zaśnięcie + 8h (domyślnie 22:00–06:00).
-- W oknie snu postać śpi, akcje są zablokowane, a sen ładuje pasek liniowo od poziomu z chwili zaśnięcia (zwykle 0%) do 100% w chwili pobudki, bez skoków.
+- W oknie snu postać śpi, akcja Woda nadal działa (wodę można pić też wieczorem i w nocy), a sen ładuje pasek liniowo od poziomu z chwili zaśnięcia (zwykle 0%) do 100% w chwili pobudki, bez skoków.
 
 **Energia (0–100%)**
 - Dzień aktywny = 16h (pobudka → zaśnięcie). Bazowo energia starcza na 30% dnia aktywnego (~4,8h; domyślnie 6:00 → ok. 10:48).
@@ -60,7 +60,7 @@ Funkcje są rozdzielone na trzy niezależne moduły, żeby nowe dodawać jako da
 - **Wybór lokalizacji** (`resolve.ts`, od najwyższego priorytetu): ręczny wybór (trzyma się do włączenia trybu automatycznego) → sen (postać śpi w sypialni) → plan dnia (krótszy blok wygrywa z dłuższym, więc lunch przebija pracę; bloki mogą przechodzić przez północ) → najbliższe zapisane miejsce w jego promieniu → park.
 - **Ekrany:** wybór sceny (dotknięcie tytułu lokacji), Miejsca, zgoda na lokalizację, Plan dnia, pytanie „Zaczynasz pracę o 9:00?”.
 
-**3. Akcje** (`actions/`) — pasek akcji budowany z rejestru `ACTIONS`. Na razie tylko **woda** (dodaj i odejmij szklankę 250 ml, zablokowana podczas snu, podświetlona gdy postać jest zmęczona). Nowa akcja: wpis w rejestrze i własny ekran.
+**3. Akcje** (`actions/`) — pasek akcji budowany z rejestru `ACTIONS`. Na razie tylko **woda** (dodaj i odejmij szklankę 250 ml, dostępna także podczas snu, podświetlona gdy postać jest zmęczona). Nowa akcja: wpis w rejestrze i własny ekran.
 
 **Lokalizacja i prywatność**
 - Zgoda jest prosta i opcjonalna; bez niej działają plan dnia i ręczny wybór sceny.

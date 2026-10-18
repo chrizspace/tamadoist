@@ -7,7 +7,8 @@ export const WATER_ACTION: ActionDef = {
   label: "Woda",
   icon: "drop",
   screen: "water",
-  blockedWhenSleeping: true,
+  /** You can drink in the evening and at night too, so water stays available during sleep. */
+  blockedWhenSleeping: false,
   highlightedWhenTired: true,
 };
 

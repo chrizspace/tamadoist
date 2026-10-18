@@ -30,7 +30,7 @@ export const Bar: Story = {
   name: "Pasek akcji z rejestru",
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      {([["zwykły", false, false], ["zmęczony (podświetlona)", false, true], ["śpi (zablokowana)", true, false]] as const).map(([label, sleeping, tired]) => (
+      {([["zwykły", false, false], ["zmęczony (podświetlona)", false, true], ["śpi (dostępna)", true, false]] as const).map(([label, sleeping, tired]) => (
         <div key={label}>
           <code style={{ fontSize: 12 }}>{label}</code>
           {onHill(<div style={{ position: "absolute", left: 0, right: 0, bottom: 28, display: "flex", justifyContent: "center" }}><ActionBar context={{ sleeping, tired }} /></div>)}

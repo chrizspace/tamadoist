@@ -1,21 +1,40 @@
-import { Glows, Tint, Win, type LocationProps } from "../parts";
+import { darken, lighten, makePaint } from "../paint";
+import { Glows, Tint, type LocationProps } from "../parts";
+import { Ball, Box, CeilingLights, Shadow, Wall, Window3D } from "../solids";
 
 export function Pool({ light, id }: LocationProps) {
-  return (
+  const p = makePaint(id);
+  const ctx = { p, light };
+  const rope = (y: number, s: number) => (
+    <g>
+      <path d={`M0 ${y}Q195 ${y + 8 * s} 390 ${y}`} stroke={darken("#E8F4FF", 0.3)} strokeWidth={2 * s} fill="none" opacity=".6" />
+      {Array.from({ length: 12 }, (_, i) => <Ball key={i} p={p} cx={16 + i * 33} cy={y + 4 * s * Math.sin((i / 11) * Math.PI)} r={7 * s} color={i % 2 ? "#FFC93C" : "#FF5A5F"} />)}
+    </g>
+  );
+  const body = (
     <>
-      <rect width="390" height="844" fill="#D9F2F7" />
-      <g fill="#C3E7EE">{Array.from({ length: 13 }, (_, i) => <rect key={i} x={i * 32} y="0" width="3" height="500" />)}{[100, 200, 300, 400].map((y) => <rect key={y} y={y} width="390" height="3" />)}</g>
-      <Win x={30} y={90} w={110} h={120} light={light} /><Win x={250} y={90} w={110} h={120} light={light} />
-      <rect y="470" width="390" height="90" fill="#F4EBD9" />
-      <rect y="556" width="390" height="10" fill="#fff" />
-      <rect y="566" width="390" height="278" fill="#4CC3FF" />
-      {[600, 650, 700, 750, 800].map((y, i) => <path key={y} d={`M0 ${y}q48 -12 97 0t98 0t98 0t97 0`} stroke="#9ADFFF" strokeWidth="5" fill="none" opacity={0.8 - i * 0.08} />)}
-      {[640, 730].map((y) => <g key={y}>{Array.from({ length: 14 }, (_, i) => <circle key={i} cx={14 + i * 28} cy={y} r="6" fill={i % 2 ? "#FFC93C" : "#FF5A5F"} />)}</g>)}
-      <g stroke="#C9D3DC" strokeWidth="7" fill="none" strokeLinecap="round"><path d="M340 560v-70q0 -20 20 -20h20" /><path d="M368 560v-70" /></g>
-      {[40, 170, 290].map((x) => <rect key={x} x={x} y="20" width="70" height="14" rx="4" fill="#fff" />)}
+      <Wall p={p} y={470} color="#CFEFF5" />
+      <g fill="#B9E2EA" opacity=".8">{Array.from({ length: 13 }, (_, i) => <rect key={i} x={i * 32} y="0" width="3" height="456" />)}{[100, 200, 300, 400].map((y) => <rect key={y} y={y} width="390" height="3" />)}</g>
+      <Window3D {...ctx} x={30} y={84} w={108} h={112} />
+      <Window3D {...ctx} x={252} y={84} w={108} h={112} />
+      <rect y="470" width="390" height="92" fill={p.lin("#F6EEDC", { light: 0.12, dark: 0.1 })} />
+      <rect y="470" width="390" height="30" fill={p.fade("#0B1020", 0.18, 0)} />
+      <rect y="556" width="390" height="14" fill={p.lin("#E3D3B3", { light: 0.1, dark: 0.3 })} />
+      <rect y="556" width="390" height="3" fill="#fff" opacity=".7" />
+      <rect y="570" width="390" height="274" fill={p.lin("#58C8FF", { light: 0.18, dark: 0.3 })} />
+      <rect y="570" width="390" height="26" fill={p.fade("#0B3A66", 0.3, 0)} />
+      {[610, 664, 722, 784].map((y, i) => <path key={y} d={`M0 ${y}q48 ${-10 - i * 2} 97 0t98 0t98 0t97 0`} stroke="#A9E5FF" strokeWidth={4 + i} fill="none" opacity={0.75 - i * 0.1} />)}
+      {[[70, 700, 46, 12], [250, 640, 38, 10], [330, 770, 54, 14], [150, 800, 40, 11]].map(([x, y, rx, ry]) => <ellipse key={`${x}`} cx={x} cy={y} rx={rx} ry={ry} fill="#fff" opacity=".13" />)}
+      {rope(650, 0.8)}{rope(746, 1.1)}
+      <Shadow p={p} cx={366} cy={566} rx={34} ry={5} o={0.25} />
+      <g stroke="#C9D3DC" strokeWidth="7" fill="none" strokeLinecap="round"><path d="M340 564v-74q0 -20 20 -20h22" /><path d="M370 564v-74" /></g>
+      <g stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" opacity=".7"><path d="M338 560v-70q0 -17 18 -17" /></g>
+      <CeilingLights {...ctx} />
       <Tint light={light} />
       <Glows lamps={[{ x: 75, y: 30, r: 150 }, { x: 205, y: 30, r: 150 }, { x: 325, y: 30, r: 150 }]} light={light} id={id} color="#E8F8FF" />
-      <Glows lamps={[{ x: 195, y: 700, r: 220 }]} light={light} id={`${id}p`} color="#7FE0FF" />
+      <Glows lamps={[{ x: 195, y: 710, r: 230 }]} light={light} id={`${id}p`} color="#7FE0FF" />
+      {light.lit && <rect y="570" width="390" height="274" fill={lighten("#7FE0FF", 0.2)} opacity=".08" />}
     </>
   );
+  return <>{body}{p.defs()}</>;
 }

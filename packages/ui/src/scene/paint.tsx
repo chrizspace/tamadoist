@@ -37,23 +37,33 @@ export interface Paint {
   lin(color: string, o?: GradOpts): string;
   /** Sphere-like shading: a highlight near the light and a shaded edge. */
   rad(color: string, o?: RadOpts): string;
+  /** Fades a flat color in or out, for shadows and light falloff. */
+  fade(color: string, from: number, to: number, dir?: "v" | "h"): string;
   /** Soft gaussian blur filter, as a `url(#id)`. */
   blur(std?: number): string;
   defs(): ReactNode;
 }
 
+/**
+ * Renders the collected definitions. It has to come after everything that paints (it is read when React reaches it),
+ * because child components such as Box or Wall add their gradients while they render.
+ */
+function PaintDefs({ nodes }: { nodes: ReactNode[] }) {
+  return <defs>{nodes}</defs>;
+}
+
 /** Collects gradient and filter definitions while a scene is being built, so shapes can ask for shaded fills. */
 export function makePaint(uid: string): Paint {
-  const entries = new Map<string, ReactNode>();
-  let n = 0;
+  const ids = new Map<string, string>();
+  const nodes: ReactNode[] = [];
   const get = (key: string, build: (id: string) => ReactNode): string => {
-    let id = `${uid}g${[...entries.keys()].indexOf(key)}`;
-    if (!entries.has(key)) {
-      id = `${uid}g${n++}`;
-      entries.set(key, build(id));
-      entries.set(`${key}#id`, id);
+    let id = ids.get(key);
+    if (!id) {
+      id = `${uid}g${ids.size}`;
+      ids.set(key, id);
+      nodes.push(build(id));
     }
-    return `url(#${entries.get(`${key}#id`)})`;
+    return `url(#${id})`;
   };
   return {
     lin(color, { light = 0.22, dark = 0.2, dir = "v" } = {}) {
@@ -73,6 +83,14 @@ export function makePaint(uid: string): Paint {
         </radialGradient>
       ));
     },
+    fade(color, from, to, dir = "v") {
+      return get(`f${color}${from}${to}${dir}`, (id) => (
+        <linearGradient key={id} id={id} x1="0" y1="0" x2={dir === "h" ? 1 : 0} y2={dir === "v" ? 1 : 0}>
+          <stop offset="0" stopColor={color} stopOpacity={from} />
+          <stop offset="1" stopColor={color} stopOpacity={to} />
+        </linearGradient>
+      ));
+    },
     blur(std = 6) {
       return get(`b${std}`, (id) => (
         <filter key={id} id={id} x="-30%" y="-30%" width="160%" height="160%">
@@ -81,7 +99,7 @@ export function makePaint(uid: string): Paint {
       ));
     },
     defs() {
-      return <defs>{[...entries.entries()].filter(([k]) => !k.endsWith("#id")).map(([, v]) => v)}</defs>;
+      return <PaintDefs nodes={nodes} />;
     },
   };
 }

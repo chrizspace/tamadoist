@@ -9,13 +9,13 @@ export function ActionsTab() {
   return (
     <>
       <Section title="Rejestr akcji" lead="Pasek akcji na dole ekranu jest budowany z rejestru. Dodanie akcji to jeden wpis i jeden ekran, bez zmian w istniejących ekranach.">
-        <div className="box"><table className="tbl"><thead><tr><th>id</th><th>etykieta</th><th>ikona</th><th>ekran</th><th>blokada we śnie</th><th>podświetlona gdy zmęczony</th></tr></thead>
+        <div className="box"><table className="tbl"><thead><tr><th>id</th><th>etykieta</th><th>ikona</th><th>ekran</th><th>zablokowana we śnie</th><th>podświetlona gdy zmęczony</th></tr></thead>
           <tbody>{ACTIONS.map((a) => <tr key={a.id}><td className="mono">{a.id}</td><td>{a.label}</td><td className="mono">{a.icon}</td><td className="mono">{a.screen}</td><td>{a.blockedWhenSleeping ? "tak" : "nie"}</td><td>{a.highlightedWhenTired ? "tak" : "nie"}</td></tr>)}</tbody></table></div>
       </Section>
 
       <Section title="Woda" lead="Jedyna akcja na ten moment. Dodajesz lub odejmujesz po szklance (250 ml), a postać pije i energia rośnie.">
         <SpecGrid>
-          <Spec title="Pasek akcji" note="Trzy stany: zwykły, zmęczony (akcja podświetlona) i śpi (zablokowana)." stage="hillbg col">
+          <Spec title="Pasek akcji" note="Trzy stany: zwykły, zmęczony (akcja podświetlona) i śpi (nadal dostępna, bo wodę można pić też wieczorem i w nocy)." stage="hillbg col">
             {([["zwykły", false, false], ["zmęczony", false, true], ["śpi", true, false]] as const).map(([l, sleeping, tired]) => (
               <div key={l} className="barrow"><span className="mono">{l}</span><div className="td-actionbar" style={{ position: "static" }}><ActionBar context={{ sleeping, tired }} /></div></div>
             ))}
@@ -35,7 +35,7 @@ export function ActionsTab() {
         <Gallery items={[
           { title: "Home z paskiem akcji", node: <HomeScreen {...d} /> },
           { title: "Home zmęczony", note: "Akcja Woda jest podświetlona.", node: <HomeScreen {...d} state="tired" energyPercent={0} /> },
-          { title: "Home śpi", note: "Akcja zablokowana.", node: <HomeScreen {...d} state="sleeping" energyPercent={50} location="home.bedroom" period="night" /> },
+          { title: "Home śpi", note: "Akcja Woda nadal dostępna.", node: <HomeScreen {...d} state="sleeping" energyPercent={50} location="home.bedroom" period="night" /> },
           { title: "Woda", node: <WaterScreen {...d} /> },
           { title: "Woda po dodaniu szklanki", node: <WaterScreen {...d} drinking /> },
         ]} />

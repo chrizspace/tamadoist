@@ -7,8 +7,8 @@ describe("water action", () => {
     expect(applyWater(500, -250)).toBe(250);
     expect(applyWater(100, -250)).toBe(0);
   });
-  it("is blocked while sleeping and highlighted when tired", () => {
-    expect(availableActions({ sleeping: true, tired: false })).toEqual([]);
+  it("stays available while sleeping and is highlighted only when tired and awake", () => {
+    expect(availableActions({ sleeping: true, tired: false }).map((a) => a.id)).toEqual(["water"]);
     expect(availableActions({ sleeping: false, tired: false }).map((a) => a.id)).toEqual(["water"]);
     expect(isActionHighlighted(getAction("water")!, { sleeping: false, tired: true })).toBe(true);
     expect(isActionHighlighted(getAction("water")!, { sleeping: true, tired: true })).toBe(false);

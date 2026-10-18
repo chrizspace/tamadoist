@@ -8,7 +8,7 @@ import { Gallery, Section, Spec, SpecGrid } from "../chrome";
 import { dateAt, fmt } from "../world";
 
 const RULES: Record<PetState, string> = {
-  sleeping: "W oknie snu. Ma najwyższy priorytet, akcje są zablokowane.",
+  sleeping: "W oknie snu. Ma najwyższy priorytet, ale wodę można pić także we śnie.",
   tired: "Energia spadła do 0%. Akcja Woda jest podświetlona.",
   drinking: "Krótko po dodaniu szklanki wody.",
   happy: "Dzieje się coś dobrego, np. lunch w kuchni.",
