@@ -20,15 +20,13 @@ export function Battery({ percent }: { percent: number }) {
   return (
     <div className="td-battery" role="img" aria-label={`Energia ${p}%`}>
       <div className="td-battery__shell">
-        <span className="td-battery__pct">{p}%</span>
-        <div className="td-battery__slots">
-          {[0, 1, 2, 3].map((i) => (
-            <span key={i} className="td-battery__slot">
-              <b style={{ width: `${slotFill(p, i) * 100}%`, background: batteryColor(p) }} />
-            </span>
-          ))}
-        </div>
+        {[0, 1, 2, 3].map((i) => (
+          <span key={i} className="td-battery__slot">
+            <b style={{ width: `${slotFill(p, i) * 100}%`, background: batteryColor(p) }} />
+          </span>
+        ))}
       </div>
+      <span className="td-battery__pct">{p}%</span>
     </div>
   );
 }

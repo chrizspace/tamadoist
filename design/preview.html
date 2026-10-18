@@ -90,13 +90,12 @@ input[type=range]{width:100%;accent-color:var(--primary)}
 .rbtn{width:48px;height:48px;border-radius:50%;border:0;background:var(--primary-dark);display:grid;place-items:center;cursor:pointer;padding:0;color:#fff}
 .rbtn svg{width:24px;height:24px}
 .rbtn:focus-visible,.pbtn:focus-visible,.act:focus-visible,.menurow:focus-visible,.circ:focus-visible{outline:3px solid var(--water);outline-offset:2px}
-.bat{display:flex;align-items:center}
-.bat .shell{position:relative;width:92px;height:42px;border:2.5px solid var(--p-text);border-radius:12px;background:#fff;padding:3px 6px 6px;display:flex;flex-direction:column;justify-content:space-between}
-.bat .shell::after{content:"";position:absolute;right:-9px;top:11px;width:5px;height:14px;border-radius:0 3px 3px 0;background:var(--p-text)}
-.bat .slot{flex:1;border-radius:3px;background:var(--p-surface);overflow:hidden}
+.bat{display:flex;align-items:center;gap:12px}
+.bat .shell{position:relative;width:64px;height:28px;border:2.5px solid var(--p-text);border-radius:9px;background:#fff;padding:2.5px;display:flex;gap:3px}
+.bat .shell::after{content:"";position:absolute;right:-8px;top:7px;width:5px;height:11px;border-radius:0 3px 3px 0;background:var(--p-text)}
+.bat .slot{flex:1;border-radius:4px;background:var(--p-surface);overflow:hidden}
 .bat .slot b{display:block;height:100%;border-radius:3px}
-.bat .pct{text-align:center;font:800 15px/18px var(--font);font-variant-numeric:tabular-nums;color:var(--p-text)}
-.bat .slots{display:flex;gap:3px;height:10px}
+.bat .pct{font:800 14px var(--font);min-width:36px;font-variant-numeric:tabular-nums;color:var(--p-text)}
 .tag{display:inline-block;background:#fff;border:2px solid var(--p-border);border-radius:999px;padding:6px 20px;font:800 24px var(--font);color:var(--p-text);box-shadow:0 3px 8px rgba(0,0,0,.08)}
 .hero{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2}
 .pet-wrap{position:relative}
@@ -285,7 +284,7 @@ const barColor=p=>p<25?'#FF5A5F':p<50?'#FFC93C':'#1FBF8F';
 function Battery(p){
   p=Math.max(0,Math.min(100,Math.round(p)));const u=p/25,c=barColor(p);
   const slots=[0,1,2,3].map(i=>{const f=Math.max(0,Math.min(1,u-i));return `<span class="slot"><b style="width:${f*100}%;background:${c}"></b></span>`}).join('');
-  return `<div class="bat" role="img" aria-label="Energia ${p}%"><div class="shell"><span class="pct">${p}%</span><div class="slots">${slots}</div></div></div>`;
+  return `<div class="bat" role="img" aria-label="Energia ${p}%"><div class="shell">${slots}</div><span class="pct">${p}%</span></div>`;
 }
 function Pet(state='awake',size=160){
   const eyes=[58,110];
