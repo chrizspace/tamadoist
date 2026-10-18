@@ -1,0 +1,463 @@
+<title>Tamadoist Design System</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Concept: a calm specimen book (page chrome) around a bright, rounded game UI (the product, which keeps its own fixed palette). */
+:root{
+  --bg:#F5F8F7; --surface:#FFFFFF; --ink:#1F2D2A; --muted:#62736E; --line:#E1E8E5; --accent:#127F5F; --chip:#E7F3EF;
+  --font:'Nunito',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  /* product tokens — fixed, never themed */
+  --primary:#1FBF8F; --primary-dark:#159A72; --primary-soft:#DDF7EE; --accent-y:#FFC93C; --accent-y-dark:#E0A800;
+  --water:#4CC3FF; --water-dark:#2A9BD8; --water-soft:#DFF4FF; --night:#4B4FA8; --night-soft:#E6E7FA; --danger:#FF5A5F;
+  --p-bg:#FFFFFF; --p-surface:#F4F7F6; --p-border:#E2E8E6; --p-text:#1F2D2A; --p-muted:#6B7C77;
+  --sky:#E6FAF6; --hill:#10B38A;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1614;--surface:#16211E;--ink:#E7F1EE;--muted:#93A8A1;--line:#25342F;--accent:#45D8A8;--chip:#1C2D28;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1614;--surface:#16211E;--ink:#E7F1EE;--muted:#93A8A1;--line:#25342F;--accent:#45D8A8;--chip:#1C2D28;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-weight:600;margin:0;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:28px 72px}
+header.top{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between;border-bottom:2px solid var(--line);padding-bottom:20px}
+h1{font-size:clamp(28px,5vw,44px);font-weight:800;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 small{display:block;font:500 13px var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+nav.tabs{display:flex;gap:6px;background:var(--chip);padding:5px;border-radius:999px}
+nav.tabs button{font:800 15px var(--font);border:0;background:transparent;color:var(--muted);padding:9px 18px;border-radius:999px;cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--surface);color:var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav.tabs button:focus-visible{outline:3px solid var(--water);outline-offset:2px}
+section.panel{padding-top:32px}
+section.panel[hidden]{display:none}
+h2{font-size:26px;font-weight:800;margin:44px 0 6px;text-wrap:balance}
+h2:first-child{margin-top:0}
+p.lead{color:var(--muted);margin:0 0 20px;max-width:68ch}
+.grid{display:grid;gap:16px}
+.swatches{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.sw{background:var(--surface);border:2px solid var(--line);border-radius:18px;overflow:hidden;cursor:pointer;text-align:left;font:inherit;color:inherit;padding:0}
+.sw:focus-visible{outline:3px solid var(--water)}
+.sw i{display:block;height:68px;border-bottom:2px solid var(--line)}
+.sw b{display:block;font-size:14px;padding:8px 12px 0}
+.sw span{display:block;font:400 12px var(--mono);color:var(--muted);padding:0 12px 10px}
+.group{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+.box{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:20px}
+.spec{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.spec .box{display:flex;flex-direction:column;gap:14px;min-width:0}
+.spec h3{margin:0;font-size:17px;font-weight:800}
+.spec .note{font-size:13px;color:var(--muted);margin:0}
+.stage{border-radius:16px;padding:20px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:center;background:var(--p-surface);color:var(--p-text)}
+.stage.sky{background:linear-gradient(var(--sky),#cdeee6)}
+.stage.hillbg{background:var(--hill)}
+.stage.night{background:#C9CCF2}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th,.tbl td{text-align:left;padding:10px 12px;border-bottom:2px solid var(--line);vertical-align:middle}
+.tbl th{font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+code,.mono{font-family:var(--mono);font-size:.9em}
+.tscale>div{display:flex;gap:20px;align-items:baseline;padding:12px 0;border-bottom:2px solid var(--line);flex-wrap:wrap}
+.tscale .lab{font:500 12px var(--mono);color:var(--muted);width:170px;flex:none}
+.sp{display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap}
+.sp div{text-align:center;font:500 12px var(--mono);color:var(--muted)}
+.sp i{display:block;background:var(--primary);border-radius:4px;margin:0 auto 6px}
+.rd{display:flex;gap:18px;flex-wrap:wrap}
+.rd div{width:84px;height:84px;background:var(--primary-soft);border:3px solid var(--primary);display:grid;place-items:center;font:700 13px var(--font);color:var(--p-text)}
+input[type=range]{width:100%;accent-color:var(--primary)}
+.ctl{display:flex;gap:12px;align-items:center;font-size:14px;flex-wrap:wrap}
+.ctl label{font-weight:700}
+.toast-demo{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+.toast-demo.on{opacity:1}
+/* ---------- screens gallery ---------- */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:28px 20px}
+.gcell{min-width:0}
+.gcell h4{margin:0 0 4px;font-size:15px;font-weight:800}
+.gcell p{margin:0 0 10px;font-size:13px;color:var(--muted)}
+.scaler{width:250px;height:541px;position:relative}
+.scaler .phone{position:absolute;left:0;top:0;transform:scale(.641);transform-origin:top left}
+.proto{display:grid;grid-template-columns:minmax(0,390px) minmax(260px,1fr);gap:32px;align-items:start}
+@media(max-width:820px){.proto{grid-template-columns:1fr}}
+.protoframe{width:100%;max-width:390px}
+.pf-scale{width:390px;height:844px;transform-origin:top left}
+.proto-ctl{display:flex;flex-direction:column;gap:16px}
+.crumbs{display:flex;flex-wrap:wrap;gap:6px}
+.crumbs button{font:700 13px var(--font);border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
+.crumbs button[aria-current="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+/* =============== PRODUCT UI (.app) =============== */
+.phone{width:390px;height:844px;border-radius:44px;overflow:hidden;position:relative;background:var(--sky);font-family:var(--font);color:var(--p-text);box-shadow:0 0 0 8px #101917,0 18px 40px rgba(0,0,0,.28);isolation:isolate}
+.phone *{box-sizing:border-box}
+.phone .scene{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.phone .layer{position:absolute;inset:0;z-index:1}
+.hdr{position:absolute;left:0;right:0;top:48px;height:64px;display:flex;align-items:center;padding:0 16px;gap:8px;z-index:3}
+.hdr .l{display:flex;gap:8px;min-width:96px}
+.hdr .t{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:124px;text-align:center;font:800 16px var(--font);color:var(--p-text);white-space:nowrap}
+.hdr .r{margin-left:auto}
+.rbtn{width:48px;height:48px;border-radius:50%;border:0;background:var(--primary-dark);display:grid;place-items:center;cursor:pointer;padding:0;color:#fff}
+.rbtn svg{width:24px;height:24px}
+.rbtn:focus-visible,.pbtn:focus-visible,.act:focus-visible,.menurow:focus-visible,.circ:focus-visible{outline:3px solid var(--water);outline-offset:2px}
+.bat{display:flex;align-items:center;gap:12px}
+.bat .shell{position:relative;width:64px;height:28px;border:2.5px solid var(--p-text);border-radius:9px;background:#fff;padding:2.5px;display:flex;gap:3px}
+.bat .shell::after{content:"";position:absolute;right:-8px;top:7px;width:5px;height:11px;border-radius:0 3px 3px 0;background:var(--p-text)}
+.bat .slot{flex:1;border-radius:4px;background:var(--p-surface);overflow:hidden}
+.bat .slot b{display:block;height:100%;border-radius:3px}
+.bat .pct{font:800 14px var(--font);min-width:36px;font-variant-numeric:tabular-nums;color:var(--p-text)}
+.tag{display:inline-block;background:#fff;border:2px solid var(--p-border);border-radius:999px;padding:6px 20px;font:800 24px var(--font);color:var(--p-text);box-shadow:0 3px 8px rgba(0,0,0,.08)}
+.hero{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2}
+.pet-wrap{position:relative}
+.pet-wrap.float svg{animation:bob 3.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+@media(prefers-reduced-motion:reduce){.pet-wrap.float svg{animation:none}}
+.ptitle{position:absolute;left:24px;right:24px;text-align:center;font:800 40px/1.1 var(--font);color:var(--primary-dark);z-index:2}
+.psub{position:absolute;left:44px;right:44px;text-align:center;font:600 16px/1.4 var(--font);color:var(--p-muted);z-index:2}
+.caption{position:absolute;left:24px;right:24px;text-align:center;font:800 18px var(--font);color:#fff;z-index:2}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:32px 32px 0 0;padding:26px 24px 34px;display:flex;flex-direction:column;gap:14px;z-index:3;box-shadow:0 -4px 16px rgba(0,0,0,.12)}
+.sheet h3{margin:0;font:800 24px var(--font);text-align:center}
+.sheet p{margin:0;text-align:center;color:var(--p-muted);font:600 16px/1.4 var(--font)}
+.dots{display:flex;gap:8px;justify-content:center}
+.dots i{height:10px;width:10px;border-radius:5px;background:var(--p-border)}
+.dots i.d{background:var(--primary)}.dots i.a{background:var(--primary);width:28px}
+.pbtn{font:800 16px var(--font);border:0;border-radius:16px;padding:17px 24px;width:100%;cursor:pointer;color:var(--c);background:var(--b);box-shadow:0 4px 0 var(--s);transition:transform .05s,box-shadow .05s}
+.pbtn:active:not(:disabled){transform:translateY(4px);box-shadow:0 0 0 var(--s)}
+.pbtn.primary{--c:#fff;--b:var(--primary);--s:var(--primary-dark)}
+.pbtn.water{--c:#fff;--b:var(--water);--s:var(--water-dark)}
+.pbtn.secondary{--c:var(--primary-dark);--b:#fff;--s:var(--p-border);border:2px solid var(--p-border)}
+.pbtn:disabled{--c:var(--p-muted);--b:var(--p-border);--s:var(--p-border);cursor:not-allowed}
+.fld{display:flex;flex-direction:column;gap:7px}
+.fld label{font:700 13px var(--font);color:var(--p-muted)}
+.fld input,.fld select{font:600 16px var(--font);padding:14px 16px;border-radius:16px;border:2px solid var(--p-border);background:var(--p-surface);color:var(--p-text);outline:none;width:100%}
+.fld input:focus,.fld select:focus{border-color:var(--primary);background:#fff}
+.fld.err input{border-color:var(--danger)}
+.fld .e{font:700 13px var(--font);color:var(--danger)}
+.pcard{border:2px solid var(--p-border);border-radius:24px;padding:14px 16px;background:#fff;display:flex;flex-direction:column;gap:4px;text-align:left}
+.pcard b{font:800 18px var(--font)}.pcard span{font:600 14px/1.35 var(--font);color:var(--p-muted)}
+.ebar{display:flex;flex-direction:column;gap:8px;width:100%}
+.ebar .row{display:flex;gap:8px;font:800 18px var(--font)}.ebar .row em{font-style:normal;color:var(--primary-dark)}
+.ebar .track{height:20px;border-radius:10px;background:var(--p-surface);border:2px solid var(--p-border);overflow:hidden}
+.ebar .fill{height:100%;border-radius:8px;background:var(--primary)}
+.ebar .fill.low{background:var(--accent-y)}
+.timecard{background:var(--night-soft);border-radius:24px;padding:16px;text-align:center}
+.timecard b{display:block;font:800 32px var(--font);color:var(--night)}.timecard span{font:700 16px var(--font);color:var(--p-muted)}
+.act{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;cursor:pointer;padding:0;font:700 13px var(--font);color:#fff}
+.act .box{width:76px;height:76px;border-radius:28px;background:#fff;display:grid;place-items:center;box-shadow:0 4px 8px rgba(0,0,0,.14);transition:all .15s}
+.act .box svg{width:36px;height:36px}
+.act.on .box{background:var(--primary-dark);border-radius:38px}
+.act:disabled{opacity:.5;cursor:not-allowed}
+.actbar{position:absolute;left:0;right:0;bottom:44px;display:flex;justify-content:center;gap:24px;z-index:3}
+.circ{width:76px;height:76px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;padding:0}
+.circ svg{width:36px;height:36px}
+.circ.plus{background:var(--water);box-shadow:0 4px 0 var(--water-dark);color:#fff}
+.circ.minus{background:#fff;border:3px solid var(--p-border);color:var(--water-dark)}
+.rb{display:flex;flex-direction:column;align-items:center;gap:6px;font:700 13px var(--font);color:#fff}
+.menupanel{position:absolute;left:16px;top:120px;width:280px;background:#fff;border-radius:28px;padding:20px 16px 12px;box-shadow:0 10px 28px rgba(0,0,0,.25);z-index:4;display:flex;flex-direction:column;gap:4px}
+.menupanel .mh{font:700 12px var(--mono);letter-spacing:.1em;color:var(--p-muted);padding:0 8px 6px}
+.menurow{display:flex;align-items:center;gap:14px;padding:10px;border-radius:18px;border:0;background:none;cursor:pointer;font:700 16px var(--font);color:var(--p-text);text-align:left;width:100%}
+.menurow:hover{background:var(--p-surface)}
+.menurow .ib{width:36px;height:36px;border-radius:12px;background:var(--primary-soft);display:grid;place-items:center;flex:none;color:var(--primary-dark)}
+.menurow .ib svg{width:20px;height:20px}
+.menurow.out{color:var(--danger)}.menurow.out .ib{background:var(--p-surface);color:var(--danger)}
+.menurow .ch{margin-left:auto;color:var(--p-muted);width:18px;height:18px}
+.menupanel hr{border:0;border-top:2px solid var(--p-border);margin:4px 8px}
+.scrim{position:absolute;inset:0;background:rgba(0,26,20,.42);z-index:3}
+.dialog{position:absolute;left:35px;right:35px;top:250px;background:#fff;border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:14px;z-index:5;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.dialog h3{margin:0;font:800 24px var(--font)}.dialog p{margin:0;color:var(--p-muted);font:600 16px/1.4 var(--font)}
+.dialog .btns{display:flex;gap:12px}
+.toast{position:absolute;left:50%;transform:translateX(-50%);top:116px;background:var(--water-dark);color:#fff;padding:12px 20px;border-radius:16px;font:700 16px var(--font);display:flex;gap:10px;align-items:center;z-index:6;white-space:nowrap;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.counter{position:absolute;left:50%;transform:translateX(-50%);background:#fff;border-radius:24px;padding:12px 28px;text-align:center;z-index:2;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+.counter b{display:block;white-space:nowrap;font:800 24px var(--font);color:var(--water-dark);font-variant-numeric:tabular-nums}.counter span{white-space:nowrap;font:600 13px var(--font);color:var(--p-muted)}
+.panelw{position:absolute;left:45px;right:45px;background:#fff;border-radius:20px;padding:10px 16px;z-index:2}
+.hdrwrap{position:relative;width:390px;max-width:100%;height:64px;background:var(--sky);border-radius:16px;overflow:hidden}.hdrwrap .hdr{top:0}
+.ring{position:absolute;border:4px dashed var(--accent-y);border-radius:22px;z-index:4;pointer-events:none}
+.ghost{opacity:.35}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1><small>Tamadoist · v0.3 preview</small>Design System</h1>
+    <nav class="tabs" role="tablist" aria-label="Sekcje">
+      <button role="tab" id="tab-foundations" aria-selected="true" data-tab="foundations">Foundations</button>
+      <button role="tab" id="tab-components" aria-selected="false" data-tab="components">Components</button>
+      <button role="tab" id="tab-screens" aria-selected="false" data-tab="screens">Screens</button>
+    </nav>
+  </header>
+
+  <!-- ============ FOUNDATIONS ============ -->
+  <section class="panel" id="foundations" role="tabpanel" aria-labelledby="tab-foundations">
+    <h2>Kolory</h2>
+    <p class="lead">Ciepła zieleń marki, żółty akcent, błękit wody i fiolet nocy. Kliknij próbkę, żeby skopiować kod.</p>
+    <div id="colors"></div>
+    <h2>Typografia — Nunito</h2>
+    <p class="lead">Zaokrąglony krój o grubych wagach, czytelny na małych ekranach. Sześć stylów wystarcza na cały produkt.</p>
+    <div class="box tscale" id="type"></div>
+    <h2>Odstępy i promienie</h2>
+    <div class="spec">
+      <div class="box"><h3>Spacing</h3><div class="sp" id="spacing"></div></div>
+      <div class="box"><h3>Radius</h3><div class="rd" id="radius"></div></div>
+      <div class="box"><h3>Cień przycisku „3D”</h3><p class="note">Przycisk ma pełny, ostry cień 4px w ciemniejszym odcieniu. Po naciśnięciu zapada się o 4px.</p><div class="stage"><div class="phone-lite" id="btn3d"></div></div></div>
+    </div>
+    <h2>Zasady energii</h2>
+    <p class="lead">Logika żyje w <code>packages/core</code>, a ten podgląd używa tej samej formuły.</p>
+    <div class="spec">
+      <div class="box"><h3>Sen i energia</h3>
+        <table class="tbl"><tbody>
+          <tr><th>Sen</th><td>zawsze 8 h, domyślnie 22:00 → 06:00</td></tr>
+          <tr><th>Dzień aktywny</th><td>16 h od pobudki do zaśnięcia</td></tr>
+          <tr><th>Baza energii</th><td>30% dnia aktywnego (4,8 h)</td></tr>
+          <tr><th>Cel wody</th><td><code>waga × 35 ml</code>, zaokrąglone do 50, zakres 1500–4000</td></tr>
+          <tr><th>Budżet energii</th><td><code>16 h × (0,30 + 0,70 × woda/cel)</code></td></tr>
+        </tbody></table></div>
+      <div class="box"><h3>Wskaźnik baterii</h3>
+        <table class="tbl"><thead><tr><th>Zakres</th><th>Obrys</th><th>Paski</th></tr></thead><tbody id="battable"></tbody></table>
+        <p class="note">Obrys jest zawsze czarny. Cztery sloty ładują się proporcjonalnie: wypełnienie slotu to <code>clamp(procent/25 − numer, 0, 1)</code>.</p></div>
+    </div>
+    <h2>Postać</h2>
+    <p class="lead">Oryginalny maskotek z zaokrąglonych kształtów. Jedna ilustracja SVG, pięć stanów.</p>
+    <div class="box"><div class="stage sky" id="petstates"></div></div>
+  </section>
+
+  <!-- ============ COMPONENTS ============ -->
+  <section class="panel" id="components" role="tabpanel" aria-labelledby="tab-components" hidden>
+    <h2>Primitives</h2>
+    <p class="lead">Każdy komponent ma stany i działa tak samo w Storybooku i w aplikacji.</p>
+    <div class="spec" id="spec1"></div>
+    <h2>Nawigacja i wskaźniki</h2>
+    <p class="lead">Pasek u góry: po lewej hamburger i „wstecz”, w środku tytuł, po prawej energia.</p>
+    <div class="spec" id="spec2"></div>
+    <h2>Scena i postać</h2>
+    <div class="spec" id="spec3"></div>
+  </section>
+
+  <!-- ============ SCREENS ============ -->
+  <section class="panel" id="screens" role="tabpanel" aria-labelledby="tab-screens" hidden>
+    <h2>Prototyp</h2>
+    <p class="lead">Klikalna wersja z prawdziwą logiką: imię, godzina snu i waga zmieniają cel wody, a woda i godzina zegara zmieniają energię.</p>
+    <div class="proto">
+      <div class="protoframe" id="protowrap"><div class="pf-scale" id="pfscale"><div class="phone" id="proto"></div></div></div>
+      <div class="proto-ctl">
+        <div class="box"><h3 style="margin:0 0 10px;font-size:17px">Przejdź do ekranu</h3><div class="crumbs" id="crumbs"></div></div>
+        <div class="box">
+          <h3 style="margin:0 0 10px;font-size:17px">Symulowany zegar</h3>
+          <div class="ctl"><label for="clock">Godzina</label><input type="range" id="clock" min="0" max="1435" step="5" value="480"><b class="mono" id="clocklab">08:00</b></div>
+          <p class="note" style="margin:10px 0 0;color:var(--muted);font-size:13px">Przesuń suwak, żeby zobaczyć, jak energia spada w ciągu dnia i jak postać zasypia w oknie snu.</p>
+        </div>
+        <div class="box"><h3 style="margin:0 0 10px;font-size:17px">Stan</h3><table class="tbl"><tbody id="statetbl"></tbody></table></div>
+      </div>
+    </div>
+    <h2>Wszystkie ekrany</h2>
+    <p class="lead">Dwanaście ekranów z jednego zestawu komponentów.</p>
+    <div class="gallery" id="gallery"></div>
+  </section>
+</div>
+<div class="toast-demo" id="copied" role="status" aria-live="polite"></div>
+
+<script>
+/* ---------- tokens ---------- */
+const COLORS={
+  Brand:[['primary','#1FBF8F'],['primary-dark','#159A72'],['primary-soft','#DDF7EE'],['accent','#FFC93C'],['accent-dark','#E0A800']],
+  Water:[['water','#4CC3FF'],['water-dark','#2A9BD8'],['water-soft','#DFF4FF']],
+  Sleep:[['night','#4B4FA8'],['night-soft','#E6E7FA']],
+  Neutral:[['bg','#FFFFFF'],['surface','#F4F7F6'],['border','#E2E8E6'],['text','#1F2D2A'],['text-muted','#6B7C77']],
+  Feedback:[['danger','#FF5A5F']],
+  Scene:[['sky','#E6FAF6'],['sky-night','#C9CCF2'],['hill-far','#8EC5FF'],['hill','#10B38A'],['hill-night','#0E8C72'],['tree','#0B8F6F'],['tree-trunk','#2D6FA3']]
+};
+const TYPE=[['display','32 / 800',32,800],['title','24 / 800',24,800],['heading','18 / 700',18,700],['body','16 / 600',16,600],['caption','13 / 600',13,600],['button','16 / 800',16,800]];
+const ICONS={
+  menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',back:'<path d="M15 5l-7 7 7 7"/>',close:'<path d="M6 6l12 12M18 6L6 18"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',minus:'<path d="M5 12h14"/>',drop:'<path d="M12 2.5s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+  settings:'<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
+  edit:'<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/>',logout:'<path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5M15 8l4 4-4 4M19 12H9"/>',
+  chevron:'<path d="M9 5l7 7-7 7"/>',pin:'<path d="M12 21s7-6.2 7-11.5a7 7 0 0 0-14 0C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>'
+};
+const icon=(n,cls='')=>`<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
+
+/* ---------- domain logic (port of packages/core) ---------- */
+const MIN_DAY=1440,SLEEP_MIN=480,ACTIVE=MIN_DAY-SLEEP_MIN,BASE=.3;
+const pt=s=>{const[h,m]=s.split(':').map(Number);return h*60+m};
+const ft=m=>{m=((Math.round(m)%MIN_DAY)+MIN_DAY)%MIN_DAY;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')};
+const wakeOf=s=>(pt(s)+SLEEP_MIN)%MIN_DAY;
+const sleeping=(now,s)=>((now-pt(s)+MIN_DAY)%MIN_DAY)<SLEEP_MIN;
+const goalFor=w=>{if(!(w>0))return 1500;return Math.min(4000,Math.max(1500,Math.round(w*35/50)*50))};
+function energy(now,s,drunk,goal){
+  const r=goal>0?Math.min(1,Math.max(0,drunk/goal)):0, budget=ACTIVE*(BASE+(1-BASE)*r), wake=wakeOf(s), until=ft(wake+budget);
+  if(sleeping(now,s))return{state:'sleeping',percent:100,until,ratio:r};
+  const since=(now-wake+MIN_DAY)%MIN_DAY, p=Math.max(0,Math.min(100,Math.round((1-since/budget)*100)));
+  return{state:p===0?'tired':'awake',percent:p,until,ratio:r};
+}
+const rangeOf=p=>p===0?'0%':p<25?'1–24%':p<50?'25–49%':p<75?'50–74%':'75–100%';
+const barColor=p=>p<25?'#FF5A5F':p<50?'#FFC93C':'#1FBF8F';
+
+/* ---------- component renderers (return HTML strings) ---------- */
+function Battery(p){
+  p=Math.max(0,Math.min(100,Math.round(p)));const u=p/25,c=barColor(p);
+  const slots=[0,1,2,3].map(i=>{const f=Math.max(0,Math.min(1,u-i));return `<span class="slot"><b style="width:${f*100}%;background:${c}"></b></span>`}).join('');
+  return `<div class="bat" role="img" aria-label="Energia ${p}%"><div class="shell">${slots}</div><span class="pct">${p}%</span></div>`;
+}
+function Pet(state='awake',size=160){
+  const eyes=[58,110];
+  let e=eyes.map(x=>state==='sleeping'?`<ellipse cx="${x+16}" cy="92" rx="16" ry="4" fill="#1F2D2A"/>`:
+   `<ellipse cx="${x+16}" cy="89" rx="16" ry="19" fill="#fff" stroke="#159A72" stroke-width="3"/><ellipse cx="${x+16}" cy="${state==='tired'?100:state==='happy'?93:94}" rx="${state==='happy'?9:7}" ry="${state==='happy'?11:9}" fill="#1F2D2A"/>${state==='tired'?`<rect x="${x-2}" y="66" width="36" height="22" fill="#1FBF8F"/>`:''}${state==='happy'?`<circle cx="${x+12}" cy="88" r="3" fill="#fff"/>`:''}`).join('');
+  const mouth=state==='awake'?'<ellipse cx="100" cy="129" rx="17" ry="11" fill="#1F2D2A"/>':state==='tired'?'<ellipse cx="100" cy="129" rx="11" ry="3" fill="#1F2D2A"/>':state==='sleeping'?'<circle cx="100" cy="129" r="7" fill="#1F2D2A"/>':state==='happy'?'<ellipse cx="100" cy="129" rx="22" ry="14" fill="#1F2D2A"/>':'<ellipse cx="100" cy="130" rx="12" ry="13" fill="#2A9BD8"/>';
+  const extra=state==='sleeping'?'<text x="150" y="26" font-family="Nunito,sans-serif" font-weight="800" font-size="18" fill="#4B4FA8">Zzz</text>':state==='drinking'?'<ellipse cx="160" cy="40" rx="9" ry="12" fill="#4CC3FF" stroke="#2A9BD8" stroke-width="3"/><ellipse cx="180" cy="70" rx="6" ry="8" fill="#4CC3FF" stroke="#2A9BD8" stroke-width="3"/>':'';
+  return `<svg width="${size}" height="${size}" viewBox="0 0 200 200" role="img" aria-label="Postać: ${state}"><ellipse cx="100" cy="110" rx="80" ry="75" fill="#1FBF8F" stroke="#159A72" stroke-width="4"/><ellipse cx="100" cy="140" rx="45" ry="35" fill="#DDF7EE"/><ellipse cx="100" cy="27" rx="11" ry="17" fill="#FFC93C" stroke="#E0A800" stroke-width="3"/><ellipse cx="51" cy="187" rx="17" ry="9" fill="#FFC93C" stroke="#E0A800" stroke-width="3"/><ellipse cx="149" cy="187" rx="17" ry="9" fill="#FFC93C" stroke="#E0A800" stroke-width="3"/><ellipse cx="53" cy="115" rx="11" ry="7" fill="#FF9999" opacity=".6"/><ellipse cx="147" cy="115" rx="11" ry="7" fill="#FF9999" opacity=".6"/>${e}${mouth}${extra}</svg>`;
+}
+function Egg(size=200){
+  return `<svg width="${size*.75}" height="${size}" viewBox="0 0 150 200" role="img" aria-label="Jajko"><ellipse cx="75" cy="187" rx="55" ry="11" fill="#000" opacity=".15"/><ellipse cx="75" cy="94" rx="65" ry="90" fill="#A9C8F0" stroke="#7FA6DC" stroke-width="3"/><ellipse cx="47" cy="54" rx="15" ry="26" fill="#fff" opacity=".45"/><g fill="#7FA6DC" opacity=".7"><ellipse cx="89" cy="95" rx="17" ry="15"/><ellipse cx="68" cy="129" rx="20" ry="17"/><ellipse cx="110" cy="142" rx="14" ry="12"/><ellipse cx="94" cy="57" rx="10" ry="9"/></g></svg>`;
+}
+function Scene(night=false){
+  const sky=night?'#C9CCF2':'#E6FAF6',far=night?'#7C84D6':'#8EC5FF',hill=night?'#0E8C72':'#10B38A',co=night?.35:.8;
+  const tree=(x,s)=>`<g transform="translate(${x} 0) scale(${s})" transform-origin="0 0"><rect x="16" y="${520/s}" width="10" height="${60/s}" fill="#2D6FA3"/><polygon points="21,${330/s} 51,${406/s} -9,${406/s}" fill="#0B8F6F"/><polygon points="21,${390/s} 57,${466/s} -15,${466/s}" fill="#0B8F6F"/><polygon points="21,${450/s} 63,${526/s} -21,${526/s}" fill="#0B8F6F"/></g>`;
+  const cloud=(x,y,w)=>`<g opacity="${co}" fill="#fff"><ellipse cx="${x+w/2}" cy="${y+w*.19}" rx="${w/2}" ry="${w*.19}"/><ellipse cx="${x+w*.47}" cy="${y+w*.06}" rx="${w*.27}" ry="${w*.2}"/></g>`;
+  return `<svg class="scene" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="390" height="844" fill="${sky}"/>${cloud(30,110,110)}${cloud(250,60,90)}${cloud(300,230,70)}<ellipse cx="200" cy="670" rx="380" ry="200" fill="${far}"/>${tree(10,1)}${tree(340,.85)}<ellipse cx="195" cy="960" rx="495" ry="380" fill="${hill}"/></svg>`;
+}
+const HB=(kind,label,attrs='')=>`<button class="rbtn" aria-label="${label}" ${attrs}>${icon(kind)}</button>`;
+function HeaderBar({left='menu',title='Zielona Łąka',p=62,ghost=false}){
+  const L=left==='menu'?HB('menu','Menu','data-act="menu"'):left==='menu+back'?HB('menu','Menu','data-act="menu"')+HB('back','Wstecz','data-act="back"'):left==='close'?HB('close','Zamknij menu','data-act="closemenu"'):'';
+  return `<div class="hdr"><div class="l ${ghost?'ghost':''}">${L}</div><div class="t">${title}</div><div class="r">${Battery(p)}</div></div>`;
+}
+const NameTag=n=>`<span class="tag">${n||'…'}</span>`;
+const Btn=(label,variant='primary',attrs='')=>`<button class="pbtn ${variant}" ${attrs}>${label}</button>`;
+const Dots=a=>`<div class="dots" role="img" aria-label="Krok ${a} z 5">${[1,2,3,4,5].map(i=>`<i class="${i===a?'a':i<a?'d':''}"></i>`).join('')}</div>`;
+const EBar=(p,label='Energia')=>`<div class="ebar"><div class="row"><span>${label}</span><em>${p}%</em></div><div class="track" role="progressbar" aria-label="${label}" aria-valuenow="${p}" aria-valuemin="0" aria-valuemax="100"><div class="fill ${p<=30?'low':''}" style="width:${p}%"></div></div></div>`;
+const Field=(label,id,val='',ph='',type='text',err='')=>`<div class="fld ${err?'err':''}"><label for="${id}">${label}</label><input id="${id}" type="${type}" value="${val}" placeholder="${ph}" ${err?'aria-invalid="true"':''}>${err?`<span class="e" role="alert">${err}</span>`:''}</div>`;
+const Act=(on=false,dis=false)=>`<button class="act ${on?'on':''}" data-act="water" ${dis?'disabled':''}><span class="box" style="color:${on?'#fff':'#2A9BD8'}">${icon('drop')}</span>Woda</button>`;
+const Scale=(w,petState='awake')=>`<div style="position:relative;width:240px;height:260px"><div style="position:absolute;left:30px;top:0">${Pet(petState,180)}</div><svg style="position:absolute;left:0;top:168px" width="240" height="84" viewBox="0 0 240 84"><rect x="8" y="22" width="224" height="58" rx="20" fill="#F4F7F6" stroke="#CBD5D2" stroke-width="2"/><rect x="0" y="6" width="240" height="26" rx="13" fill="#F4F7F6" stroke="#CBD5D2" stroke-width="2"/><rect x="70" y="40" width="100" height="32" rx="10" fill="#1F2D2A"/><text x="120" y="63" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="18" fill="#1FBF8F" id="scalekg">${w||'—'} kg</text></svg></div>`;
+const MenuPanel=()=>`<div class="menupanel" role="menu"><div class="mh">MENU</div><button class="menurow" role="menuitem" data-act="settings"><span class="ib">${icon('settings')}</span>Ustawienia${icon('chevron','ch')}</button><button class="menurow" role="menuitem" data-act="rename"><span class="ib">${icon('edit')}</span>Zmień imię${icon('chevron','ch')}</button><hr><button class="menurow out" role="menuitem" data-act="logout"><span class="ib">${icon('logout')}</span>Wyloguj${icon('chevron','ch')}</button></div>`;
+const wrapScreen=(night,inner)=>Scene(night)+`<div class="layer">${inner}</div>`;
+
+/* ---------- screens ---------- */
+const SCREENS=[
+ ['login','Login','Jajko w krajobrazie, jedno wejście przez Google.'],
+ ['name','Imię','Imię pojawia się nad jajkiem na żywo.'],
+ ['energy','Energia','Wyjaśnienie: energia to sen plus woda.'],
+ ['indicator','Wskaźnik','Pierwsze pojawienie się baterii w prawym górnym rogu.'],
+ ['sleep','Sen','Zawsze 8 godzin, wybierasz tylko porę zaśnięcia.'],
+ ['weight','Waga','Postać stoi na wadze, z wagi powstaje cel wody.'],
+ ['home','Home','Hamburger, tytuł lokacji, energia, akcja Woda.'],
+ ['menu','Menu','Panel pod hamburgerem.'],
+ ['water','Woda','Dodawanie i odejmowanie po szklance.'],
+ ['tired','Zmęczony','Energia 0%, akcja Woda podświetlona.'],
+ ['sleeping','Śpi','Scena nocna, akcja zablokowana.'],
+ ['dialog','Zmiana imienia','Dialog z polem i dwoma przyciskami.']
+];
+function renderScreen(id,S,live=false){
+  const g=goalFor(S.weight), en=energy(S.now,S.sleep,S.water,g), nm=S.name||'Tama';
+  const sl=sleeping(S.now,S.sleep);
+  switch(id){
+  case 'login': return wrapScreen(false,`<div class="ptitle" style="top:92px">Tamadoist</div><div class="psub" style="top:150px">Wykluj postać z jajka! Dbaj o nawyki, a ona będzie rosła.</div><div class="hero" style="top:300px"><div class="pet-wrap float">${Egg(260)}</div></div><div style="position:absolute;left:24px;right:24px;bottom:96px;z-index:3">${Btn('Kontynuuj z Google','secondary','data-go="name"')}</div><div class="caption" style="bottom:56px;font-size:13px">Logując się akceptujesz regulamin</div>`);
+  case 'name': return wrapScreen(false,`<div class="hero" style="top:120px">${NameTag(nm)}<div class="pet-wrap float">${Egg(250)}</div></div><div class="sheet">${Dots(1)}<h3>Jak masz na imię?</h3><p>Nadaj imię swojej postaci. Możesz je później zmienić.</p>${Field('Imię postaci','f-name',S.name,'np. Tama')}${Btn('Dalej','primary','data-go="energy" id="b-name"')}</div>`);
+  case 'energy': return wrapScreen(false,`<div class="hero" style="top:150px">${NameTag(nm)}<div class="pet-wrap float">${Pet('awake',230)}</div></div><div class="sheet">${Dots(2)}<h3>Energia = sen + woda</h3><p>Bazowo energii starcza na 30% dnia. Każda szklanka wody wydłuża pasek, aż do 100% przy wypiciu całego celu.</p>${EBar(30)}${Btn('Rozumiem','primary','data-go="indicator"')}</div>`);
+  case 'indicator': return wrapScreen(false,`${HeaderBar({left:'none',p:62,ghost:true})}<div class="ring" style="right:6px;top:52px;width:158px;height:56px"></div><div class="hero" style="top:150px">${NameTag(nm)}<div class="pet-wrap float">${Pet('awake',230)}</div></div><div class="sheet">${Dots(2)}<h3>To Twoja energia</h3><p>Wskaźnik w prawym górnym rogu pokazuje, ile energii ma Twoja postać. Pije wodę i śpi, a bateria się ładuje.</p>${Btn('Dalej','primary','data-go="sleep"')}</div>`);
+  case 'sleep': {const w=ft(wakeOf(S.sleep)); return wrapScreen(true,`<div class="hero" style="top:110px">${NameTag(nm)}<div class="pet-wrap float">${Pet('sleeping',220)}</div></div><div class="sheet">${Dots(3)}<h3>Kiedy chodzisz spać?</h3><p>Sen zawsze trwa 8 godzin. Wybierz godzinę zaśnięcia.</p><div class="timecard"><b id="sleeplab">${S.sleep} → ${w}</b><span>8 godzin snu</span></div><div class="fld"><label for="f-sleep">Godzina zaśnięcia</label><select id="f-sleep">${Array.from({length:48},(_,i)=>ft(i*30)).map(t=>`<option ${t===S.sleep?'selected':''}>${t}</option>`).join('')}</select></div>${Btn('Dalej','primary','data-go="weight"')}</div>`);}
+  case 'weight': return wrapScreen(false,`<div class="hero" style="top:70px">${NameTag(nm)}</div><div style="position:absolute;left:75px;top:130px;z-index:2">${Scale(S.weight)}</div><div class="sheet">${Dots(4)}<h3>Ile ważysz?</h3><p>Postać stanęła na wadze! Cel wody to waga × 35 ml.</p>${Field('Waga (kg)','f-weight',S.weight,'70','number')}<div style="text-align:center;font:800 18px var(--font);color:var(--water-dark)" id="goallab">Twój cel: ${g} ml wody dziennie</div>${Btn('Zaczynamy!','primary','data-go="home"')}</div>`);
+  case 'home': case 'tired': case 'sleeping': {
+    const st=id==='home'?(live?(sl?'sleeping':en.state==='tired'?'tired':S.justDrank?'happy':'awake'):'awake'):id==='tired'?'tired':'sleeping';
+    const night=id==='sleeping'||(live&&id==='home'&&sl); const p=id==='tired'?0:id==='sleeping'?100:en.percent;
+    const cap=night?`${nm} śpi do ${ft(wakeOf(S.sleep))}. Dobranoc!`:(id==='tired'||st==='tired')?'Brak energii – napij się wody!':`Energii starczy do ${en.until}`;
+    return wrapScreen(night,`${HeaderBar({left:'menu',p})}<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap float">${Pet(st,270)}</div></div><div class="caption" style="top:600px">${cap}</div><div class="actbar">${Act(id==='tired'||st==='tired',night)}</div>${S.toast?`<div class="toast">${icon('drop')} ${S.toast}</div>`:''}`);}
+  case 'menu': return wrapScreen(false,`<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap">${Pet('awake',270)}</div></div><div class="actbar">${Act()}</div><div class="scrim"></div>${HeaderBar({left:'close',title:'Menu',p:en.percent})}${MenuPanel()}`);
+  case 'water': {const drank=S.justDrank; return wrapScreen(false,`${HeaderBar({left:'menu+back',title:'Woda',p:en.percent})}<div class="hero" style="top:130px">${NameTag(nm)}<div class="pet-wrap">${Pet(drank?'drinking':'awake',230)}</div></div><div class="counter" style="top:455px"><b id="wl">${S.water} / ${g} ml</b><span>Dodawaj po szklance (250 ml)</span></div><div class="panelw" style="top:560px">${EBar(Math.round(Math.min(1,S.water/g)*100),'Woda')}</div><div class="actbar" style="bottom:56px;gap:70px"><div class="rb"><button class="circ minus" aria-label="Odejmij 250 ml" data-act="minus">${icon('minus')}</button>−250 ml</div><div class="rb"><button class="circ plus" aria-label="Dodaj 250 ml" data-act="plus">${icon('plus')}</button>+250 ml</div></div>${S.toast?`<div class="toast">${icon('drop')} ${S.toast}</div>`:''}`);}
+  case 'dialog': return wrapScreen(false,`${HeaderBar({left:'menu',p:en.percent})}<div class="hero" style="top:165px">${NameTag(nm)}<div class="pet-wrap">${Pet('awake',270)}</div></div><div class="scrim"></div><div class="dialog"><h3>Zmień imię</h3><p>Jak ma się teraz nazywać Twoja postać?</p>${Field('Imię postaci','f-rename',S.name,'np. Tama')}<div class="btns">${Btn('Anuluj','secondary','data-act="closedlg"')}${Btn('Zapisz','primary','data-act="saverename"')}</div></div>`);
+  case 'settings': return wrapScreen(false,`${HeaderBar({left:'menu+back',title:'Ustawienia',p:en.percent})}<div style="position:absolute;left:24px;right:24px;top:140px;display:flex;flex-direction:column;gap:12px;z-index:2">${[['Imię postaci',nm],['Godzina snu',S.sleep+' → '+ft(wakeOf(S.sleep))],['Waga',S.weight+' kg'],['Cel wody',g+' ml']].map(([a,b])=>`<div class="pcard"><span>${a}</span><b>${b}</b></div>`).join('')}</div>`);
+  }
+}
+const SAMPLE={name:'Tama',sleep:'22:00',weight:70,water:1700,now:480,toast:'',justDrank:false};
+
+/* ---------- foundations ---------- */
+const copied=document.getElementById('copied');let ct;
+function copy(txt){const done=()=>{copied.textContent='Skopiowano '+txt;copied.classList.add('on');clearTimeout(ct);ct=setTimeout(()=>copied.classList.remove('on'),1400)};
+  try{navigator.clipboard.writeText(txt).then(done,done)}catch(e){done()}}
+document.getElementById('colors').innerHTML=Object.entries(COLORS).map(([g,l])=>`<div class="group">${g}</div><div class="grid swatches">${l.map(([n,h])=>`<button class="sw" data-hex="${h}"><i style="background:${h}"></i><b>${n}</b><span>${h}</span></button>`).join('')}</div>`).join('');
+document.getElementById('type').innerHTML=TYPE.map(([n,l,s,w])=>`<div><span class="lab">${n} · ${l}</span><span style="font-size:${s}px;font-weight:${w}">Wypij wodę, wyśpij się, zdobywaj cele</span></div>`).join('');
+document.getElementById('spacing').innerHTML=[4,8,12,16,24,32].map(s=>`<div><i style="width:${s}px;height:${s}px"></i>${s}</div>`).join('');
+document.getElementById('radius').innerHTML=[['sm',8],['md',16],['lg',24],['full',999]].map(([n,r])=>`<div style="border-radius:${r}px">${n}</div>`).join('');
+document.getElementById('btn3d').innerHTML='<div style="width:240px">'+Btn('Dalej')+'</div>';
+document.getElementById('battable').innerHTML=[['0%','czarny','brak'],['1–24%','czarny','1 czerwony'],['25–49%','czarny','2 żółte'],['50–74%','czarny','3 zielone'],['75–100%','czarny','4 zielone']].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
+document.getElementById('petstates').innerHTML=['awake','tired','sleeping','happy','drinking'].map(s=>`<div style="text-align:center">${Pet(s,150)}<div class="mono" style="font-size:12px;color:#6B7C77">${s}</div></div>`).join('');
+
+/* ---------- components ---------- */
+const spec=(title,note,stage,cls='')=>`<div class="box"><h3>${title}</h3><p class="note">${note}</p><div class="stage ${cls}">${stage}</div></div>`;
+document.getElementById('spec1').innerHTML=
+ spec('Button','Cztery warianty, wciskany efekt 3D.',`<div style="display:flex;flex-direction:column;gap:12px;width:260px">${Btn('Dalej')}${Btn('Kontynuuj z Google','secondary')}${Btn('+ 250 ml wody','water')}<button class="pbtn" disabled>Wyłączony</button></div>`)+
+ spec('Input','Domyślny, wypełniony i z błędem.',`<div style="display:flex;flex-direction:column;gap:14px;width:260px">${Field('Imię postaci','c1','','np. Tama')}${Field('Imię postaci','c2','Tama')}${Field('Imię postaci','c3','','', 'text','Imię musi mieć 1–20 znaków')}</div>`)+
+ spec('Card','Krótka informacja z tytułem.',`<div style="width:280px"><div class="pcard"><b>Woda: 1700 / 2450 ml</b><span>Wypij jeszcze 3 szklanki, by naładować energię do 100%.</span></div></div>`)+
+ spec('EnergyBar','Poniżej 30% pasek zmienia się na żółty.',`<div style="display:flex;flex-direction:column;gap:14px;width:260px">${[0,30,70,100].map(v=>EBar(v)).join('')}</div>`)+
+ spec('ProgressDots','Postęp onboardingu.',`<div style="display:flex;flex-direction:column;gap:14px">${[1,3,5].map(Dots).join('')}</div>`)+
+ spec('TimeCard','Pora snu, zawsze 8 godzin.',`<div style="width:260px"><div class="timecard"><b>22:00 → 06:00</b><span>8 godzin snu</span></div></div>`)+
+ spec('Dialog','Biała karta z dwoma przyciskami.',`<div style="width:290px;background:#fff;border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:12px"><div style="font:800 24px var(--font)">Zmień imię</div><div style="color:var(--p-muted);font:600 15px var(--font)">Jak ma się teraz nazywać Twoja postać?</div>${Field('Imię postaci','c4','Tama')}<div style="display:flex;gap:10px">${Btn('Anuluj','secondary')}${Btn('Zapisz')}</div></div>`)+
+ spec('Toast','Krótkie potwierdzenie po akcji.',`<div class="toast" style="position:static;transform:none">${icon('drop')} +250 ml wody</div>`);
+document.getElementById('spec2').innerHTML=
+ spec('BatteryIndicator','Obrys zawsze czarny, paski ładują się proporcjonalnie do procentu. Przesuń suwak.',`<div style="display:flex;flex-direction:column;gap:14px;align-items:center;width:100%"><div id="batdemo" style="background:#fff;padding:12px 18px;border-radius:999px;box-shadow:0 3px 8px rgba(0,0,0,.1)"></div><div class="ctl" style="width:100%"><label for="batr">Energia</label><input id="batr" type="range" min="0" max="100" value="62"></div><div id="batlab" class="mono" style="color:var(--p-muted);font-size:12px"></div></div>`)+
+ spec('BatteryIndicator — zakresy','Pięć zakresów obok siebie.',`<div style="display:flex;flex-direction:column;gap:12px;background:#fff;padding:16px 20px;border-radius:20px">${[0,12,37,62,100].map(p=>`<div style="display:flex;align-items:center;gap:14px">${Battery(p)}<span class="mono" style="font-size:11px;color:var(--p-muted)">${rangeOf(p)}</span></div>`).join('')}</div>`)+
+ spec('HeaderBar','Trzy układy lewej strony. Tytuł pośrodku, energia po prawej.',`<div style="display:flex;flex-direction:column;gap:14px;width:100%;align-items:center">${['menu','menu+back','close'].map(k=>`<div class="hdrwrap">${HeaderBar({left:k,title:k==='close'?'Menu':k==='menu'?'Zielona Łąka':'Woda',p:62})}</div>`).join('')}</div>`,'sky')+
+ spec('MenuPanel','Biały panel pod hamburgerem, wylogowanie na dole.',`<div style="position:relative;width:300px;height:250px"><div class="menupanel" style="left:8px;top:0">${MenuPanel().replace(/^<div class="menupanel"[^>]*>|<\/div>$/g,'')}</div></div>`,'sky')+
+ spec('ActionButton','Pasek akcji na dole. Na razie tylko „Woda”.',`<div style="display:flex;gap:28px">${Act()}${Act(true)}</div>`,'hillbg')+
+ spec('RoundButton','Dodaj i odejmij szklankę wody.',`<div style="display:flex;gap:40px"><div class="rb"><button class="circ minus" aria-label="Odejmij">${icon('minus')}</button>−250 ml</div><div class="rb"><button class="circ plus" aria-label="Dodaj">${icon('plus')}</button>+250 ml</div></div>`,'hillbg')+
+ spec('LocationTitle','Nazwa lokacji w środku paska.',`<div style="font:800 18px var(--font);display:flex;align-items:center;gap:8px"><span style="color:#159A72;width:22px;height:22px;display:inline-block">${icon('pin')}</span>Zielona Łąka</div>`,'sky');
+document.getElementById('spec3').innerHTML=
+ spec('Pet','Wybierz stan.',`<div style="text-align:center"><div id="petdemo"></div><div class="crumbs" id="petsel" style="justify-content:center;margin-top:10px"></div></div>`,'sky')+
+ spec('Egg','Stan początkowy postaci, lekko się unosi.',`<div class="pet-wrap float">${Egg(210)}</div>`,'sky')+
+ spec('NameTag','Imię zawsze nad postacią.',`<div style="display:flex;flex-direction:column;align-items:center;gap:6px">${NameTag('Tama')}${Pet('awake',110)}</div>`,'sky')+
+ spec('Scale','Postać stoi na wadze podczas wpisywania wagi.',Scale(70),'sky')+
+ spec('Scene — dzień i noc','Tło ekranów. Noc jest używana w oknie snu.',`<div style="display:flex;gap:14px"><div class="phone" style="transform:scale(.3);transform-origin:top left;width:390px;height:844px;margin:0 -273px -590px 0;box-shadow:none">${Scene(false)}</div><div class="phone" style="transform:scale(.3);transform-origin:top left;width:390px;height:844px;margin:0 -273px -590px 0;box-shadow:none">${Scene(true)}</div></div>`,'');
+// battery demo
+const batdemo=document.getElementById('batdemo'),batr=document.getElementById('batr'),batlab=document.getElementById('batlab');
+const updBat=()=>{const p=+batr.value;batdemo.innerHTML=Battery(p);batlab.textContent='zakres '+rangeOf(p)+' · jednostki '+(p/25).toFixed(2)};
+batr.addEventListener('input',updBat);updBat();
+// pet demo
+const petdemo=document.getElementById('petdemo'),petsel=document.getElementById('petsel');
+petsel.innerHTML=['awake','tired','sleeping','happy','drinking'].map((s,i)=>`<button data-pet="${s}" aria-current="${i===0}">${s}</button>`).join('');
+petsel.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;petdemo.innerHTML=Pet(b.dataset.pet,170);petsel.querySelectorAll('button').forEach(x=>x.setAttribute('aria-current',x===b))});
+petdemo.innerHTML=Pet('awake',170);
+document.addEventListener('click',e=>{const s=e.target.closest('.sw');if(s)copy(s.dataset.hex)});
+
+/* ---------- screens: gallery + prototype ---------- */
+document.getElementById('gallery').innerHTML=SCREENS.map(([id,t,d],i)=>{
+  const S={...SAMPLE};if(id==='tired')S.water=0;
+  return `<div class="gcell"><h4>${String(i+1).padStart(2,'0')} · ${t}</h4><p>${d}</p><div class="scaler"><div class="phone">${renderScreen(id,S)}</div></div></div>`}).join('');
+
+const P={screen:'login',stack:[],S:{...SAMPLE,name:'',weight:70,water:0,now:480}};
+const proto=document.getElementById('proto'),crumbs=document.getElementById('crumbs');
+const PROTO_ORDER=[['login','Login'],['name','Imię'],['energy','Energia'],['indicator','Wskaźnik'],['sleep','Sen'],['weight','Waga'],['home','Home'],['menu','Menu'],['water','Woda'],['settings','Ustawienia'],['dialog','Dialog']];
+crumbs.innerHTML=PROTO_ORDER.map(([id,l])=>`<button data-to="${id}">${l}</button>`).join('');
+let toastT;
+function showToast(msg){P.S.toast=msg;clearTimeout(toastT);toastT=setTimeout(()=>{P.S.toast='';P.S.justDrank=false;draw()},1500)}
+function draw(){
+  const id=P.screen, S=P.S; const nameShown={...S,name:S.name||(['login','name'].includes(id)?'':'Tama')};
+  proto.innerHTML=renderScreen(id,id==='name'?{...S}:nameShown,true);
+  crumbs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b.dataset.to===id));
+  const g=goalFor(S.weight),en=energy(S.now,S.sleep,S.water,g);
+  document.getElementById('statetbl').innerHTML=[['Imię',S.name||'—'],['Sen',S.sleep+' → '+ft(wakeOf(S.sleep))],['Waga / cel',S.weight+' kg / '+g+' ml'],['Woda',S.water+' ml ('+Math.round(en.ratio*100)+'%)'],['Energia',en.state==='sleeping'?'śpi':en.percent+'% do '+en.until]].map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join('');
+  const b=proto.querySelector('#b-name');if(b)b.disabled=!S.name.trim();
+}
+function go(id){P.screen=id;draw()}
+proto.addEventListener('click',e=>{
+  const t=e.target.closest('[data-go],[data-act]');if(!t)return;
+  if(t.dataset.go){go(t.dataset.go);return}
+  const a=t.dataset.act,S=P.S;
+  if(a==='menu'){P.prev=P.screen;go('menu')}
+  else if(a==='closemenu'){go(P.prev&&P.prev!=='menu'?P.prev:'home')}
+  else if(a==='back'){go('home')}
+  else if(a==='water'){go('water')}
+  else if(a==='plus'){S.water+=250;S.justDrank=true;showToast('+250 ml wody');draw()}
+  else if(a==='minus'){S.water=Math.max(0,S.water-250);showToast('−250 ml wody');draw()}
+  else if(a==='settings'){go('settings')}
+  else if(a==='rename'){go('dialog')}
+  else if(a==='closedlg'){go('home')}
+  else if(a==='saverename'){const v=(proto.querySelector('#f-rename').value||'').trim();if(v){S.name=v.slice(0,20)}go('home')}
+  else if(a==='logout'){P.S={...SAMPLE,name:'',weight:70,water:0,now:P.S.now};go('login')}
+});
+proto.addEventListener('input',e=>{
+  const S=P.S,t=e.target;
+  if(t.id==='f-name'){S.name=t.value.slice(0,20);const tag=proto.querySelector('.tag');if(tag)tag.textContent=S.name||'…';const b=proto.querySelector('#b-name');if(b)b.disabled=!S.name.trim();0}
+  else if(t.id==='f-weight'){S.weight=+t.value||0;const g=goalFor(S.weight);proto.querySelector('#goallab').textContent='Twój cel: '+g+' ml wody dziennie';const k=proto.querySelector('#scalekg');if(k)k.textContent=(S.weight||'—')+' kg'}
+});
+proto.addEventListener('change',e=>{if(e.target.id==='f-sleep'){P.S.sleep=e.target.value;proto.querySelector('#sleeplab').textContent=P.S.sleep+' → '+ft(wakeOf(P.S.sleep))}});
+crumbs.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(!P.S.name)P.S.name='Tama';go(b.dataset.to)});
+const clock=document.getElementById('clock'),clocklab=document.getElementById('clocklab');
+clock.addEventListener('input',()=>{P.S.now=+clock.value;clocklab.textContent=ft(P.S.now);if(['home','water','menu','settings','dialog'].includes(P.screen)){const a=document.activeElement;draw();}else{draw()}});
+draw();
+
+/* ---------- gallery scaling for wide proto frame on phones ---------- */
+function fit(){const w=document.getElementById('protowrap').clientWidth;const s=Math.min(1,w/390);const el=document.getElementById('pfscale');el.style.transform='scale('+s+')';document.getElementById('protowrap').style.height=(844*s)+'px'}
+addEventListener('resize',fit);fit();
+
+/* ---------- tabs ---------- */
+const tabs=[...document.querySelectorAll('nav.tabs button')];
+function showTab(id){tabs.forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===id));document.querySelectorAll('section.panel').forEach(s=>s.hidden=s.id!==id);try{history.replaceState(null,'','#'+id)}catch(e){};fit()}
+tabs.forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+const h=(location.hash||'').slice(1);if(['foundations','components','screens'].includes(h))showTab(h);
+</script>

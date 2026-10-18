@@ -17,6 +17,13 @@ export const colors = {
   text: "#1F2D2A",
   textMuted: "#6B7C77",
   onPrimary: "#FFFFFF",
+  sky: "#E6FAF6",
+  skyNight: "#C9CCF2",
+  hillFar: "#8EC5FF",
+  hill: "#10B38A",
+  hillNight: "#0E8C72",
+  tree: "#0B8F6F",
+  treeTrunk: "#2D6FA3",
 } as const;
 
 export const space = { 4: 4, 8: 8, 12: 12, 16: 16, 24: 24, 32: 32 } as const;
