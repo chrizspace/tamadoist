@@ -17,6 +17,7 @@ import { ProgressDots } from "../components/ProgressDots";
 import { Sheet } from "../components/Sheet";
 import { TimeCard } from "../components/TimeCard";
 import { TimePicker } from "../components/TimePicker";
+import type { Need } from "@tamadoist/core";
 import type { DialKey } from "../character/Indicators";
 import { PetStage } from "../character/PetStage";
 import { Toast } from "../components/Toast";
@@ -165,17 +166,18 @@ export interface HomeProps extends SceneProps, Pick<ScreenData, "name" | "energy
   onMenu?: () => void;
   onTitle?: () => void;
   onIndicator?: (key: DialKey) => void;
+  need?: Need;
   onAction?: (id: string) => void;
 }
 
-export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state = "awake", toast, location = "recreation.park", period = "noon", onMenu, onTitle, onIndicator, onAction }: HomeProps) {
+export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state = "awake", toast, location = "recreation.park", period = "noon", onMenu, onTitle, onIndicator, need, onAction }: HomeProps) {
   const sleeping = state === "sleeping";
   const tired = state === "tired";
   return (
     <Phone location={location} period={period}>
       <HeaderBar left="menu" title={getLocation(location).label} percent={energyPercent} onMenu={onMenu} onTitle={onTitle ?? (() => undefined)} onIndicator={onIndicator} />
       <PetStage location={location} state={state} name={name} top={STAGE_TOP} />
-      <ActionBar context={{ sleeping, tired }} onAction={onAction} />
+      <ActionBar context={{ sleeping, tired }} need={need} onAction={onAction} />
       {toast && <Toast>{toast}</Toast>}
     </Phone>
   );

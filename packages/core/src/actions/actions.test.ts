@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ACTIONS, applyMeal, applyWater, checklistProgress, completeNext, nextOpenItem, toggleItem, availableActions, derivePetState, getAction, isActionHighlighted } from "../index";
+import { predictNeed, ACTIONS, applyMeal, applyWater, checklistProgress, completeNext, nextOpenItem, toggleItem, availableActions, derivePetState, getAction, isActionHighlighted } from "../index";
 
 describe("nutrition action", () => {
   it("adds and removes a glass, never below zero", () => {
@@ -51,5 +51,27 @@ describe("meals", () => {
     expect(applyMeal(0)).toBe(1);
     expect(applyMeal(0, -1)).toBe(0);
     expect(applyMeal(12)).toBe(12);
+  });
+});
+
+describe("predictNeed (icon of the Zadbaj action)", () => {
+  const base = { sleepStart: "22:00", sleepEnd: "06:00", sleeping: false, drunkMl: 0, goalMl: 2450, meals: 0, mealsGoal: 4 };
+  it("starts the day with drinking (tie goes to water)", () => {
+    expect(predictNeed({ ...base, minutes: 8 * 60 }).need).toBe("drink");
+  });
+  it("asks for food when meals are further behind than water", () => {
+    expect(predictNeed({ ...base, minutes: 12 * 60, drunkMl: 1100, meals: 1 }).need).toBe("eat");
+  });
+  it("asks for water when water is further behind than meals", () => {
+    expect(predictNeed({ ...base, minutes: 15 * 60, drunkMl: 500, meals: 3 }).need).toBe("drink");
+  });
+  it("switches to sleep within an hour of bedtime and while sleeping", () => {
+    expect(predictNeed({ ...base, minutes: 21 * 60 + 15 }).need).toBe("sleep");
+    expect(predictNeed({ ...base, minutes: 2 * 60, sleeping: true }).need).toBe("sleep");
+    expect(predictNeed({ ...base, minutes: 20 * 60 }).need).not.toBe("sleep");
+  });
+  it("follows a non-default bedtime", () => {
+    expect(predictNeed({ ...base, sleepStart: "00:00", sleepEnd: "08:00", minutes: 23 * 60 + 30 }).need).toBe("sleep");
+    expect(predictNeed({ ...base, sleepStart: "00:00", sleepEnd: "08:00", minutes: 21 * 60 }).need).not.toBe("sleep");
   });
 });

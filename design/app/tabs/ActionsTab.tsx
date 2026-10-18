@@ -20,6 +20,9 @@ export function ActionsTab() {
               <div key={l} className="barrow"><span className="mono">{l}</span><div className="td-actionbar" style={{ position: "static" }}><ActionBar context={{ sleeping, tired }} /></div></div>
             ))}
           </Spec>
+          <Spec title="Ikona Zadbaj zależy od potrzeby" note="Przycisk pokazuje najbliższą potrzebę: picie, jedzenie albo sen. W ostatniej godzinie przed snem i podczas snu zawsze sen; wcześniej wygrywa to, z czym postać jest bardziej do tyłu (woda lub posiłki)." stage="hillbg">
+            <ActionButton label="Zadbaj" icon="drop" /><ActionButton label="Zadbaj" icon="utensils" /><ActionButton label="Zadbaj" icon="moon" />
+          </Spec>
           <Spec title="Przycisk akcji" stage="hillbg"><ActionButton /><ActionButton active /><ActionButton disabled /></Spec>
           <Spec title="Dodawanie wody (składnik Odżywiania)" note={`Zapis w applyWater: krok ${GLASS_ML} ml, wynik nigdy poniżej zera.`} stage="hillbg col">
             <div className="td-static" style={{ position: "relative", height: 76, width: 320 }}><WaterCounter drunkMl={ml} goalMl={2450} /></div>

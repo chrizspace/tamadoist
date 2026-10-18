@@ -340,3 +340,8 @@ button.td-ibar__seg:focus-visible { outline: 3px solid var(--color-water); outli
 .td-nutri__track { height: 8px; border-radius: 4px; background: color-mix(in srgb, var(--c) 16%, #fff); overflow: hidden; }
 .td-nutri__track > div { height: 100%; border-radius: 4px; background: var(--c); transition: width .3s; }
 .td-nutri__gain { top: auto; bottom: -14px; right: 12px; }
+
+/* Icon swap on the Zadbaj button when the nearest need changes */
+.td-action__icon { display: grid; place-items: center; animation: td-iconswap .3s ease-out; }
+@keyframes td-iconswap { from { transform: scale(.5) rotate(-20deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .td-action__icon { animation: none; } }

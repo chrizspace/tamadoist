@@ -53,3 +53,5 @@ export const S23_Tasks: Story = { name: "23 Zadania (akcja)", render: () => <Che
 export const S24_TasksList: Story = { name: "24 Zadania – lista", render: () => <ChecklistPage title="Zadania" items={SAMPLE_TODAY} /> };
 export const S25_Habits: Story = { name: "25 Nawyki (akcja)", render: () => <ChecklistActionScreen title="Nawyki" items={SAMPLE_HABIT_ITEMS.map((h, i) => ({ ...h, done: i === 0 }))} /> };
 export const S26_HabitsList: Story = { name: "26 Nawyki – lista", render: () => <ChecklistPage title="Nawyki" color="#FF8A3D" items={SAMPLE_HABIT_ITEMS.map((h, i) => ({ ...h, done: i === 0 }))} /> };
+export const S28_NeedEat: Story = { name: "28 Home – potrzeba: jedzenie", render: () => <HomeScreen {...d} need="eat" /> };
+export const S29_NeedSleep: Story = { name: "29 Home – potrzeba: sen", render: () => <HomeScreen {...d} need="sleep" location="home.bedroom" period="evening" /> };

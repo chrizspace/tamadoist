@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { completeNext, toggleItem, LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
+import { MEALS_GOAL, predictNeed, completeNext, toggleItem, LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
 import {
   IndicatorsProvider, IndicatorsLayoutContext, StatusScreen, ChecklistActionScreen, ChecklistPage, SAMPLE_TODAY, SAMPLE_HABIT_ITEMS, type DialKey, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
   PlacesScreen, RenameDialogScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
@@ -47,6 +47,7 @@ export function Prototype() {
   };
   const scene = { location: w.scene.location, period: w.scene.period.id };
   const tasksDone = tasks.filter((t) => t.done).length;
+  const need = predictNeed({ minutes: clock, sleepStart: ch.profile.sleepStart, sleepEnd: w.sleepEnd, sleeping: w.energy.state === "sleeping", drunkMl: ac.drunkMl, goalMl: ch.goalMl, meals: ac.meals, mealsGoal: MEALS_GOAL });
   const go = (s: ScreenId) => setScreen(s);
   const openStatus = (from: ScreenId) => (key: DialKey) => { setStatusFocus(key); setStatusBack(from); go("status"); };
   // Habits: ticked by hand, or automatic when the underlying goal is met (water goal, all tasks).
@@ -68,7 +69,7 @@ export function Prototype() {
       case "indicator": return <EnergyIndicatorScreen name={w.name} energyPercent={d.energyPercent} onNext={() => go("sleep")} />;
       case "sleep": return <SleepScreen name={w.name} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} onSleepStart={ch.setSleepStart} onNext={() => go("weight")} />;
       case "weight": return <WeightScreen name={w.name} weightKg={d.weightKg} goalMl={d.goalMl} onWeight={ch.setWeight} onNext={() => go("home")} />;
-      case "home": return <HomeScreen {...d} {...scene} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onIndicator={openStatus("home")} onAction={(id) => id === "nutrition" ? go("nutrition") : id === "tasks" ? go("tasks") : id === "habits" && go("habits")} />;
+      case "home": return <HomeScreen {...d} {...scene} need={need.need} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onIndicator={openStatus("home")} onAction={(id) => id === "nutrition" ? go("nutrition") : id === "tasks" ? go("tasks") : id === "habits" && go("habits")} />;
       case "menu": return <MenuScreen name={w.name} energyPercent={d.energyPercent} onClose={() => go("home")} onSettings={() => go("settings")} onPlaces={() => go("places")} onSchedule={() => go("schedule")} onLogout={() => { ch.reset(); ac.reset(); sc.setManual(undefined); sc.setPos("none"); go("login"); }} />;
       case "nutrition": return <NutritionScreen {...scene} name={w.name} energyPercent={d.energyPercent} state={ac.justDrank ? "drinking" : ac.justAte && w.petState !== "sleeping" ? "happy" : w.petState} drunkMl={ac.drunkMl} goalMl={ch.goalMl} meals={ac.meals} sleepStart={ch.profile.sleepStart} sleepEnd={w.sleepEnd} gain={toast} onBack={() => go("home")} onWater={() => { ac.add(); flash("+250 ml"); }} onMeal={() => { ac.eat(); flash("+1 posiłek"); }} onSleep={() => go("sleep-edit")} onIndicator={openStatus("nutrition")} />;
       case "sleep-edit": return <SleepPage sleepStart={ch.profile.sleepStart} sleepEnd={w.sleepEnd} onSleepStart={ch.setSleepStart} onClose={() => go("nutrition")} />;
@@ -92,6 +93,7 @@ export function Prototype() {
     ["Sen", `${ch.profile.sleepStart} → ${w.sleepEnd}`],
     ["Waga / cel", `${ch.profile.weightKg} kg / ${ch.goalMl} ml`],
     ["Stan postaci", w.petState],
+    ["Najbliższa potrzeba", `${{ drink: "picie", eat: "jedzenie", sleep: "sen" }[need.need]} (pilność ${Math.round(need.urgency * 100)}%)`],
     ["Energia", w.energy.state === "sleeping" ? `${w.energy.percent}% (śpi, ładuje się)` : `${w.energy.percent}% do ${w.energy.energyUntil}`],
     ["Pora dnia", w.scene.period.label],
     ["Scena", `${w.scene.label} (${w.scene.source})`],
