@@ -445,3 +445,16 @@ button.td-status__check.is-done { background: var(--c); border-color: var(--c); 
 .td-trow { padding: 0 12px; border-radius: 12px; }
 .td-trow--tomorrow { padding: 4px 12px; }
 .td-trow + .td-trow { border-top: 0; box-shadow: 0 -1px 0 var(--color-border); }
+
+/* Tasks page: lists use the full width, without the gray frame around each section */
+.td-tasks.td-statusfull { padding-left: 10px; padding-right: 10px; }
+.td-tasks .td-status__head { padding-left: 10px; padding-right: 10px; }
+.td-tasks .td-seg { margin-left: 0; margin-right: 0; }
+.td-tasks .td-status { padding-left: 0; padding-right: 0; }
+.td-tasks .td-status__sec { border: 0; border-radius: 0; background: none; padding: 0; gap: 8px; }
+.td-tasks .td-status__sec > header { padding: 0 10px; }
+.td-tasks .td-todaybar { padding: 0 10px; }
+.td-tasks .td-trow { padding: 0 8px; }
+.td-tasks .td-addrow, .td-tasks .td-goalform, .td-tasks .td-tomorrow { margin: 0 10px; }
+.td-tasks .td-goalcard, .td-tasks .td-dashed { margin: 0 4px; }
+.td-tasks .td-trow__subs { padding-right: 0; }

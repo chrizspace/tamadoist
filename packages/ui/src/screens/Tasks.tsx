@@ -226,7 +226,7 @@ export function TasksPage({ backlog, tab: tab0 = "now", goalId: goal0, expanded:
 
   return (
     <div className="td-phone td-phone--plain">
-      <div className="td-statusfull">
+      <div className="td-statusfull td-tasks">
         <header className="td-status__head">
           <h3>Zadania</h3>
           <button type="button" className="td-status__close" onClick={onClose} aria-label="Zamknij"><Icon name="close" /></button>
