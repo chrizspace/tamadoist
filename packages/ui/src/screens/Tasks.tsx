@@ -243,10 +243,12 @@ export function TasksPage({ backlog, tab: tab0 = "now", goalId: goal0, expanded:
                 <h4>Na dziś</h4>
                 <span>{today.done}/{today.total}</span>
               </header>
-              <div className="td-todaybar">
-                <small>{backlog.todayOrder ? "Własna kolejność." : "Sortowanie: data i godzina."} Przeciągnij uchwyt, aby ustawić kolejność, albo przypisz godziny.</small>
-                {backlog.todayOrder && <button type="button" onClick={ed.onSortByTime}>Wg godziny</button>}
-              </div>
+              {backlog.todayOrder && (
+                <div className="td-todaybar">
+                  <small>Własna kolejność.</small>
+                  <button type="button" onClick={ed.onSortByTime}>Wg godziny</button>
+                </div>
+              )}
               <Reorder.Group as="ul" axis="y" values={todayList.map((t) => t.id)} onReorder={(ids) => ed.onReorderToday?.(ids)} className="td-trows" data-testid="today-list">
                 {todayList.map((t) => <DraggableRow key={t.id} task={t} backlog={backlog} mode="today" open={expanded.includes(t.id)} onOpen={() => toggleOpen(t.id)} {...ed} />)}
               </Reorder.Group>
