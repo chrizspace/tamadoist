@@ -26,7 +26,7 @@ export function ComponentsTab() {
               <div key={left} className="hdrwrap"><div style={{ position: "absolute", inset: 0, top: -48 }}><HeaderBar left={left} title={left === "close" ? "Menu" : left === "menu" ? "Kuchnia" : "Woda"} percent={62} rail={false} onTitle={left === "menu" ? () => undefined : undefined} /></div></div>
             ))}
           </Spec>
-          <Spec title="MenuPanel" note="Miejsca, Plan dnia, Ustawienia i Wyloguj." stage="sky"><div style={{ position: "relative", width: 310, height: 250 }}><div style={{ position: "absolute", left: 8, top: -112 }}><MenuPanel /></div></div></Spec>
+          <Spec title="MenuPanel" note="Ustawienia i Wyloguj (Miejsca i Plan dnia są w Ustawieniach)." stage="sky"><div style={{ position: "relative", width: 310, height: 250 }}><div style={{ position: "absolute", left: 8, top: -112 }}><MenuPanel /></div></div></Spec>
         </SpecGrid>
       </Section>
 

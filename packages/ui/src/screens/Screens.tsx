@@ -12,6 +12,7 @@ import { Dialog } from "../components/Dialog";
 import { HeaderBar } from "../components/HeaderBar";
 import { Input } from "../components/Input";
 import { MenuPanel } from "../components/MenuPanel";
+import { Icon } from "../components/Icon";
 import { AddCard, ListCard, MapArt, SettingRow, Switch } from "../components/Places";
 import { ProgressDots } from "../components/ProgressDots";
 import { Sheet } from "../components/Sheet";
@@ -183,38 +184,41 @@ export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state =
   );
 }
 
-export interface MenuHandlers { onClose?: () => void; onSettings?: () => void; onPlaces?: () => void; onSchedule?: () => void; onLogout?: () => void }
+export interface MenuHandlers { onClose?: () => void; onSettings?: () => void; onLogout?: () => void }
 
-export function MenuScreen({ name, energyPercent, onClose, onSettings, onPlaces, onSchedule, onLogout }: Pick<ScreenData, "name" | "energyPercent"> & MenuHandlers) {
+export function MenuScreen({ name, energyPercent, onClose, onSettings, onLogout }: Pick<ScreenData, "name" | "energyPercent"> & MenuHandlers) {
   return (
     <Phone {...LOC_PARK}>
       <PetStage location="recreation.park" name={name} top={STAGE_TOP} still />
       <ActionBar context={{ sleeping: false, tired: false }} />
       <div className="td-scrim" />
       <HeaderBar left="close" title="Menu" percent={energyPercent} rail={false} onClose={onClose} />
-      <MenuPanel onSettings={onSettings} onPlaces={onPlaces} onSchedule={onSchedule} onLogout={onLogout} />
+      <MenuPanel onSettings={onSettings} onLogout={onLogout} />
     </Phone>
   );
 }
 
 /* ---------------- Character: settings ---------------- */
 
-function SettingsRows({ name, sleepStart, sleepEnd, weightKg, goalMl, onEditName }: ScreenData & { onEditName?: () => void }) {
+function SettingsRows({ name, sleepStart, sleepEnd, weightKg, goalMl, onEditName, onPlaces, onSchedule }: ScreenData & { onEditName?: () => void; onPlaces?: () => void; onSchedule?: () => void }) {
   return (
-    <div className="td-page">
+    <div className="td-page td-page--list">
       <SettingRow label="Imię postaci" value={name} onEdit={onEditName ?? (() => undefined)} />
       <SettingRow label="Godzina snu" value={`${sleepStart} → ${sleepEnd}`} />
       <SettingRow label="Waga" value={`${weightKg} kg`} />
       <SettingRow label="Cel wody" value={`${goalMl} ml`} />
+      <div className="td-grouphead">Scena</div>
+      <ListCard icon="pin" title="Miejsca" sub="Dom, praca i inne miejsca" right={<Icon name="chevron" />} onClick={onPlaces ?? (() => undefined)} />
+      <ListCard icon="clock" title="Plan dnia" sub="Godziny pracy i lunchu" right={<Icon name="chevron" />} onClick={onSchedule ?? (() => undefined)} />
     </div>
   );
 }
 
-export function SettingsScreen({ onBack, onEditName, ...d }: ScreenData & { onBack?: () => void; onEditName?: () => void }) {
+export function SettingsScreen({ onBack, onEditName, onPlaces, onSchedule, ...d }: ScreenData & { onBack?: () => void; onEditName?: () => void; onPlaces?: () => void; onSchedule?: () => void }) {
   return (
     <Phone {...LOC_PARK}>
       <HeaderBar left="back" title="Ustawienia" percent={d.energyPercent} rail={false} onBack={onBack} />
-      <SettingsRows {...d} onEditName={onEditName} />
+      <SettingsRows {...d} onEditName={onEditName} onPlaces={onPlaces} onSchedule={onSchedule} />
     </Phone>
   );
 }

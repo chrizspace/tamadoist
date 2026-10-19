@@ -1,6 +1,6 @@
 import { Icon, type IconName } from "./Icon";
 
-export interface MenuPanelProps { onSettings?: () => void; onPlaces?: () => void; onSchedule?: () => void; onLogout?: () => void }
+export interface MenuPanelProps { onSettings?: () => void; onLogout?: () => void }
 
 function Row({ icon, label, danger, onClick }: { icon: IconName; label: string; danger?: boolean; onClick?: () => void }) {
   return (
@@ -12,12 +12,10 @@ function Row({ icon, label, danger, onClick }: { icon: IconName; label: string; 
   );
 }
 
-export function MenuPanel({ onSettings, onPlaces, onSchedule, onLogout }: MenuPanelProps) {
+export function MenuPanel({ onSettings, onLogout }: MenuPanelProps) {
   return (
     <div className="td-menu" role="menu">
       <div className="td-menu__head">MENU</div>
-      <Row icon="pin" label="Miejsca" onClick={onPlaces} />
-      <Row icon="clock" label="Plan dnia" onClick={onSchedule} />
       <Row icon="settings" label="Ustawienia" onClick={onSettings} />
       <hr />
       <Row icon="logout" label="Wyloguj" danger onClick={onLogout} />
