@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BASE_ENERGY_SHARE, DEFAULT_PROFILE, PET_STATES, computeEnergy, derivePetState, sleepWindow, waterGoalMl, type PetState } from "@tamadoist/core";
 import {
   EnergyIndicator, TasksIndicator, StreakIndicator, IndicatorsProvider, IndicatorRail, IndicatorBar, IndicatorDial, Egg, EnergyExplainScreen, EnergyIndicatorScreen, LoginScreen, NameScreen, NameTag, Pet, PetScale, RenameDialogScreen,
-  SAMPLE, SettingsScreen, SleepScreen, WeightScreen, energyRange, TimePicker,
+  SAMPLE, SettingsScreen, CharacterScreen, SleepScreen, WeightScreen, energyRange, TimePicker,
 } from "@tamadoist/ui";
 import { Gallery, Section, Spec, SpecGrid } from "../chrome";
 import { dateAt, fmt } from "../world";
@@ -29,7 +29,7 @@ export function CharacterTab() {
     <>
       <Section title="Profil postaci" lead="To, co użytkownik mówi o swojej postaci. Każda cecha to pole w CharacterProfile.">
         <SpecGrid>
-          <Spec title="Imię" note="1–20 znaków, wyświetlane nad postacią. Zmiana: Ustawienia, wiersz z ikoną edycji."><div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}><NameTag name="Tama" /><Pet size={120} /></div></Spec>
+          <Spec title="Imię" note="1–20 znaków, wyświetlane nad postacią. Zmiana: Menu → Postać, wiersz z ikoną edycji."><div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}><NameTag name="Tama" /><Pet size={120} /></div></Spec>
           <Spec title="Godziny snu" note="Sen zawsze trwa 8 godzin. Wybierasz tylko porę zaśnięcia, domyślnie 22:00 → 06:00.">
             <div style={{ width: 240, display: "flex", flexDirection: "column", gap: 12 }}>
               <TimePicker label="Godzina zaśnięcia" value={bed} onChange={setBed} />
@@ -117,7 +117,8 @@ export function CharacterTab() {
           { title: "Wskaźnik", node: <EnergyIndicatorScreen name={d.name} energyPercent={d.energyPercent} /> },
           { title: "Sen", node: <SleepScreen name={d.name} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} /> },
           { title: "Waga", node: <WeightScreen name={d.name} weightKg={d.weightKg} goalMl={d.goalMl} /> },
-          { title: "Ustawienia", note: "Imię z ikoną edycji po prawej.", node: <SettingsScreen {...d} /> },
+          { title: "Postać", note: "Podgląd postaci i imię z ikoną edycji po prawej.", node: <CharacterScreen name={d.name} energyPercent={d.energyPercent} /> },
+          { title: "Preferencje", note: "Sen, waga, cel wody i scena (miejsca, plan dnia).", node: <SettingsScreen {...d} /> },
           { title: "Zmiana imienia", node: <RenameDialogScreen {...d} /> },
         ]} />
       </Section>

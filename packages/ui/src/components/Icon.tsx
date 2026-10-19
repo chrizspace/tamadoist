@@ -23,6 +23,7 @@ export const ICON_PATHS = {
   sun: (<><circle cx="12" cy="12" r="4" /><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.600 5.600l1.400 1.400M17 17l1.400 1.400M18.400 5.600 17 7M7 17l-1.400 1.400" /></>),
   trash: (<><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" /><path d="M10 11v6M14 11v6" /></>),
   grip: (<><path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" strokeWidth="3.4" /></>),
+  face: (<><circle cx="12" cy="12" r="9" /><path d="M9 10v.5M15 10v.5" strokeWidth="2.6" /><path d="M8.500 14.500c1 1.500 2.200 2.200 3.500 2.200s2.500-.7 3.500-2.200" /></>),
   moon: <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />,
   clock: (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>),
   chevronDown: <path d="M6 9l6 6 6-6" />,

@@ -184,26 +184,38 @@ export function HomeScreen({ name, energyPercent, energyUntil, sleepEnd, state =
   );
 }
 
-export interface MenuHandlers { onClose?: () => void; onSettings?: () => void; onLogout?: () => void }
+export interface MenuHandlers { onClose?: () => void; onCharacter?: () => void; onSettings?: () => void; onLogout?: () => void }
 
-export function MenuScreen({ name, energyPercent, onClose, onSettings, onLogout }: Pick<ScreenData, "name" | "energyPercent"> & MenuHandlers) {
+export function MenuScreen({ name, energyPercent, onClose, onCharacter, onSettings, onLogout }: Pick<ScreenData, "name" | "energyPercent"> & MenuHandlers) {
   return (
     <Phone {...LOC_PARK}>
       <PetStage location="recreation.park" name={name} top={STAGE_TOP} still />
       <ActionBar context={{ sleeping: false, tired: false }} />
       <div className="td-scrim" />
       <HeaderBar left="close" title="Menu" percent={energyPercent} rail={false} onClose={onClose} />
-      <MenuPanel onSettings={onSettings} onLogout={onLogout} />
+      <MenuPanel onCharacter={onCharacter} onSettings={onSettings} onLogout={onLogout} />
     </Phone>
   );
 }
 
-/* ---------------- Character: settings ---------------- */
+/* ---------------- Character and preferences ---------------- */
 
-function SettingsRows({ name, sleepStart, sleepEnd, weightKg, goalMl, onEditName, onPlaces, onSchedule }: ScreenData & { onEditName?: () => void; onPlaces?: () => void; onSchedule?: () => void }) {
+/** Character: who the character is. Here you see it and change its name. */
+export function CharacterScreen({ name, energyPercent, onBack, onEditName }: Pick<ScreenData, "name" | "energyPercent"> & { onBack?: () => void; onEditName?: () => void }) {
+  return (
+    <Phone {...LOC_PARK}>
+      <HeaderBar left="back" title="Postać" percent={energyPercent} rail={false} onBack={onBack} />
+      <PetStage location="recreation.park" name={name} top={150} still />
+      <div className="td-page td-page--list" style={{ top: "auto", bottom: 40 }}>
+        <SettingRow label="Imię postaci" value={name} onEdit={onEditName ?? (() => undefined)} />
+      </div>
+    </Phone>
+  );
+}
+
+function PreferenceRows({ sleepStart, sleepEnd, weightKg, goalMl, onPlaces, onSchedule }: ScreenData & { onPlaces?: () => void; onSchedule?: () => void }) {
   return (
     <div className="td-page td-page--list">
-      <SettingRow label="Imię postaci" value={name} onEdit={onEditName ?? (() => undefined)} />
       <SettingRow label="Godzina snu" value={`${sleepStart} → ${sleepEnd}`} />
       <SettingRow label="Waga" value={`${weightKg} kg`} />
       <SettingRow label="Cel wody" value={`${goalMl} ml`} />
@@ -214,11 +226,12 @@ function SettingsRows({ name, sleepStart, sleepEnd, weightKg, goalMl, onEditName
   );
 }
 
-export function SettingsScreen({ onBack, onEditName, onPlaces, onSchedule, ...d }: ScreenData & { onBack?: () => void; onEditName?: () => void; onPlaces?: () => void; onSchedule?: () => void }) {
+/** Preferences: sleep, weight, water goal and the scene (places and day plan). */
+export function SettingsScreen({ onBack, onPlaces, onSchedule, ...d }: ScreenData & { onBack?: () => void; onPlaces?: () => void; onSchedule?: () => void }) {
   return (
     <Phone {...LOC_PARK}>
-      <HeaderBar left="back" title="Ustawienia" percent={d.energyPercent} rail={false} onBack={onBack} />
-      <SettingsRows {...d} onEditName={onEditName} onPlaces={onPlaces} onSchedule={onSchedule} />
+      <HeaderBar left="back" title="Preferencje" percent={d.energyPercent} rail={false} onBack={onBack} />
+      <PreferenceRows {...d} onPlaces={onPlaces} onSchedule={onSchedule} />
     </Phone>
   );
 }
@@ -226,8 +239,11 @@ export function SettingsScreen({ onBack, onEditName, onPlaces, onSchedule, ...d 
 export function RenameDialogScreen({ draft, onDraft, onCancel, onSave, ...d }: ScreenData & { draft?: string; onDraft?: (v: string) => void; onCancel?: () => void; onSave?: () => void }) {
   return (
     <Phone {...LOC_PARK}>
-      <HeaderBar left="back" title="Ustawienia" percent={d.energyPercent} rail={false} />
-      <SettingsRows {...d} />
+      <HeaderBar left="back" title="Postać" percent={d.energyPercent} rail={false} />
+      <PetStage location="recreation.park" name={d.name} top={150} still />
+      <div className="td-page td-page--list" style={{ top: "auto", bottom: 40 }}>
+        <SettingRow label="Imię postaci" value={d.name} />
+      </div>
       <div className="td-scrim" />
       <Dialog title="Zmień imię" description="Jak ma się teraz nazywać Twoja postać?" actions={<><Button variant="secondary" onClick={onCancel}>Anuluj</Button><Button onClick={onSave}>Zapisz</Button></>}>
         <Input label="Imię postaci" {...bindValue(draft ?? d.name, onDraft)} />

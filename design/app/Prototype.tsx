@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { MEALS_GOAL, predictNeed, completeNext, toggleItem, completeNextStep, isTaskDone, nextStep, nextTask, toggleSubtask, toggleTask, toggleToday, todayProgress, todayTasks, bringBackToToday, deferOpenToTomorrow, deferToTomorrow, addGoal, addSection, addSubtask, addTask, moveToday, removeGoal, removeSection, removeSubtask, removeTask, reorderToday, setTaskGoal, setTaskTime, sortTodayByTime, updateGoal, LOCATIONS, PERIODS, PET_STATES, periodWindows, validateName, type LocationId, type PetState } from "@tamadoist/core";
 import {
   IndicatorsProvider, IndicatorsLayoutContext, StatusScreen, ChecklistActionScreen, ChecklistPage, SAMPLE_BACKLOG, TasksPage, SAMPLE_HABIT_ITEMS, type DialKey, type IndicatorsLayout, EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LocationPermissionScreen, LoginScreen, MenuScreen, NameScreen,
-  PlacesScreen, RenameDialogScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
+  PlacesScreen, RenameDialogScreen, CharacterScreen, ScenePickerScreen, ScheduleScreen, SchedulePromptScreen, SettingsScreen,
   SleepScreen, NutritionScreen, SleepPage, WeightScreen,
 } from "@tamadoist/ui";
 import { Fit, Timeline } from "./chrome";
@@ -11,12 +11,12 @@ import { useCharacter } from "./modules/character";
 import { useScene, type SimPosition } from "./modules/scene";
 import { CITIES, SEASONS, deriveWorld, fmt, isoDate, parseIso, type Env, DEFAULT_ENV } from "./world";
 
-type ScreenId = "login" | "name" | "energy" | "indicator" | "sleep" | "weight" | "home" | "menu" | "nutrition" | "sleep-edit" | "settings" | "rename" | "scenes" | "places" | "locperm" | "schedule" | "prompt" | "status" | "tasks" | "tasks-list" | "habits" | "habits-list";
+type ScreenId = "login" | "name" | "energy" | "indicator" | "sleep" | "weight" | "home" | "menu" | "nutrition" | "sleep-edit" | "settings" | "character" | "rename" | "scenes" | "places" | "locperm" | "schedule" | "prompt" | "status" | "tasks" | "tasks-list" | "habits" | "habits-list";
 
 const CRUMBS: [ScreenId, string][] = [
   ["login", "Login"], ["name", "Imię"], ["energy", "Energia"], ["indicator", "Wskaźnik"], ["sleep", "Sen"], ["weight", "Waga"],
   ["home", "Home"], ["menu", "Menu"], ["nutrition", "Zadbaj"], ["tasks", "Zadania"], ["habits", "Nawyki"], ["status", "Status"], ["scenes", "Wybór sceny"], ["places", "Miejsca"], ["locperm", "Lokalizacja"],
-  ["schedule", "Plan dnia"], ["prompt", "Pytanie o plan"], ["settings", "Ustawienia"], ["rename", "Zmiana imienia"],
+  ["schedule", "Plan dnia"], ["prompt", "Pytanie o plan"], ["character", "Postać"], ["settings", "Preferencje"], ["rename", "Zmiana imienia"],
 ];
 
 export function Prototype() {
@@ -75,11 +75,12 @@ export function Prototype() {
       case "sleep": return <SleepScreen name={w.name} sleepStart={d.sleepStart} sleepEnd={d.sleepEnd} onSleepStart={ch.setSleepStart} onNext={() => go("weight")} />;
       case "weight": return <WeightScreen name={w.name} weightKg={d.weightKg} goalMl={d.goalMl} onWeight={ch.setWeight} onNext={() => go("home")} />;
       case "home": return <HomeScreen {...d} {...scene} need={need.need} state={w.petState} toast={toast} onMenu={() => go("menu")} onTitle={() => go("scenes")} onIndicator={openStatus("home")} onAction={(id) => id === "nutrition" ? go("nutrition") : id === "tasks" ? go("tasks") : id === "habits" && go("habits")} />;
-      case "menu": return <MenuScreen name={w.name} energyPercent={d.energyPercent} onClose={() => go("home")} onSettings={() => go("settings")} onLogout={() => { ch.reset(); ac.reset(); sc.setManual(undefined); sc.setPos("none"); go("login"); }} />;
+      case "menu": return <MenuScreen name={w.name} energyPercent={d.energyPercent} onClose={() => go("home")} onCharacter={() => go("character")} onSettings={() => go("settings")} onLogout={() => { ch.reset(); ac.reset(); sc.setManual(undefined); sc.setPos("none"); go("login"); }} />;
       case "nutrition": return <NutritionScreen {...scene} name={w.name} energyPercent={d.energyPercent} state={ac.justDrank ? "drinking" : ac.justAte && w.petState !== "sleeping" ? "happy" : w.petState} drunkMl={ac.drunkMl} goalMl={ch.goalMl} meals={ac.meals} sleepStart={ch.profile.sleepStart} sleepEnd={w.sleepEnd} gain={toast} onBack={() => go("home")} onWater={() => { ac.add(); flash("+250 ml"); }} onMeal={() => { ac.eat(); flash("+1 posiłek"); }} onSleep={() => go("sleep-edit")} onIndicator={openStatus("nutrition")} />;
       case "sleep-edit": return <SleepPage sleepStart={ch.profile.sleepStart} sleepEnd={w.sleepEnd} onSleepStart={ch.setSleepStart} onClose={() => go("nutrition")} />;
-      case "settings": return <SettingsScreen {...d} onBack={() => go("home")} onPlaces={() => go("places")} onSchedule={() => go("schedule")} onEditName={() => { setDraft(ch.profile.name); go("rename"); }} />;
-      case "rename": return <RenameDialogScreen {...d} draft={draft} onDraft={setDraft} onCancel={() => go("settings")} onSave={() => { if (!validateName(draft)) { ch.saveName(draft); go("settings"); } }} />;
+      case "settings": return <SettingsScreen {...d} onBack={() => go("home")} onPlaces={() => go("places")} onSchedule={() => go("schedule")} />;
+      case "character": return <CharacterScreen name={w.name} energyPercent={d.energyPercent} onBack={() => go("home")} onEditName={() => { setDraft(ch.profile.name); go("rename"); }} />;
+      case "rename": return <RenameDialogScreen {...d} draft={draft} onDraft={setDraft} onCancel={() => go("character")} onSave={() => { if (!validateName(draft)) { ch.saveName(draft); go("character"); } }} />;
       case "scenes": return <ScenePickerScreen name={w.name} energyPercent={d.energyPercent} {...scene} auto={!sc.manual} onPick={(l) => { sc.setManual(l); go("home"); }} onAuto={(on) => { if (on) sc.setManual(undefined); go("home"); }} onClose={() => go("home")} />;
       case "places": return <PlacesScreen energyPercent={d.energyPercent} onBack={() => go("settings")} onUseLocation={() => go("locperm")} />;
       case "locperm": return <LocationPermissionScreen name={w.name} onAllow={() => { sc.setPos("home"); go("places"); }} onLater={() => go("places")} />;

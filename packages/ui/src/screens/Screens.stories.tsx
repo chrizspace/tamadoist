@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import {
   EnergyExplainScreen, EnergyIndicatorScreen, HomeScreen, LoginScreen, MenuScreen, NameScreen,
   LocationPermissionScreen, PlacesScreen, RenameDialogScreen, SAMPLE, ScenePickerScreen, ScheduleScreen,
-  SchedulePromptScreen, SettingsScreen, SleepScreen, WeightScreen,
+  SchedulePromptScreen, SettingsScreen, CharacterScreen, SleepScreen, WeightScreen,
 } from "./Screens";
 import { StatusScreen } from "./Status";
 import { NutritionScreen, SleepPage } from "./Nutrition";
@@ -31,7 +31,8 @@ export const S07b_EnergyInfo: Story = { name: "07b Home – po kliknięciu energ
 export const S10_Tired: Story = { name: "10 Zmęczony", render: () => <HomeScreen {...d} energyPercent={0} state="tired" /> };
 export const S11_Sleeping: Story = { name: "11 Śpi", render: () => <HomeScreen {...d} energyPercent={50} state="sleeping" location="home.bedroom" period="night" /> };
 export const S12_Rename: Story = { name: "12 Zmiana imienia", render: () => <RenameDialogScreen {...d} /> };
-export const S13_Settings: Story = { name: "13 Ustawienia", render: () => <SettingsScreen {...d} /> };
+export const S13_Settings: Story = { name: "13 Preferencje", render: () => <SettingsScreen {...d} /> };
+export const S13b_Character: Story = { name: "13b Postać (zmiana imienia)", render: () => <CharacterScreen name={d.name} energyPercent={d.energyPercent} /> };
 export const NutritionDrank: Story = { name: "Zadbaj – po dodaniu szklanki", render: () => <NutritionScreen state="drinking" gain="+250 ml" /> };
 export const S27_SleepPage: Story = { name: "27 Sen (pełny ekran)", render: () => <SleepPage sleepStart="22:00" sleepEnd="06:00" /> };
 
